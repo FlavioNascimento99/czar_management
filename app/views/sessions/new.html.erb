@@ -1,0 +1,37 @@
+<% content_for :title, "Login - CzarManagement" %>
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-4">
+    <div class="card shadow">
+      <div class="card-body">
+        <h2 class="card-title text-center mb-4">Login</h2>
+        
+        <%= form_with url: login_path, local: true, class: "needs-validation", novalidate: true do |form| %>
+          <div class="mb-3">
+            <%= form.label :email, "Email", class: "form-label" %>
+            <%= form.email_field :email, class: "form-control", required: true %>
+            <div class="invalid-feedback">
+              Por favor, insira um email válido.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <%= form.label :password, "Senha", class: "form-label" %>
+            <%= form.password_field :password, class: "form-control", required: true %>
+            <div class="invalid-feedback">
+              Por favor, insira sua senha.
+            </div>
+          </div>
+
+          <div class="d-grid">
+            <%= form.submit "Entrar", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+        
+        <div class="text-center mt-3">
+          <p class="mb-0">Não tem uma conta? <%= link_to "Cadastre-se", signup_path, class: "text-decoration-none" %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

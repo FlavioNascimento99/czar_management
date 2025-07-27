@@ -1,0 +1,60 @@
+<% content_for :title, "Meus Projetos - CzarManagement" %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>Meus Projetos</h1>
+  <%= link_to "Novo Projeto", new_project_path, class: "btn btn-primary" %>
+</div>
+
+<% if @projects.any? %>
+  <div class="row">
+    <% @projects.each do |project| %>
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title"><%= project.name %></h5>
+            <p class="card-text text-muted">
+              <%= truncate(project.description, length: 100) %>
+            </p>
+            
+            <div class="row text-center mb-3">
+              <div class="col">
+                <small class="text-muted">Tarefas</small>
+                <div class="fw-bold"><%= project.tasks.count %></div>
+              </div>
+              <div class="col">
+                <small class="text-muted">Requisitos</small>
+                <div class="fw-bold"><%= project.requirements.count %></div>
+              </div>
+              <div class="col">
+                <small class="text-muted">Membros</small>
+                <div class="fw-bold"><%= project.users.count %></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card-footer bg-transparent">
+            <div class="d-flex gap-2">
+              <%= link_to "Ver", project, class: "btn btn-outline-primary btn-sm flex-fill" %>
+              <%= link_to "Editar", edit_project_path(project), class: "btn btn-outline-secondary btn-sm flex-fill" %>
+              <%= link_to "Excluir", project, method: :delete, 
+                          confirm: "Tem certeza que deseja excluir este projeto?", 
+                          class: "btn btn-outline-danger btn-sm flex-fill" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="text-center py-5">
+    <div class="mb-4">
+      <svg width="64" height="64" fill="currentColor" class="text-muted" viewBox="0 0 16 16">
+        <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+      </svg>
+    </div>
+    <h4 class="text-muted">Nenhum projeto encontrado</h4>
+    <p class="text-muted">Comece criando seu primeiro projeto!</p>
+    <%= link_to "Criar Projeto", new_project_path, class: "btn btn-primary" %>
+  </div>
+<% end %>

@@ -1,0 +1,157 @@
+<% content_for :title, "#{@project.name} - CzarManagement" %>
+
+<div class="d-flex justify-content-between align-items-start mb-4">
+  <div>
+    <h1><%= @project.name %></h1>
+    <p class="text-muted lead"><%= @project.description %></p>
+  </div>
+  <div class="d-flex gap-2">
+    <%= link_to "Editar", edit_project_path(@project), class: "btn btn-outline-primary" %>
+    <%= link_to "Voltar", projects_path, class: "btn btn-secondary" %>
+  </div>
+</div>
+
+<!-- Estatísticas -->
+<div class="row mb-4">
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h3 class="text-primary"><%= @tasks.count %></h3>
+        <p class="card-text">Total de Tarefas</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h3 class="text-success"><%= @tasks.concluida.count %></h3>
+        <p class="card-text">Concluídas</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h3 class="text-warning"><%= @tasks.em_andamento.count %></h3>
+        <p class="card-text">Em Andamento</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h3 class="text-info"><%= @requirements.count %></h3>
+        <p class="card-text">Requisitos</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Navegação por abas -->
+<ul class="nav nav-tabs" id="projectTabs" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="tasks-tab" data-bs-toggle="tab" data-bs-target="#tasks" type="button" role="tab">
+      Tarefas (<%= @tasks.count %>)
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="requirements-tab" data-bs-toggle="tab" data-bs-target="#requirements" type="button" role="tab">
+      Requisitos (<%= @requirements.count %>)
+    </button>
+  </li>
+</ul>
+
+<div class="tab-content" id="projectTabsContent">
+  <!-- Aba de Tarefas -->
+  <div class="tab-pane fade show active" id="tasks" role="tabpanel">
+    <div class="d-flex justify-content-between align-items-center my-3">
+      <h4>Tarefas</h4>
+      <%= link_to "Nova Tarefa", new_project_task_path(@project), class: "btn btn-primary btn-sm" %>
+    </div>
+    
+    <% if @tasks.any? %>
+      <div class="row">
+        <% @tasks.each do |task| %>
+          <div class="col-md-6 col-lg-4 mb-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h6 class="card-title"><%= task.title %></h6>
+                  <span class="badge bg-<%= task.priority == 'alta' ? 'danger' : task.priority == 'media' ? 'warning' : 'secondary' %>">
+                    <%= task.priority.capitalize %>
+                  </span>
+                </div>
+                
+                <p class="card-text small text-muted">
+                  <%= truncate(task.description, length: 80) %>
+                </p>
+                
+                <div class="mb-2">
+                  <span class="badge bg-<%= task.status == 'concluida' ? 'success' : task.status == 'em_andamento' ? 'warning' : 'secondary' %>">
+                    <%= task.status.humanize %>
+                  </span>
+                </div>
+                
+                <div class="small text-muted">
+                  <div>Autor: <%= task.author.name %></div>
+                  <div>Responsável: <%= task.assigned_to.name %></div>
+                </div>
+                
+                <div class="mt-2">
+                  <%= link_to "Ver", [@project, task], class: "btn btn-outline-primary btn-sm" %>
+                  <%= link_to "Editar", edit_project_task_path(@project, task), class: "btn btn-outline-secondary btn-sm" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-4">
+        <p class="text-muted">Nenhuma tarefa criada ainda.</p>
+        <%= link_to "Criar primeira tarefa", new_project_task_path(@project), class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+  
+  <!-- Aba de Requisitos -->
+  <div class="tab-pane fade" id="requirements" role="tabpanel">
+    <div class="d-flex justify-content-between align-items-center my-3">
+      <h4>Requisitos</h4>
+      <%= link_to "Novo Requisito", new_project_requirement_path(@project), class: "btn btn-primary btn-sm" %>
+    </div>
+    
+    <% if @requirements.any? %>
+      <div class="row">
+        <% @requirements.each do |requirement| %>
+          <div class="col-md-6 mb-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h6 class="card-title"><%= requirement.title %></h6>
+                  <span class="badge bg-<%= requirement.priority == 'alta' ? 'danger' : requirement.priority == 'media' ? 'warning' : 'secondary' %>">
+                    <%= requirement.priority.capitalize %>
+                  </span>
+                </div>
+                
+                <p class="card-text text-muted">
+                  <%= truncate(requirement.description, length: 120) %>
+                </p>
+                
+                <div class="mt-2">
+                  <%= link_to "Ver", [@project, requirement], class: "btn btn-outline-primary btn-sm" %>
+                  <%= link_to "Editar", edit_project_requirement_path(@project, requirement), class: "btn btn-outline-secondary btn-sm" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-4">
+        <p class="text-muted">Nenhum requisito criado ainda.</p>
+        <%= link_to "Criar primeiro requisito", new_project_requirement_path(@project), class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
