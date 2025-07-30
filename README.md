@@ -1,3 +1,6 @@
+***Entrega 27 de Agosto***
+
+
 # CzarManagement
 
 Uma plataforma completa de gerenciamento de tarefas e projetos desenvolvida em Ruby on Rails, onde usuários podem criar e participar de projetos, criar tarefas, atribuí-las a outros membros, acompanhar progresso e prioridades.
