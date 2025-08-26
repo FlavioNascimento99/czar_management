@@ -35,7 +35,7 @@
           <div class="navbar-nav ms-auto">
             <span class="navbar-text me-3">Olá, <%= current_user.name %>!</span>
             <%= link_to "Meus Projetos", projects_path, class: "nav-link text-white" %>
-            <%= link_to "Logout", logout_path, method: :delete, class: "nav-link text-white" %>
+            <%= button_to "Logout", logout_path, method: :delete, class: "btn btn-link nav-link text-white", form: { "data-turbo-confirm": "Deseja realmente sair?" } %>
           </div>
         <% else %>
           <div class="navbar-nav ms-auto">

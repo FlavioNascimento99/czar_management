@@ -1,2 +1,63 @@
-<h1>Requirements#new</h1>
-<p>Find me in app/views/requirements/new.html.erb</p>
+<% content_for :title, "Novo Requisito - #{@project.name}" %>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow">
+      <div class="card-header">
+        <h3 class="card-title mb-0">Novo Requisito</h3>
+        <small class="text-muted">Projeto: <%= @project.name %></small>
+      </div>
+      <div class="card-body">
+        <%= form_with model: [@project, @requirement], local: true, class: "needs-validation", novalidate: true do |form| %>
+          <% if @requirement.errors.any? %>
+            <div class="alert alert-danger">
+              <ul class="mb-0">
+                <% @requirement.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <div class="mb-3">
+            <%= form.label :title, "Título do Requisito", class: "form-label" %>
+            <%= form.text_field :title, class: "form-control", required: true,
+                                placeholder: "Ex: O sistema deve permitir login com Google" %>
+            <div class="invalid-feedback">
+              Por favor, insira o título do requisito.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <%= form.label :description, "Descrição", class: "form-label" %>
+            <%= form.text_area :description, class: "form-control", rows: 4, required: true,
+                               placeholder: "Descreva detalhadamente o requisito..." %>
+            <div class="invalid-feedback">
+              Por favor, insira a descrição do requisito.
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <%= form.label :priority, "Prioridade", class: "form-label" %>
+                <%= form.select :priority,
+                    options_for_select([
+                      ['Baixa', 'baixa'],
+                      ['Média', 'media'],
+                      ['Alta', 'alta']
+                    ], 'media'),
+                    {}, { class: "form-select", required: true } %>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2">
+            <%= form.submit "Criar Requisito", class: "btn btn-primary" %>
+            <%= link_to "Cancelar", @project, class: "btn btn-secondary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

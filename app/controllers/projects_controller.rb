@@ -8,8 +8,14 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @tasks = @project.tasks.includes(:author, :assigned_to)
+    @tasks = @project.tasks
+                     .includes(:author, :assigned_to)
+                     .order(created_at: :desc)
+                     .page(params[:tasks_page]).per(6)
+
     @requirements = @project.requirements
+                            .order(created_at: :desc)
+                            .page(params[:requirements_page]).per(6)
   end
 
   def new
@@ -18,7 +24,7 @@ class ProjectsController < ApplicationController
 
   def create
     @project = Project.new(project_params)
-    
+
     if @project.save
       @project.users << current_user
       redirect_to @project, notice: 'Projeto criado com sucesso!'
