@@ -43,7 +43,8 @@ class TasksController < ApplicationController
 
   def destroy
     @task.destroy
-    redirect_to project_tasks_path(@project), notice: 'Tarefa excluída com sucesso!'
+    redirect_to @project, notice: 'Tarefa excluída com sucesso!'
+    return
   end
 
   private

@@ -38,7 +38,8 @@ class RequirementsController < ApplicationController
 
   def destroy
     @requirement.destroy
-    redirect_to project_requirements_path(@project), notice: 'Requisito excluído com sucesso!'
+    redirect_to @project, notice: 'Requisito excluído com sucesso!'
+    return
   end
 
   private

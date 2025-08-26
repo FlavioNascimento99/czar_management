@@ -19,7 +19,21 @@ gem "jbuilder"
 gem 'kaminari'
 gem 'bootstrap5-kaminari-views', '~> 0.0.1'
 
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
+  gem 'faker'
 
+end
+
+group :test do
+  gem 'capybara'
+  gem 'selenium-webdriver'
+  gem 'factory_bot_rails'
+  gem 'faker'
+  gem 'database_cleaner-active_record'
+  gem 'rails-controller-testing'
+end
 
 gem 'sqlite3', '~> 2.7', platforms: [:x64_mingw, :mingw, :mswin]
 
