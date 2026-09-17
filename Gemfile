@@ -29,13 +29,13 @@ end
 group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
-  gem 'factory_bot_rails'
-  gem 'faker'
   gem 'database_cleaner-active_record'
   gem 'rails-controller-testing'
 end
 
-gem 'sqlite3', '~> 2.7', platforms: [:x64_mingw, :mingw, :mswin]
+# sqlite3 must install on all platforms: Linux (CI, Docker, Kamal) needs it,
+# not just Windows. Restricting `platforms:` broke `bundle install` on ubuntu-latest.
+gem 'sqlite3', '~> 2.7'
 
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
