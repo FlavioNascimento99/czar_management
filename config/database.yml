@@ -20,34 +20,15 @@ test:
   <<: *default
   database: storage/test.sqlite3
 
-
 # Production runs on Postgres (Supabase) because Cloudflare Containers have
-# ephemeral disk — SQLite files would not survive restarts. All four roles
-# share one DATABASE_URL (single container instance). Use the DIRECT
-# connection (port 5432, sslmode=require), NOT the PgBouncer pooler port
-# (6543 transaction mode breaks Solid Queue advisory locks).
-# Example: postgres://postgres:PASSWORD@db.xxx.supabase.co:5432/postgres?sslmode=require
+# ephemeral disk — SQLite files would not survive restarts. Solid Cache, Queue
+# and Cable live in this same database (tables created by regular migrations).
+# Use the Supavisor SESSION pooler (port 5432): the direct db.<ref>.supabase.co
+# host is IPv6-only, and the transaction pooler (port 6543) breaks Solid Queue
+# advisory locks.
+# Example: postgres://postgres.<ref>:PASSWORD@aws-0-<region>.pooler.supabase.com:5432/postgres?sslmode=require
 production:
-  primary:
-    adapter: postgresql
-    encoding: unicode
-    url: <%= ENV["DATABASE_URL"] %>
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  cache:
-    adapter: postgresql
-    encoding: unicode
-    url: <%= ENV["DATABASE_URL"] %>
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-    migrations_paths: db/cache_migrate
-  queue:
-    adapter: postgresql
-    encoding: unicode
-    url: <%= ENV["DATABASE_URL"] %>
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-    migrations_paths: db/queue_migrate
-  cable:
-    adapter: postgresql
-    encoding: unicode
-    url: <%= ENV["DATABASE_URL"] %>
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-    migrations_paths: db/cable_migrate
+  adapter: postgresql
+  encoding: unicode
+  url: <%= ENV["DATABASE_URL"] %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
