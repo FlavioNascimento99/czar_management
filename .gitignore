@@ -32,3 +32,9 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Cloudflare local dev
+.dev.vars
+node_modules/
+# wrangler local state
+.wrangler/
