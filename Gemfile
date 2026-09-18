@@ -39,6 +39,10 @@ end
 # not just Windows. Restricting `platforms:` broke `bundle install` on ubuntu-latest.
 gem "sqlite3", "~> 2.7"
 
+# Postgres for production on Cloudflare Containers (Supabase). Precompiled
+# linux binaries, so CI/dev install it fine without libpq.
+gem "pg", "~> 1.6"
+
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"

@@ -1,0 +1,32 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "czar",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-09-18",
+  "observability": {
+    "enabled": true
+  },
+  "containers": [
+    {
+      "class_name": "CzarContainer",
+      "image": "./Dockerfile",
+      "max_instances": 1,
+      "name": "czar-app",
+      "instance_type": "standard-1"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "class_name": "CzarContainer",
+        "name": "CZAR_CONTAINER"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "new_sqlite_classes": ["CzarContainer"],
+      "tag": "v1"
+    }
+  ]
+}
