@@ -58,7 +58,8 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "example.com" }
+  # APP_HOST must be set on the deploy target (e.g. app.example.com).
+  config.action_mailer.default_url_options = { host: ENV.fetch("APP_HOST", "example.com") }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
   # config.action_mailer.smtp_settings = {
@@ -80,11 +81,24 @@ Rails.application.configure do
   config.active_record.attributes_for_inspect = [ :id ]
 
   # Enable DNS rebinding protection and other `Host` header attacks.
-  # config.hosts = [
-  #   "example.com",     # Allow requests from example.com
-  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
-  # ]
-  #
-  # Skip DNS rebinding protection for the default health check endpoint.
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  # Set APP_HOST on the deploy target; without it every Host is allowed.
+  if (app_host = ENV["APP_HOST"]).present?
+    config.hosts << app_host
+  end
+
+  # Skip Host authorization for the health check endpoint so Kamal and
+  # Cloudflare health checks never get blocked.
+  config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  # Trust Cloudflare edge IPs so request.remote_ip / logging see the real
+  # client IP instead of the proxy IP. Refresh from https://www.cloudflare.com/ips
+  # when Cloudflare rotates ranges. Only effective when behind Cloudflare.
+  config.action_dispatch.trusted_proxies = %w[
+    173.245.48.0/20 103.21.244.0/22 103.22.200.0/22 103.31.4.0/22
+    141.101.64.0/18 108.162.192.0/18 190.93.240.0/20 188.114.96.0/20
+    197.234.240.0/22 198.41.128.0/17 162.158.0.0/15 104.16.0.0/13
+    104.24.0.0/14 172.64.0.0/13 131.0.72.0/22
+    2400:cb00::/32 2606:4700::/32 2803:f800::/32 2405:b500::/32
+    2405:8100::/32 2a06:98c0::/29 2c0f:f248::/32
+  ].map { |proxy| IPAddr.new(proxy) }
 end
