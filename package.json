@@ -7,14 +7,15 @@
     "deploy": "wrangler deploy"
   },
   "dependencies": {
-    "@cloudflare/containers": "latest"
+    "@cloudflare/containers": "0.3.7"
   },
   "devDependencies": {
-    "wrangler": "latest",
-    "typescript": "^5.7.0"
+    "supabase": "2.117.0",
+    "typescript": "^5.7.0",
+    "wrangler": "4.135.0"
   },
   "allowScripts": {
     "esbuild@0.28.1": true,
-    "workerd@1.20260915.1": true
+    "workerd@1.20260918.1": true
   }
 }
