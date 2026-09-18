@@ -8,6 +8,7 @@ RSpec.describe ProjectsController, type: :controller do
 
   describe "GET #index" do
     it "retorna os projetos do usuário" do
+      project # força criação antes da requisição (index avalia eager)
       get :index
       expect(assigns(:projects)).to include(project)
       expect(response).to have_http_status(:ok)
