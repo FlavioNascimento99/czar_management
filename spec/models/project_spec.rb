@@ -18,6 +18,11 @@ RSpec.describe Project, type: :model do
     expect(project.users.count).to eq(3)
   end
 
+  it "é inválido sem dono" do
+    project = build(:project, owner: nil)
+    expect(project).not_to be_valid
+  end
+
   it "retorna as tarefas associadas" do
     project = create(:project)
     task = create(:task, project: project)

@@ -14,6 +14,14 @@ RSpec.describe TasksController, type: :controller do
       }.to change(Task, :count).by(1)
       expect(response).to redirect_to(project_task_path(project, Task.last))
     end
+
+    it "rejeita responsável que não é membro" do
+      outsider = create(:user)
+      expect {
+        post :create, params: { project_id: project.id, task: { title: "Tarefa Y", description: "desc", status: "pendente", priority: "baixa", assigned_to_id: outsider.id } }
+      }.not_to change(Task, :count)
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
   end
 
   describe "PATCH #update" do

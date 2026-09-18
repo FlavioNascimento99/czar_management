@@ -22,6 +22,23 @@ RSpec.describe User, type: :model do
     expect(user).not_to be_valid
   end
 
+  it "não permite email duplicado com caixa diferente" do
+    create(:user, email: "teste@email.com")
+    user = build(:user, email: "TESTE@EMAIL.COM")
+    expect(user).not_to be_valid
+  end
+
+  it "normaliza o email antes de validar" do
+    user = build(:user, email: "  Teste@Email.COM  ")
+    expect(user).to be_valid
+    expect(user.email).to eq("teste@email.com")
+  end
+
+  it "é inválido com senha curta" do
+    user = build(:user, password: "curta")
+    expect(user).not_to be_valid
+  end
+
   it "retorna os projetos do usuário" do
     user = create(:user)
     project = create(:project)
