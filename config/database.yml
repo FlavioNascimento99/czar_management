@@ -21,24 +21,33 @@ test:
   database: storage/test.sqlite3
 
 
-# Store production database in the storage/ directory, which by default
-# is mounted as a persistent Docker volume in config/deploy.yml.
-# Single-node only: SQLite serializes writers, so this setup supports one
-# app server. Snapshot/back up the czar_management_storage volume off-server
-# (migrate to Postgres if you ever scale past one node).
+# Production runs on Postgres (Supabase) because Cloudflare Containers have
+# ephemeral disk — SQLite files would not survive restarts. All four roles
+# share one DATABASE_URL (single container instance). Use the DIRECT
+# connection (port 5432, sslmode=require), NOT the PgBouncer pooler port
+# (6543 transaction mode breaks Solid Queue advisory locks).
+# Example: postgres://postgres:PASSWORD@db.xxx.supabase.co:5432/postgres?sslmode=require
 production:
   primary:
-    <<: *default
-    database: storage/production.sqlite3
+    adapter: postgresql
+    encoding: unicode
+    url: <%= ENV["DATABASE_URL"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   cache:
-    <<: *default
-    database: storage/production_cache.sqlite3
+    adapter: postgresql
+    encoding: unicode
+    url: <%= ENV["DATABASE_URL"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
     migrations_paths: db/cache_migrate
   queue:
-    <<: *default
-    database: storage/production_queue.sqlite3
+    adapter: postgresql
+    encoding: unicode
+    url: <%= ENV["DATABASE_URL"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
     migrations_paths: db/queue_migrate
   cable:
-    <<: *default
-    database: storage/production_cable.sqlite3
+    adapter: postgresql
+    encoding: unicode
+    url: <%= ENV["DATABASE_URL"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
     migrations_paths: db/cable_migrate
