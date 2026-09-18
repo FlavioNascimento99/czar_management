@@ -16,26 +16,25 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
-gem 'kaminari'
-gem 'bootstrap5-kaminari-views', '~> 0.0.1'
+gem "kaminari"
+gem "bootstrap5-kaminari-views", "~> 0.0.1"
 
 group :development, :test do
-  gem 'rspec-rails'
-  gem 'factory_bot_rails'
-  gem 'faker'
-
+  gem "rspec-rails"
+  gem "factory_bot_rails"
+  gem "faker"
 end
 
 group :test do
-  gem 'capybara'
-  gem 'selenium-webdriver'
-  gem 'database_cleaner-active_record'
-  gem 'rails-controller-testing'
+  gem "capybara"
+  gem "selenium-webdriver"
+  gem "database_cleaner-active_record"
+  gem "rails-controller-testing"
 end
 
 # sqlite3 must install on all platforms: Linux (CI, Docker, Kamal) needs it,
 # not just Windows. Restricting `platforms:` broke `bundle install` on ubuntu-latest.
-gem 'sqlite3', '~> 2.7'
+gem "sqlite3", "~> 2.7"
 
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
