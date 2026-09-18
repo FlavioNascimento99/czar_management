@@ -7,6 +7,6 @@ class User < ApplicationRecord
 
   # Relacionamentos
   has_and_belongs_to_many :projects
-  has_many :authored_tasks, class_name: 'Task', foreign_key: 'author_id', dependent: :destroy
-  has_many :assigned_tasks, class_name: 'Task', foreign_key: 'assigned_to_id', dependent: :nullify
+  has_many :authored_tasks, class_name: "Task", foreign_key: "author_id", dependent: :destroy
+  has_many :assigned_tasks, class_name: "Task", foreign_key: "assigned_to_id", dependent: :nullify
 end

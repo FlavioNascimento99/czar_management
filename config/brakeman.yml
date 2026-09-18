@@ -1,0 +1,9 @@
+# Brakeman configuration. Auto-loaded from ./config/brakeman.yml by `bin/brakeman`.
+#
+# EOLRuby/EOLRails are skipped here so version-upgrade debt does not block
+# every PR. Upgrades are tracked explicitly instead:
+# - Ruby 3.2.2 is EOL since 2026-03-31 -> upgrade to a maintained 3.3/3.4
+# - Rails 8.0.2 support ends 2026-11-07 -> upgrade to 8.1.x (see Dependabot PRs)
+:skip_checks:
+  - CheckEOLRuby
+  - CheckEOLRails

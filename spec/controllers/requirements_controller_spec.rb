@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe RequirementsController, type: :controller do
   let(:user) { create(:user) }
-  let(:project) { create(:project, users: [user]) }
+  let(:project) { create(:project, users: [ user ]) }
   let(:requirement) { create(:requirement, project: project) }
 
   before { allow(controller).to receive(:current_user).and_return(user) }

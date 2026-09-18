@@ -2,7 +2,7 @@ class RequirementsController < ApplicationController
   before_action :require_login
   before_action :set_project
   before_action :check_project_member
-  before_action :set_requirement, only: [:show, :edit, :update, :destroy]
+  before_action :set_requirement, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @requirements = @project.requirements
@@ -17,9 +17,9 @@ class RequirementsController < ApplicationController
 
   def create
     @requirement = @project.requirements.build(requirement_params)
-    
+
     if @requirement.save
-      redirect_to [@project, @requirement], notice: 'Requisito criado com sucesso!'
+      redirect_to [ @project, @requirement ], notice: "Requisito criado com sucesso!"
     else
       render :new, status: :unprocessable_entity
     end
@@ -30,7 +30,7 @@ class RequirementsController < ApplicationController
 
   def update
     if @requirement.update(requirement_params)
-      redirect_to [@project, @requirement], notice: 'Requisito atualizado com sucesso!'
+      redirect_to [ @project, @requirement ], notice: "Requisito atualizado com sucesso!"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -38,8 +38,7 @@ class RequirementsController < ApplicationController
 
   def destroy
     @requirement.destroy
-    redirect_to @project, notice: 'Requisito excluído com sucesso!'
-    return
+    redirect_to @project, notice: "Requisito excluído com sucesso!"
   end
 
   private
@@ -54,7 +53,7 @@ class RequirementsController < ApplicationController
 
   def check_project_member
     unless @project.users.include?(current_user)
-      flash[:alert] = 'Você não tem permissão para acessar este projeto'
+      flash[:alert] = "Você não tem permissão para acessar este projeto"
       redirect_to projects_path
     end
   end
