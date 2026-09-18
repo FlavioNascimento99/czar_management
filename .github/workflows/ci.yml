@@ -37,15 +37,6 @@ jobs:
       - name: Run RSpec suite
         run: bundle exec rspec
 
-      # TEMPORARY (rails-8.1 upgrade): capture the re-resolved lockfile so it
-      # can be committed. Remove this step once Gemfile.lock is updated.
-      - name: Upload resolved lockfile
-        if: always()
-        uses: actions/upload-artifact@v5
-        with:
-          name: resolved-lockfile
-          path: Gemfile.lock
-
   scan_ruby:
     runs-on: ubuntu-latest
 
