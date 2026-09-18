@@ -23,6 +23,10 @@
   <p class="text-muted">Nenhum requisito criado ainda.</p>
 <% end %>
 
+<div class="mt-3 d-flex justify-content-center">
+  <%= paginate @requirements, theme: "bootstrap-5" %>
+</div>
+
 <div class="mt-3">
   <%= link_to "Voltar ao projeto", @project, class: "btn btn-secondary" %>
 </div>

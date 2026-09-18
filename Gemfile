@@ -16,6 +16,9 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+# Rate limiting for auth endpoints [https://github.com/rack/rack-attack]
+gem "rack-attack"
+
 gem "kaminari"
 gem "bootstrap5-kaminari-views", "~> 0.0.1"
 

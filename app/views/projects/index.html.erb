@@ -19,15 +19,15 @@
             <div class="row text-center mb-3">
               <div class="col">
                 <small class="text-muted">Tarefas</small>
-                <div class="fw-bold"><%= project.tasks.count %></div>
+                <div class="fw-bold"><%= @task_counts.fetch(project.id, 0) %></div>
               </div>
               <div class="col">
                 <small class="text-muted">Requisitos</small>
-                <div class="fw-bold"><%= project.requirements.count %></div>
+                <div class="fw-bold"><%= @requirement_counts.fetch(project.id, 0) %></div>
               </div>
               <div class="col">
                 <small class="text-muted">Membros</small>
-                <div class="fw-bold"><%= project.users.count %></div>
+                <div class="fw-bold"><%= project.users.size %></div>
               </div>
             </div>
           </div>
