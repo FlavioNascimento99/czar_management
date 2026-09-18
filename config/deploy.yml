@@ -1,13 +1,22 @@
 # Name of your application. Used to uniquely configure containers.
+# Deploy target values come from the environment so this file is safe for git.
+# Required before the first deploy:
+#   export KAMAL_IMAGE="your-dockerhub-user/czar_management"  # or ghcr.io/your-user/czar_management
+#   export KAMAL_SERVER_IP="203.0.113.10"                     # your VPS address
+#   export KAMAL_PROXY_HOST="app.example.com"                 # public domain (proxied by Cloudflare)
+#   export KAMAL_REGISTRY_USER="your-dockerhub-user"
+#   export APP_HOST="app.example.com"                         # must match KAMAL_PROXY_HOST
+#   export KAMAL_REGISTRY_PASSWORD="..."                       # registry token (see .kamal/secrets)
+#   export SECRET_KEY_BASE="$(openssl rand -hex 64)"           # generate ONCE, store safely
 service: czar_management
 
 # Name of the container image.
-image: your-user/czar_management
+image: <%= ENV.fetch("KAMAL_IMAGE") %>
 
 # Deploy to these servers.
 servers:
   web:
-    - 192.168.0.1
+    - <%= ENV.fetch("KAMAL_SERVER_IP") %>
   # job:
   #   hosts:
   #     - 192.168.0.1
@@ -16,16 +25,18 @@ servers:
 # Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
 # Remove this section when using multiple web servers and ensure you terminate SSL at your load balancer.
 #
-# Note: If using Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
+# Note: If using Cloudflare, set encryption mode in SSL/TLS setting to
+# "Full (strict)" to enable CF-to-app encryption. "Flexible" + Rails
+# force_ssl causes an infinite redirect loop.
 proxy:
   ssl: true
-  host: app.example.com
+  host: <%= ENV.fetch("KAMAL_PROXY_HOST") %>
 
 # Credentials for your image host.
 registry:
   # Specify the registry server, if you're not using Docker Hub
   # server: registry.digitalocean.com / ghcr.io / ...
-  username: your-user
+  username: <%= ENV.fetch("KAMAL_REGISTRY_USER") %>
 
   # Always use an access token rather than real password when possible.
   password:
@@ -34,8 +45,10 @@ registry:
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
 env:
   secret:
-    - RAILS_MASTER_KEY
+    - SECRET_KEY_BASE
   clear:
+    # Public hostname, also used for Host authorization and mailer links.
+    APP_HOST: <%= ENV.fetch("APP_HOST") %>
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
     SOLID_QUEUE_IN_PUMA: true
