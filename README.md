@@ -98,8 +98,8 @@ CzarManagement é uma versão simplificada de ferramentas como Trello/Asana, foc
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Ruby**: 3.2.2
-- **Rails**: 8.0.2
+- **Ruby**: 3.4.10
+- **Rails**: 8.1.3.1
 - **Banco de Dados**: SQLite (desenvolvimento)
 - **Autenticação**: bcrypt gem com has_secure_password
 - **Frontend**: Bootstrap 5 para interface responsiva
@@ -108,8 +108,8 @@ CzarManagement é uma versão simplificada de ferramentas como Trello/Asana, foc
 ## 📦 Instalação e Configuração
 
 ### Pré-requisitos
-- Ruby 3.2.2
-- Rails 8.0.2
+- Ruby 3.4.10
+- Rails 8.1.3.1
 - SQLite3
 
 ### Passos para Instalação
