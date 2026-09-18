@@ -4,9 +4,10 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = User.find_by(email: params[:email])
+    user = User.find_by(email: params[:email].to_s.strip.downcase)
 
     if user && user.authenticate(params[:password])
+      reset_session
       session[:user_id] = user.id
       redirect_to root_path, notice: "Login realizado com sucesso!"
     else
@@ -16,7 +17,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session[:user_id] = nil
+    reset_session
     redirect_to login_path, notice: "Logout realizado com sucesso!"
   end
 end

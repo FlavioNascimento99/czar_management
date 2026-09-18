@@ -10,6 +10,12 @@ RSpec.describe SessionsController, type: :controller do
       expect(response).to redirect_to(root_path)
     end
 
+    it "loga com email em caixa alta e espaços" do
+      post :create, params: { email: "  #{user.email.upcase}  ", password: "password123" }
+      expect(session[:user_id]).to eq(user.id)
+      expect(response).to redirect_to(root_path)
+    end
+
     it "não loga com credenciais inválidas" do
       post :create, params: { email: user.email, password: "errada" }
       expect(session[:user_id]).to be_nil

@@ -1,2 +1,28 @@
-<h1>Requirements#index</h1>
-<p>Find me in app/views/requirements/index.html.erb</p>
+<% content_for :title, "Requisitos - #{@project.name}" %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1>Requisitos</h1>
+    <small class="text-muted">Projeto: <%= @project.name %></small>
+  </div>
+  <%= link_to "Novo Requisito", new_project_requirement_path(@project), class: "btn btn-primary" %>
+</div>
+
+<% if @requirements.any? %>
+  <div class="list-group">
+    <% @requirements.each do |requirement| %>
+      <%= link_to [@project, requirement], class: "list-group-item list-group-item-action d-flex justify-content-between align-items-center" do %>
+        <span><%= requirement.title %></span>
+        <span class="badge bg-<%= requirement.priority == "alta" ? "danger" : requirement.priority == "media" ? "warning" : "secondary" %>">
+          <%= requirement.priority.capitalize %>
+        </span>
+      <% end %>
+    <% end %>
+  </div>
+<% else %>
+  <p class="text-muted">Nenhum requisito criado ainda.</p>
+<% end %>
+
+<div class="mt-3">
+  <%= link_to "Voltar ao projeto", @project, class: "btn btn-secondary" %>
+</div>

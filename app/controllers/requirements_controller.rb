@@ -4,6 +4,10 @@ class RequirementsController < ApplicationController
   before_action :check_project_member
   before_action :set_requirement, only: [ :show, :edit, :update, :destroy ]
 
+  # Prioridade adulterada no form levanta ArgumentError na atribuição do enum;
+  # converte em 302 com alerta em vez de 500.
+  rescue_from ArgumentError, with: :invalid_enumeration
+
   def index
     @requirements = @project.requirements
   end
@@ -52,10 +56,14 @@ class RequirementsController < ApplicationController
   end
 
   def check_project_member
-    unless @project.users.include?(current_user)
+    unless @project.member?(current_user)
       flash[:alert] = "Você não tem permissão para acessar este projeto"
       redirect_to projects_path
     end
+  end
+
+  def invalid_enumeration
+    redirect_to @project, alert: "Prioridade inválida"
   end
 
   def requirement_params

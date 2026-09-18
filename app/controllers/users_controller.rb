@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  before_action :require_login, only: [ :show ]
+
   def new
     @user = User.new
   end
@@ -7,6 +9,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
+      reset_session
       session[:user_id] = @user.id
       redirect_to root_path, notice: "Conta criada com sucesso!"
     else
@@ -15,7 +18,11 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
+    if params[:id].to_s != current_user.id.to_s
+      redirect_to root_path, alert: "Você só pode ver o seu próprio perfil"
+    else
+      @user = current_user
+    end
   end
 
   private

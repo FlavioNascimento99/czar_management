@@ -1,2 +1,26 @@
-<h1>Requirements#show</h1>
-<p>Find me in app/views/requirements/show.html.erb</p>
+<% content_for :title, "#{@requirement.title} - #{@project.name}" %>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <h3 class="card-title mb-0"><%= @requirement.title %></h3>
+          <span class="badge bg-<%= @requirement.priority == "alta" ? "danger" : @requirement.priority == "media" ? "warning" : "secondary" %>">
+            <%= @requirement.priority.capitalize %>
+          </span>
+        </div>
+
+        <p class="mt-2"><%= simple_format(@requirement.description) %></p>
+
+        <div class="d-flex gap-2">
+          <%= link_to "Editar", edit_project_requirement_path(@project, @requirement), class: "btn btn-primary btn-sm" %>
+          <%= link_to "Excluir", [ @project, @requirement ],
+                      data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja excluir este requisito?" },
+                      class: "btn btn-outline-danger btn-sm" %>
+          <%= link_to "Voltar", @project, class: "btn btn-secondary btn-sm" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -7,6 +7,11 @@
   </div>
   <div class="d-flex gap-2">
     <%= link_to "Editar", edit_project_path(@project), class: "btn btn-outline-primary" %>
+    <% if @project.owned_by?(current_user) %>
+      <%= link_to "Excluir", @project,
+                  data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja excluir este projeto? Esta ação não pode ser desfeita." },
+                  class: "btn btn-outline-danger" %>
+    <% end %>
     <%= link_to "Voltar", projects_path, class: "btn btn-secondary" %>
   </div>
 </div>
@@ -44,6 +49,43 @@
         <p class="card-text">Requisitos</p>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Membros -->
+<div class="card mb-4">
+  <div class="card-header">
+    <span class="fw-bold">Membros (<%= @members.count %>)</span>
+  </div>
+  <div class="card-body">
+    <ul class="list-group mb-3">
+      <% @members.each do |member| %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span>
+            <%= member.name %>
+            <small class="text-muted"><%= member.email %></small>
+            <% if @project.owned_by?(member) %>
+              <span class="badge bg-primary">Dono</span>
+            <% end %>
+          </span>
+          <% if @project.owned_by?(current_user) && !@project.owned_by?(member) %>
+            <%= button_to "Remover", project_remove_member_path(@project, user_id: member.id),
+                          method: :delete, class: "btn btn-outline-danger btn-sm",
+                          form: { "data-turbo-confirm": "Remover este membro do projeto?" } %>
+          <% elsif member == current_user %>
+            <%= button_to "Sair do projeto", project_remove_member_path(@project, user_id: member.id),
+                          method: :delete, class: "btn btn-outline-warning btn-sm",
+                          form: { "data-turbo-confirm": "Sair deste projeto?" } %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+    <% if @project.owned_by?(current_user) %>
+      <%= form_with url: project_add_member_path(@project), method: :post, local: true, class: "d-flex gap-2" do |form| %>
+        <%= form.email_field :email, class: "form-control", placeholder: "Email do novo membro", required: true %>
+        <%= form.submit "Adicionar membro", class: "btn btn-primary" %>
+      <% end %>
+    <% end %>
   </div>
 </div>
 

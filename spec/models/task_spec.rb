@@ -34,8 +34,19 @@ RSpec.describe Task, type: :model do
   end
 
   it "tem um responsável" do
+    project = create(:project)
     assignee = create(:user)
-    task = create(:task, assigned_to: assignee)
+    project.users << assignee
+    task = create(:task, project: project, assigned_to: assignee)
     expect(task.assigned_to).to eq(assignee)
+  end
+
+  it "é inválido com responsável fora do projeto" do
+    project = create(:project)
+    outsider = create(:user)
+    task = build(:task, project: project, assigned_to: outsider)
+    # a factory adiciona o responsável como membro; remove para simular invasão
+    task.project.users.delete(outsider)
+    expect(task).not_to be_valid
   end
 end

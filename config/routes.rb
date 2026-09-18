@@ -34,6 +34,8 @@ Rails.application.routes.draw do
   resources :projects do
     resources :tasks
     resources :requirements
+    post "members", to: "projects#add_member", as: :add_member
+    delete "members/:user_id", to: "projects#remove_member", as: :remove_member
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
