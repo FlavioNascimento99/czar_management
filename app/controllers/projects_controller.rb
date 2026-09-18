@@ -5,7 +5,10 @@ class ProjectsController < ApplicationController
   before_action :require_owner, only: [ :destroy, :add_member ]
 
   def index
-    @projects = current_user.projects
+    @projects = current_user.projects.includes(:users).order(:name).to_a
+    project_ids = @projects.map(&:id)
+    @task_counts = Task.where(project_id: project_ids).group(:project_id).count
+    @requirement_counts = Requirement.where(project_id: project_ids).group(:project_id).count
   end
 
   def show
@@ -18,6 +21,10 @@ class ProjectsController < ApplicationController
                             .order(created_at: :desc)
                             .page(params[:requirements_page]).per(6)
     @members = @project.users.order(:name)
+    @tasks_count = @project.tasks.count
+    @tasks_done_count = @project.tasks.concluida.count
+    @tasks_doing_count = @project.tasks.em_andamento.count
+    @requirements_count = @project.requirements.count
   end
 
   def new

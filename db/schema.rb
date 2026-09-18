@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_09_18_120001) do
+ActiveRecord::Schema[8.0].define(version: 2026_09_18_120002) do
   create_table "projects", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -23,6 +23,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_18_120001) do
   create_table "projects_users", id: false, force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "project_id", null: false
+    t.index [ "project_id", "user_id" ], name: "index_projects_users_unique", unique: true
   end
 
   create_table "requirements", force: :cascade do |t|
@@ -60,6 +61,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_18_120001) do
   end
 
   add_foreign_key "projects", "users", column: "owner_id"
+  add_foreign_key "projects_users", "projects"
+  add_foreign_key "projects_users", "users"
 
   add_foreign_key "requirements", "projects"
   add_foreign_key "tasks", "projects"

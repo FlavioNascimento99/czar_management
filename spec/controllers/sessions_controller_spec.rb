@@ -16,6 +16,12 @@ RSpec.describe SessionsController, type: :controller do
       expect(response).to redirect_to(root_path)
     end
 
+    it "reseta a sessão no login (anti-fixation)" do
+      post :create, params: { email: user.email, password: "password123" }, session: { pre_login: "stale" }
+      expect(session[:user_id]).to eq(user.id)
+      expect(session[:pre_login]).to be_nil
+    end
+
     it "não loga com credenciais inválidas" do
       post :create, params: { email: user.email, password: "errada" }
       expect(session[:user_id]).to be_nil

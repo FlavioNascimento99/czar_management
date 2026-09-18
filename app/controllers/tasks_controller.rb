@@ -9,7 +9,7 @@ class TasksController < ApplicationController
   rescue_from ArgumentError, with: :invalid_enumeration
 
   def index
-    @tasks = @project.tasks.includes(:author, :assigned_to)
+    @tasks = @project.tasks.includes(:author, :assigned_to).page(params[:page]).per(20)
   end
 
   def show

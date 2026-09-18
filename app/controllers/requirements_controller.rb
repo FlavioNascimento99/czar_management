@@ -9,7 +9,7 @@ class RequirementsController < ApplicationController
   rescue_from ArgumentError, with: :invalid_enumeration
 
   def index
-    @requirements = @project.requirements
+    @requirements = @project.requirements.page(params[:page]).per(20)
   end
 
   def show

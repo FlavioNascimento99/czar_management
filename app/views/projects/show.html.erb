@@ -21,7 +21,7 @@
   <div class="col-md-3">
     <div class="card text-center">
       <div class="card-body">
-        <h3 class="text-primary"><%= @project.tasks.count %></h3>
+        <h3 class="text-primary"><%= @tasks_count %></h3>
         <p class="card-text">Total de Tarefas</p>
       </div>
     </div>
@@ -29,7 +29,7 @@
   <div class="col-md-3">
     <div class="card text-center">
       <div class="card-body">
-        <h3 class="text-success"><%= @project.tasks.concluida.count %></h3>
+        <h3 class="text-success"><%= @tasks_done_count %></h3>
         <p class="card-text">Concluídas</p>
       </div>
     </div>
@@ -37,7 +37,7 @@
   <div class="col-md-3">
     <div class="card text-center">
       <div class="card-body">
-        <h3 class="text-warning"><%= @project.tasks.em_andamento.count %></h3>
+        <h3 class="text-warning"><%= @tasks_doing_count %></h3>
         <p class="card-text">Em Andamento</p>
       </div>
     </div>
@@ -45,7 +45,7 @@
   <div class="col-md-3">
     <div class="card text-center">
       <div class="card-body">
-        <h3 class="text-info"><%= @project.requirements.count %></h3>
+        <h3 class="text-info"><%= @requirements_count %></h3>
         <p class="card-text">Requisitos</p>
       </div>
     </div>
@@ -93,12 +93,12 @@
 <ul class="nav nav-tabs" id="projectTabs" role="tablist">
   <li class="nav-item" role="presentation">
     <button class="nav-link active" id="tasks-tab" data-bs-toggle="tab" data-bs-target="#tasks" type="button" role="tab">
-      Tarefas (<%= @project.tasks.count %>)
+      Tarefas (<%= @tasks_count %>)
     </button>
   </li>
   <li class="nav-item" role="presentation">
     <button class="nav-link" id="requirements-tab" data-bs-toggle="tab" data-bs-target="#requirements" type="button" role="tab">
-      Requisitos (<%= @project.requirements.count %>)
+      Requisitos (<%= @requirements_count %>)
     </button>
   </li>
 </ul>

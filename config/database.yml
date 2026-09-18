@@ -23,6 +23,9 @@ test:
 
 # Store production database in the storage/ directory, which by default
 # is mounted as a persistent Docker volume in config/deploy.yml.
+# Single-node only: SQLite serializes writers, so this setup supports one
+# app server. Snapshot/back up the czar_management_storage volume off-server
+# (migrate to Postgres if you ever scale past one node).
 production:
   primary:
     <<: *default
