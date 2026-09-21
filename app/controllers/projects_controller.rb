@@ -1,8 +1,8 @@
 class ProjectsController < ApplicationController
   before_action :require_login
-  before_action :set_project, only: [ :show, :edit, :update, :destroy, :add_member, :remove_member ]
-  before_action :check_project_member, only: [ :show, :edit, :update, :destroy, :add_member, :remove_member ]
-  before_action :require_owner, only: [ :destroy, :add_member ]
+  before_action :set_project, only: [ :show, :board, :calendar, :edit, :update, :destroy, :add_member, :remove_member ]
+  before_action :check_project_member, only: [ :show, :board, :calendar, :edit, :update, :destroy, :add_member, :remove_member ]
+  before_action :require_owner, only: [ :destroy ]
 
   def index
     @projects = current_user.projects.includes(:users).order(:name).to_a
@@ -28,6 +28,20 @@ class ProjectsController < ApplicationController
     @requirements_count = @project.requirements.count
   end
 
+  def board
+    tasks = @project.tasks.includes(:assigned_to, :tags).ordered_by_due
+    @columns = {
+      "pendente" => tasks.select(&:pendente?),
+      "em_andamento" => tasks.select(&:em_andamento?),
+      "concluida" => tasks.select(&:concluida?)
+    }
+  end
+
+  def calendar
+    ics = IcalService.tasks_calendar(tasks: @project.tasks.where.not(due_date: nil), calendar_name: @project.name)
+    render plain: ics, content_type: "text/calendar"
+  end
+
   def new
     @project = Project.new
   end
@@ -35,14 +49,17 @@ class ProjectsController < ApplicationController
   def create
     @project = Project.new(project_params)
     @project.owner = current_user
+    @template_key = params[:project][:template].to_s if params[:project]
+    @template_key = nil unless ProjectTemplateService.keys.include?(@template_key)
 
     begin
       ActiveRecord::Base.transaction do
         @project.save!
         @project.users << current_user
+        ProjectTemplateService.apply!(project: @project, template_key: @template_key, creator: current_user) if @template_key
       end
       redirect_to @project, notice: I18n.t("projects.created")
-    rescue ActiveRecord::RecordInvalid
+    rescue ActiveRecord::RecordInvalid, ArgumentError
       render :new, status: :unprocessable_entity
     end
   end
@@ -72,6 +89,8 @@ class ProjectsController < ApplicationController
       redirect_to @project, alert: I18n.t("projects.already_member")
     else
       @project.users << user
+      ActivityLog.log!(project: @project, actor: current_user, action: "member_added", trackable: user)
+      TaskMailer.member_added(@project.id, user.id).deliver_later
       redirect_to @project, notice: I18n.t("projects.member_added")
     end
   end
@@ -85,6 +104,7 @@ class ProjectsController < ApplicationController
       redirect_to @project, alert: I18n.t("projects.owner_cannot_leave")
     elsif @project.owned_by?(current_user) || user == current_user
       @project.users.delete(user)
+      ActivityLog.log!(project: @project, actor: current_user, action: "member_removed", trackable: user)
       redirect_to @project, notice: I18n.t("projects.member_removed")
     else
       redirect_to @project, alert: I18n.t("projects.owner_only")

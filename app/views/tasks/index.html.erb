@@ -22,6 +22,9 @@
     <div class="col-md-3">
       <%= select_tag :assigned_to_id, options_for_select([["Todos responsáveis", ""]] + @project_users.map { |u| [u.name, u.id] }, params[:assigned_to_id]), class: "form-select" %>
     </div>
+    <div class="col-md-2">
+      <%= select_tag :tag_id, options_for_select([["Todas etiquetas", ""]] + @project_tags.map { |t| [t.name, t.id] }, params[:tag_id]), class: "form-select" %>
+    </div>
     <div class="col-md-2 d-flex gap-2">
       <%= submit_tag "Filtrar", class: "btn btn-primary" %>
       <%= link_to "Limpar", project_tasks_path(@project), class: "btn btn-outline-secondary" %>
@@ -33,7 +36,12 @@
   <div class="list-group">
     <% @tasks.each do |task| %>
       <%= link_to [@project, task], class: "list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-2" do %>
-        <span><%= task.title %></span>
+        <span>
+          <%= task.title %>
+          <% task.tags.each do |tag| %>
+            <span class="badge ms-1" style="background-color: <%= tag.color %>"><%= tag.name %></span>
+          <% end %>
+        </span>
         <span class="d-flex gap-1 align-items-center">
           <%= due_date_badge(task) %>
           <span class="badge bg-<%= task.status == "concluida" ? "success" : task.status == "em_andamento" ? "warning" : "secondary" %>">

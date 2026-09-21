@@ -39,6 +39,13 @@ RSpec.describe ProjectsController, type: :controller do
       expect(created.member?(user)).to be_truthy
       expect(response).to redirect_to(created)
     end
+
+    it "aplica template quando informado" do
+      expect {
+        post :create, params: { project: { name: "Sprint", description: "Desc", template: "onboarding" } }
+      }.to change(Task, :count).by(2)
+      expect(Project.last.tasks.count).to eq(2)
+    end
   end
 
   describe "PATCH #update" do
@@ -79,13 +86,42 @@ RSpec.describe ProjectsController, type: :controller do
       expect(flash[:alert]).to be_present
     end
 
-    it "bloqueia quem não é dono" do
+    it "permite membro (nao-dono) adicionar" do
       other_owner = create(:user)
       owned = create(:project, owner: other_owner, users: [ other_owner, user ])
       newcomer = create(:user)
       post :add_member, params: { id: owned.id, email: newcomer.email }
-      expect(owned.reload.member?(newcomer)).to be_falsey
+      expect(owned.reload.member?(newcomer)).to be_truthy
       expect(response).to redirect_to(owned)
+    end
+
+    it "bloqueia nao-membro" do
+      outsider_project = create(:project)
+      newcomer = create(:user)
+      post :add_member, params: { id: outsider_project.id, email: newcomer.email }
+      expect(response).to redirect_to(projects_path)
+      expect(outsider_project.reload.member?(newcomer)).to be_falsey
+    end
+
+    it "registra activity ao adicionar" do
+      newcomer = create(:user)
+      expect {
+        post :add_member, params: { id: project.id, email: newcomer.email }
+      }.to change(ActivityLog, :count).by(1)
+    end
+  end
+
+  describe "GET #board" do
+    it "mostra colunas do kanban" do
+      get :board, params: { id: project.id }
+      expect(response).to have_http_status(:ok)
+      expect(assigns(:columns).keys).to match_array(%w[pendente em_andamento concluida])
+    end
+
+    it "bloqueia não-membro" do
+      other = create(:project)
+      get :board, params: { id: other.id }
+      expect(response).to redirect_to(projects_path)
     end
   end
 

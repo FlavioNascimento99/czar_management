@@ -50,6 +50,20 @@ RSpec.describe Task, type: :model do
     expect(task).not_to be_valid
   end
 
+  describe "anexos" do
+    it "rejeita executável" do
+      task = build(:task)
+      task.files.attach(io: StringIO.new("x"), filename: "run.exe", content_type: "application/octet-stream")
+      expect(task).not_to be_valid
+    end
+
+    it "aceita txt pequeno" do
+      task = build(:task)
+      task.files.attach(io: StringIO.new("hello"), filename: "nota.txt", content_type: "text/plain")
+      expect(task).to be_valid
+    end
+  end
+
   describe "prazos" do
     it "detecta atrasada" do
       task = build(:task, due_date: 1.day.ago.to_date, status: "pendente")

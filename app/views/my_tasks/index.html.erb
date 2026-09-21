@@ -5,9 +5,12 @@
     <h1>Minhas Tarefas</h1>
     <small class="text-muted">Tudo atribuído a você, ordenado por prazo</small>
   </div>
-  <% if @overdue_count.positive? %>
-    <span class="badge bg-danger fs-6"><%= @overdue_count %> atrasada(s)</span>
-  <% end %>
+  <div class="d-flex gap-2 align-items-center">
+    <%= link_to "Calendário (.ics)", my_tasks_calendar_path(format: :ics), class: "btn btn-sm btn-outline-info" %>
+    <% if @overdue_count.positive? %>
+      <span class="badge bg-danger fs-6"><%= @overdue_count %> atrasada(s)</span>
+    <% end %>
+  </div>
 </div>
 
 <div class="d-flex gap-2 mb-3 flex-wrap">
