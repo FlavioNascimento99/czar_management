@@ -14,6 +14,19 @@ class Task < ApplicationRecord
   belongs_to :project
   belongs_to :author, class_name: "User"
   belongs_to :assigned_to, class_name: "User"
+  has_many :comments, dependent: :destroy
+
+  scope :overdue, -> { where.not(status: statuses[:concluida]).where.not(due_date: nil).where("due_date < ?", Date.current) }
+  scope :due_today, -> { where(due_date: Date.current) }
+  scope :ordered_by_due, -> { order(Arel.sql("due_date IS NULL, due_date ASC, created_at DESC")) }
+
+  def overdue?
+    due_date.present? && !concluida? && due_date < Date.current
+  end
+
+  def due_today?
+    due_date.present? && due_date == Date.current
+  end
 
   private
 

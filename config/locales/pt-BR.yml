@@ -1,0 +1,23 @@
+pt-BR:
+  app:
+    name: "Czar"
+    tagline: "Gestão de projetos grátis e fácil"
+  auth:
+    login_required: "Você precisa estar logado para acessar esta página"
+    login_success: "Login realizado com sucesso!"
+    logout_success: "Logout realizado com sucesso!"
+    signup_success: "Conta criada com sucesso!"
+    invalid_credentials: "Email ou senha inválidos"
+    profile_forbidden: "Você só pode ver o seu próprio perfil"
+  projects:
+    created: "Projeto criado com sucesso!"
+    updated: "Projeto atualizado com sucesso!"
+    destroyed: "Projeto excluído com sucesso!"
+    forbidden: "Você não tem permissão para acessar este projeto"
+    owner_only: "Apenas o dono do projeto pode fazer isso"
+    member_added: "Membro adicionado com sucesso!"
+    member_removed: "Membro removido com sucesso!"
+    member_not_found: "Membro não encontrado"
+    owner_cannot_leave: "O dono do projeto não pode ser removido"
+    user_not_found: "Usuário não encontrado com esse email"
+    already_member: "Usuário já é membro do projeto"

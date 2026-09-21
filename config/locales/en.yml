@@ -1,31 +1,23 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  app:
+    name: "Czar"
+    tagline: "Free & easy project management"
+  auth:
+    login_required: "Please log in to continue"
+    login_success: "Welcome back!"
+    logout_success: "You've been logged out. See you soon!"
+    signup_success: "Account created — welcome to Czar!"
+    invalid_credentials: "Invalid email or password"
+    profile_forbidden: "You can only view your own profile"
+  projects:
+    created: "Project created!"
+    updated: "Project updated!"
+    destroyed: "Project deleted."
+    forbidden: "You don't have permission to access this project"
+    owner_only: "Only the project owner can do that"
+    member_added: "Member added!"
+    member_removed: "Member removed."
+    member_not_found: "Member not found"
+    owner_cannot_leave: "The project owner can't be removed"
+    user_not_found: "No user found with that email"
+    already_member: "That user is already a member"

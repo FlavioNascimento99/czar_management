@@ -33,6 +33,9 @@ module CzarManagement
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
+    # SaaS i18n: English by default, PT-BR ready.
+    config.i18n.available_locales = [ :en, :"pt-BR" ]
+    config.i18n.default_locale = :en
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 

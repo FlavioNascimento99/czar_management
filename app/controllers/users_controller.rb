@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     if @user.save
       reset_session
       session[:user_id] = @user.id
-      redirect_to root_path, notice: "Conta criada com sucesso!"
+      redirect_to root_path, notice: I18n.t("auth.signup_success")
     else
       render :new, status: :unprocessable_entity
     end
@@ -19,7 +19,7 @@ class UsersController < ApplicationController
 
   def show
     if params[:id].to_s != current_user.id.to_s
-      redirect_to root_path, alert: "Você só pode ver o seu próprio perfil"
+      redirect_to root_path, alert: I18n.t("auth.profile_forbidden")
     else
       @user = current_user
     end

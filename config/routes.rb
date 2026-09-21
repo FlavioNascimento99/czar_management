@@ -9,9 +9,12 @@ Rails.application.routes.draw do
   post "/signup", to: "users#create"
 
   # Recursos principais
+  get "/my_tasks", to: "my_tasks#index", as: :my_tasks
   resources :users, only: [ :show ]
   resources :projects do
-    resources :tasks
+    resources :tasks do
+      resources :comments, only: [ :create, :destroy ]
+    end
     resources :requirements
     post "members", to: "projects#add_member", on: :member, as: :add_member
     delete "members/:user_id", to: "projects#remove_member", on: :member, as: :remove_member
@@ -25,6 +28,6 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  # Defines the root path route ("/")
-  root "projects#index"
+  # Public SaaS landing + logged-in dashboard
+  root "pages#home"
 end

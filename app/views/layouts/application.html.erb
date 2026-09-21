@@ -1,74 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title><%= content_for(:title) || "CzarManagement" %></title>
+    <title><%= content_for(:title) || "Czar — Free & easy project management" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="Czar is free project management for small teams. Projects, tasks and requirements in one simple place.">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= yield :head %>
-
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "saas", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
-    
-    <!-- Bootstrap CSS (pinned with SRI; CSP follow-up: nonce plumbing for importmap) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha512-t4GWSVZO1eC8BM339Xd7Uphw5s17a86tIZIj8qRxhnKub6WoyhnrxeCIMeAqBPgdZGlCcG2PrZjMc+Wr78+5Xg=="
           crossorigin="anonymous">
   </head>
 
-  <body>
-    <!-- Navegação -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <div class="container">
-        <%= link_to "CzarManagement", root_path, class: "navbar-brand fw-bold" %>
-        
+  <body class="saas">
+    <header class="saas-nav">
+      <div class="saas-nav-inner">
+        <%= link_to root_path, class: "saas-brand" do %>
+          <span class="saas-logo">C</span><span>Czar</span>
+        <% end %>
+
         <% if logged_in? %>
-          <div class="navbar-nav ms-auto">
-            <span class="navbar-text me-3">Olá, <%= current_user.name %>!</span>
-            <%= link_to "Meus Projetos", projects_path, class: "nav-link text-white" %>
-            <%= button_to "Logout", logout_path, method: :delete, class: "btn btn-link nav-link text-white", form: { "data-turbo-confirm": "Deseja realmente sair?" } %>
+          <nav class="saas-links">
+            <%= link_to "Dashboard", root_path %>
+            <%= link_to "Projects", projects_path %>
+            <%= link_to "My Tasks", my_tasks_path %>
+          </nav>
+          <div class="saas-nav-cta">
+            <span class="saas-user">Hi, <%= current_user.name %></span>
+            <%= link_to "New project", new_project_path, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+            <%= button_to "Log out", logout_path, method: :delete, class: "saas-btn saas-btn-ghost saas-btn-sm", form: { "data-turbo-confirm": "Log out?" } %>
           </div>
         <% else %>
-          <div class="navbar-nav ms-auto">
-            <%= link_to "Login", login_path, class: "nav-link text-white" %>
-            <%= link_to "Cadastrar", signup_path, class: "nav-link text-white" %>
+          <nav class="saas-links">
+            <a href="#features">Features</a>
+            <a href="#how">How it works</a>
+            <a href="#pricing">Pricing</a>
+          </nav>
+          <div class="saas-nav-cta">
+            <%= link_to "Log in", login_path, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+            <%= link_to "Start free", signup_path, class: "saas-btn saas-btn-primary saas-btn-sm" %>
           </div>
         <% end %>
       </div>
-    </nav>
+    </header>
 
-    <!-- Mensagens Flash -->
-    <% if notice %>
-      <div class="alert alert-success alert-dismissible fade show m-0" role="alert">
-        <%= notice %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-      </div>
-    <% end %>
-    
-    <% if alert %>
-      <div class="alert alert-danger alert-dismissible fade show m-0" role="alert">
-        <%= alert %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <% if notice || alert %>
+      <div class="saas-flash">
+        <% if notice %><div class="saas-alert saas-alert-success"><%= notice %></div><% end %>
+        <% if alert %><div class="saas-alert saas-alert-danger"><%= alert %></div><% end %>
       </div>
     <% end %>
 
-    <!-- Conteúdo Principal -->
-    <main class="container my-4">
+    <main class="saas-wrap">
       <%= yield %>
     </main>
 
-    <!-- Bootstrap JS (pinned with SRI) -->
+    <footer class="saas-footer">
+      <div class="saas-footer-inner">
+        <span><strong>Czar</strong> — free &amp; easy project management.</span>
+        <span>Free forever for small teams · No credit card · <a href="#pricing">Pricing</a></span>
+      </div>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
             integrity="sha512-VK2zcvntEufaimc+efOYi622VN5ZacdnufnmX7zIhCPmjhKnOi9ZDMtg1/ug5l183f19gG1/cBstPO4D8N/Img=="
             crossorigin="anonymous"></script>

@@ -9,10 +9,22 @@ class TasksController < ApplicationController
   rescue_from ArgumentError, with: :invalid_enumeration
 
   def index
-    @tasks = @project.tasks.includes(:author, :assigned_to).page(params[:page]).per(20)
+    scope = @project.tasks.includes(:author, :assigned_to).ordered_by_due
+    scope = scope.where(status: params[:status]) if Task.statuses.key?(params[:status].to_s)
+    scope = scope.where(priority: params[:priority]) if Task.priorities.key?(params[:priority].to_s)
+    scope = scope.where(assigned_to_id: params[:assigned_to_id]) if params[:assigned_to_id].present?
+    if params[:q].present?
+      q = "%#{params[:q].to_s.strip}%"
+      scope = scope.where("tasks.title LIKE ? OR tasks.description LIKE ?", q, q)
+    end
+    scope = scope.overdue if params[:filter] == "overdue"
+    @tasks = scope.page(params[:page]).per(20)
+    @project_users = @project.users.order(:name)
   end
 
   def show
+    @comments = @task.comments.includes(:author).order(created_at: :asc)
+    @comment = @task.comments.build
   end
 
   def new
@@ -25,6 +37,7 @@ class TasksController < ApplicationController
     @task.author = current_user
 
     if @task.save
+      ActivityLog.log!(project: @project, actor: current_user, action: "task_created", trackable: @task)
       redirect_to [ @project, @task ], notice: "Tarefa criada com sucesso!"
     else
       @project_users = @project.users.order(:name)
@@ -38,6 +51,8 @@ class TasksController < ApplicationController
 
   def update
     if @task.update(task_params)
+      action = (@task.saved_change_to_status? && @task.concluida?) ? "task_completed" : "task_updated"
+      ActivityLog.log!(project: @project, actor: current_user, action: action, trackable: @task)
       redirect_to [ @project, @task ], notice: "Tarefa atualizada com sucesso!"
     else
       @project_users = @project.users.order(:name)
@@ -72,6 +87,6 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:title, :description, :status, :priority, :assigned_to_id)
+    params.require(:task).permit(:title, :description, :status, :priority, :assigned_to_id, :due_date)
   end
 end

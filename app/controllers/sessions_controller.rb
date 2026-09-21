@@ -9,15 +9,15 @@ class SessionsController < ApplicationController
     if user && user.authenticate(params[:password])
       reset_session
       session[:user_id] = user.id
-      redirect_to root_path, notice: "Login realizado com sucesso!"
+      redirect_to root_path, notice: I18n.t("auth.login_success")
     else
-      flash.now[:alert] = "Email ou senha inválidos"
+      flash.now[:alert] = I18n.t("auth.invalid_credentials")
       render :new, status: :unprocessable_entity
     end
   end
 
   def destroy
     reset_session
-    redirect_to login_path, notice: "Logout realizado com sucesso!"
+    redirect_to root_path, notice: I18n.t("auth.logout_success")
   end
 end

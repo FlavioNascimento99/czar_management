@@ -418,9 +418,9 @@ DEPENDENCIES
   jbuilder
   kamal
   kaminari
+  pg (~> 1.6)
   propshaft
   puma (>= 5.0)
-  pg (~> 1.6)
   rack-attack
   rails (~> 8.1.0)
   rails-controller-testing

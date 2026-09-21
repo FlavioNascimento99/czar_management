@@ -10,7 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_18_190002) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_21_014919) do
+  create_table "activity_logs", force: :cascade do |t|
+    t.string "action", null: false
+    t.integer "actor_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "project_id", null: false
+    t.integer "trackable_id"
+    t.string "trackable_type"
+    t.datetime "updated_at", null: false
+    t.index ["actor_id"], name: "index_activity_logs_on_actor_id"
+    t.index ["project_id", "created_at"], name: "index_activity_logs_on_project_id_and_created_at"
+    t.index ["project_id"], name: "index_activity_logs_on_project_id"
+    t.index ["trackable_type", "trackable_id"], name: "index_activity_logs_on_trackable_type_and_trackable_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.integer "author_id", null: false
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.integer "task_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_comments_on_author_id"
+    t.index ["task_id"], name: "index_comments_on_task_id"
+  end
+
   create_table "projects", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
@@ -183,6 +207,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_18_190002) do
     t.integer "author_id", null: false
     t.datetime "created_at", null: false
     t.text "description"
+    t.date "due_date"
     t.integer "priority"
     t.integer "project_id", null: false
     t.integer "status"
@@ -190,6 +215,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_18_190002) do
     t.datetime "updated_at", null: false
     t.index ["assigned_to_id"], name: "index_tasks_on_assigned_to_id"
     t.index ["author_id"], name: "index_tasks_on_author_id"
+    t.index ["due_date"], name: "index_tasks_on_due_date"
     t.index ["project_id"], name: "index_tasks_on_project_id"
   end
 
@@ -202,6 +228,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_18_190002) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "activity_logs", "projects"
+  add_foreign_key "activity_logs", "users", column: "actor_id"
+  add_foreign_key "comments", "tasks"
+  add_foreign_key "comments", "users", column: "author_id"
   add_foreign_key "projects", "users", column: "owner_id"
   add_foreign_key "projects_users", "projects"
   add_foreign_key "projects_users", "users"

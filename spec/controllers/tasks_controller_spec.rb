@@ -32,6 +32,16 @@ RSpec.describe TasksController, type: :controller do
     end
   end
 
+  describe "GET #index com filtros" do
+    it "filtra por status e busca textual" do
+      create(:task, project: project, author: user, assigned_to: user, title: "Login mágico", status: "pendente")
+      create(:task, project: project, author: user, assigned_to: user, title: "Checkout", status: "concluida")
+      get :index, params: { project_id: project.id, status: "pendente", q: "mágico" }
+      expect(assigns(:tasks).map(&:title)).to include("Login mágico")
+      expect(assigns(:tasks).map(&:title)).not_to include("Checkout")
+    end
+  end
+
   describe "DELETE #destroy" do
     it "remove a tarefa" do
       delete :destroy, params: { project_id: project.id, id: task.id }

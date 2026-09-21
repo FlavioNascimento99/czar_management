@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
 
   def require_login
     unless logged_in?
-      flash[:alert] = "Você precisa estar logado para acessar esta página"
+      flash[:alert] = I18n.t("auth.login_required")
       redirect_to login_path
     end
   end
