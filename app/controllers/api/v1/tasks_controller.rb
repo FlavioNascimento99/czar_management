@@ -38,7 +38,7 @@ module Api
       end
 
       def task_api_params
-        params.require(:task).permit(:status, :priority, :assigned_to_id, :due_date, :title, :description)
+        params.require(:task).permit(:status, :priority, :assigned_to_id, :due_date, :recurrence, :title, :description)
       end
 
       def task_json(t)

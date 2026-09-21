@@ -62,8 +62,13 @@ class TasksController < ApplicationController
 
   def update
     if @task.update(task_params)
-      action = (@task.saved_change_to_status? && @task.concluida?) ? "task_completed" : "task_updated"
+      just_completed = @task.saved_change_to_status? && @task.concluida?
+      action = just_completed ? "task_completed" : "task_updated"
       ActivityLog.log!(project: @project, actor: current_user, action: action, trackable: @task)
+      if just_completed && !@task.nenhuma?
+        nxt = @task.schedule_next_occurrence!
+        ActivityLog.log!(project: @project, actor: current_user, action: "task_created", trackable: nxt)
+      end
       EmailGate.deliver(TaskMailer.task_reassigned(@task.id)) if @task.saved_change_to_assigned_to_id? && @task.assigned_to != current_user
       if @task.saved_change_to_assigned_to_id?
         Notification.notify!(user: @task.assigned_to, action: "task_reassigned", actor: current_user, notifiable: @task)
@@ -115,6 +120,6 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:title, :description, :status, :priority, :assigned_to_id, :due_date, tag_ids: [], files: [])
+    params.require(:task).permit(:title, :description, :status, :priority, :assigned_to_id, :due_date, :recurrence, tag_ids: [], files: [])
   end
 end

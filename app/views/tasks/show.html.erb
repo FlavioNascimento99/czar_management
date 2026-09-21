@@ -15,6 +15,9 @@
           <%= @task.status.humanize %>
         </span>
         <%= due_date_badge(@task) %>
+        <% unless @task.nenhuma? %>
+          <span class="badge bg-dark">🔁 <%= @task.diaria? ? "Todo dia" : "Toda semana" %></span>
+        <% end %>
         <% @task.tags.each do |tag| %>
           <span class="badge" style="background-color: <%= tag.color %>"><%= tag.name %></span>
         <% end %>

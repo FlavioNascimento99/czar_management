@@ -2,6 +2,7 @@ class Task < ApplicationRecord
   # Enums
   enum :status, { pendente: 0, em_andamento: 1, concluida: 2 }
   enum :priority, { baixa: 0, media: 1, alta: 2 }
+  enum :recurrence, { nenhuma: 0, diaria: 1, semanal: 2 }, default: :nenhuma
 
   # Validações
   validates :title, presence: true
@@ -39,6 +40,19 @@ class Task < ApplicationRecord
   def subtasks_progress
     return 0 if subtasks.empty?
     (subtasks.count(&:done) * 100 / subtasks.size)
+  end
+
+  def schedule_next_occurrence!
+    return if nenhuma?
+    base = due_date || Date.current
+    next_due = diaria? ? base + 1.day : base + 1.week
+    copy = project.tasks.create!(
+      title: title, description: description, status: "pendente",
+      priority: priority, author: author, assigned_to: assigned_to,
+      due_date: next_due, recurrence: recurrence
+    )
+    copy.tags << tags
+    copy
   end
 
   private

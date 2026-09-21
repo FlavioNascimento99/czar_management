@@ -50,6 +50,28 @@ RSpec.describe Task, type: :model do
     expect(task).not_to be_valid
   end
 
+  describe "recorrência" do
+    it "diaria agenda próxima para amanhã" do
+      task = create(:task, due_date: Date.current, recurrence: "diaria", status: "em_andamento")
+      expect { task.schedule_next_occurrence! }.to change(Task, :count).by(1)
+      nxt = Task.order(:created_at).last
+      expect(nxt.due_date).to eq(Date.tomorrow)
+      expect(nxt).to be_pendente
+    end
+
+    it "semanal soma 7 dias e copia responsável" do
+      task = create(:task, due_date: Date.current, recurrence: "semanal", status: "em_andamento")
+      nxt = task.schedule_next_occurrence!
+      expect(nxt.due_date).to eq(Date.current + 7.days)
+      expect(nxt.assigned_to).to eq(task.assigned_to)
+    end
+
+    it "nenhuma não agenda" do
+      task = create(:task, recurrence: "nenhuma")
+      expect(task.schedule_next_occurrence!).to be_nil
+    end
+  end
+
   describe "anexos" do
     it "rejeita executável" do
       task = build(:task)

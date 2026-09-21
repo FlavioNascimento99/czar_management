@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_21_033533) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_21_034843) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -319,6 +319,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_21_033533) do
     t.date "due_date"
     t.integer "priority"
     t.integer "project_id", null: false
+    t.integer "recurrence", default: 0, null: false
     t.integer "status"
     t.string "title"
     t.datetime "updated_at", null: false
@@ -326,6 +327,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_21_033533) do
     t.index ["author_id"], name: "index_tasks_on_author_id"
     t.index ["due_date"], name: "index_tasks_on_due_date"
     t.index ["project_id"], name: "index_tasks_on_project_id"
+    t.index ["recurrence"], name: "index_tasks_on_recurrence"
   end
 
   create_table "users", force: :cascade do |t|

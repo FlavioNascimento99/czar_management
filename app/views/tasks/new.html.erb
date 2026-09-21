@@ -83,6 +83,11 @@
             <%= form.date_field :due_date, class: "form-control" %>
           </div>
 
+          <div class="mb-3">
+            <%= form.label :recurrence, "Repete", class: "form-label" %>
+            <%= form.select :recurrence, options_for_select([["Não repete", "nenhuma"], ["Todo dia", "diaria"], ["Toda semana", "semanal"]]), {}, class: "form-select" %>
+          </div>
+
           <% if @project_tags.any? %>
             <div class="mb-3">
               <span class="form-label">Etiquetas</span>

@@ -59,6 +59,23 @@ RSpec.describe TasksController, type: :controller do
     end
   end
 
+  describe "PATCH #update com recorrência" do
+    it "concluir tarefa diária cria a próxima" do
+      task.update!(recurrence: "diaria", status: "em_andamento", due_date: Date.current)
+      expect {
+        patch :update, params: { project_id: project.id, id: task.id, task: { status: "concluida" } }
+      }.to change(Task, :count).by(1)
+      expect(Task.order(:created_at).last.due_date).to eq(Date.tomorrow)
+    end
+
+    it "concluir tarefa sem recorrência não duplica" do
+      task
+      expect {
+        patch :update, params: { project_id: project.id, id: task.id, task: { status: "concluida" } }
+      }.not_to change(Task, :count)
+    end
+  end
+
   describe "PATCH #update via JSON (kanban)" do
     it "move status e retorna json" do
       patch :update, params: { project_id: project.id, id: task.id, task: { status: "em_andamento" }, format: :json }
