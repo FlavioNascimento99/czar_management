@@ -12,6 +12,7 @@ class CommentsController < ApplicationController
 
     if @comment.save
       ActivityLog.log!(project: @project, actor: current_user, action: "comment_created", trackable: @comment)
+      TaskMailer.task_commented(@comment.id).deliver_later
       redirect_to [ @project, @task ], notice: "Comentário adicionado!"
     else
       redirect_to [ @project, @task ], alert: @comment.errors.full_messages.to_sentence

@@ -7,6 +7,8 @@ module ProjectsHelper
     when "task_completed" then "#{actor} concluiu a tarefa ##{log.trackable_id}"
     when "comment_created" then "#{actor} comentou na tarefa"
     when "requirement_created" then "#{actor} criou um requisito"
+    when "member_added" then "#{actor} adicionou um membro ao projeto"
+    when "member_removed" then "#{actor} removeu um membro do projeto"
     else "#{actor} fez #{log.action}"
     end
   end

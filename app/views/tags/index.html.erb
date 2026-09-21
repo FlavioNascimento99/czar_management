@@ -1,0 +1,36 @@
+<% content_for :title, "Etiquetas - #{@project.name}" %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h1>Etiquetas</h1>
+    <small class="text-muted">Projeto: <%= @project.name %></small>
+  </div>
+  <%= link_to "Nova Etiqueta", new_project_tag_path(@project), class: "btn btn-primary" %>
+</div>
+
+<% if @tags.any? %>
+  <div class="list-group">
+    <% @tags.each do |tag| %>
+      <div class="list-group-item d-flex justify-content-between align-items-center">
+        <span>
+          <span class="badge" style="background-color: <%= tag.color %>">&nbsp;</span>
+          <%= tag.name %>
+          <small class="text-muted">(<%= tag.tasks.count %>)</small>
+        </span>
+        <span class="d-flex gap-2">
+          <%= link_to "Editar", edit_project_tag_path(@project, tag), class: "btn btn-sm btn-outline-secondary" %>
+          <%= link_to "Excluir", project_tag_path(@project, tag), data: { turbo_method: :delete, turbo_confirm: "Excluir etiqueta?" }, class: "btn btn-sm btn-outline-danger" %>
+        </span>
+      </div>
+    <% end %>
+  </div>
+  <div class="mt-3 d-flex justify-content-center">
+    <%= paginate @tags, theme: "bootstrap-5" %>
+  </div>
+<% else %>
+  <p class="text-muted">Nenhuma etiqueta ainda.</p>
+<% end %>
+
+<div class="mt-3">
+  <%= link_to "Voltar ao projeto", @project, class: "btn btn-secondary" %>
+</div>
