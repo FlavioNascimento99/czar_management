@@ -15,6 +15,11 @@ class Task < ApplicationRecord
   belongs_to :author, class_name: "User"
   belongs_to :assigned_to, class_name: "User"
   has_many :comments, dependent: :destroy
+  has_many :task_tags, dependent: :destroy
+  has_many :tags, through: :task_tags
+  has_many_attached :files
+
+  validate :files_size_and_type
 
   scope :overdue, -> { where.not(status: statuses[:concluida]).where.not(due_date: nil).where("due_date < ?", Date.current) }
   scope :due_today, -> { where(due_date: Date.current) }
@@ -34,6 +39,20 @@ class Task < ApplicationRecord
     return if project.nil? || assigned_to.nil?
     unless project.users.include?(assigned_to)
       errors.add(:assigned_to, "deve ser membro do projeto")
+    end
+  end
+
+  BLOCKED_EXTENSIONS = %w[.exe .bat .cmd .com .scr .msi .sh].freeze
+  MAX_FILE_SIZE = 10.megabytes
+
+  def files_size_and_type
+    files.each do |file|
+      if file.blob.byte_size > MAX_FILE_SIZE
+        errors.add(:files, "#{file.filename} excede 10MB")
+      end
+      if BLOCKED_EXTENSIONS.include?(File.extname(file.filename.to_s).downcase)
+        errors.add(:files, "#{file.filename} é um tipo bloqueado")
+      end
     end
   end
 end

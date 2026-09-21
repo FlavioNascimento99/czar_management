@@ -18,4 +18,9 @@ class MyTasksController < ApplicationController
     @tasks = scope.page(params[:page]).per(20)
     @overdue_count = current_user.assigned_tasks.overdue.count
   end
+
+  def calendar
+    ics = IcalService.tasks_calendar(tasks: current_user.assigned_tasks.where.not(due_date: nil), calendar_name: "Minhas Tarefas")
+    render plain: ics, content_type: "text/calendar"
+  end
 end

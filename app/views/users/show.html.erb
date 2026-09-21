@@ -1,2 +1,16 @@
-<h1>Users#show</h1>
-<p>Find me in app/views/users/show.html.erb</p>
+<% content_for :title, "Meu perfil" %>
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow">
+      <div class="card-body">
+        <h3><%= @user.name %></h3>
+        <p class="text-muted"><%= @user.email %></p>
+        <hr>
+        <h5>Token de API</h5>
+        <p><code><%= @user.api_token %></code></p>
+        <p class="small text-muted">Use como <code>Authorization: Bearer TOKEN</code> ou <code>?token=TOKEN</code> em <code>/api/v1/projects</code>.</p>
+        <%= button_to "Regenerar token", regenerate_token_user_path(@user), class: "btn btn-outline-warning btn-sm" %>
+      </div>
+    </div>
+  </div>
+</div>

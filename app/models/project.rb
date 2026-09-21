@@ -9,6 +9,7 @@ class Project < ApplicationRecord
   has_many :tasks, dependent: :destroy
   has_many :requirements, dependent: :destroy
   has_many :activity_logs, dependent: :destroy
+  has_many :tags, dependent: :destroy
 
   def owned_by?(user)
     user.present? && owner_id == user.id

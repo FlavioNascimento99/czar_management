@@ -36,6 +36,11 @@
             </div>
           </div>
 
+          <div class="mb-3">
+            <%= form.label :template, "Começar de um modelo (opcional)", class: "form-label" %>
+            <%= form.select :template, options_for_select([["Projeto em branco", ""]] + ProjectTemplateService::TEMPLATES.map { |k, v| [v[:name], k] }), {}, class: "form-select" %>
+          </div>
+
           <div class="d-flex gap-2">
             <%= form.submit "Criar Projeto", class: "btn btn-primary" %>
             <%= link_to "Cancelar", projects_path, class: "btn btn-secondary" %>

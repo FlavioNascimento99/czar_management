@@ -8,7 +8,7 @@
         <small class="text-muted">Projeto: <%= @project.name %></small>
       </div>
       <div class="card-body">
-        <%= form_with model: [@project, @task], local: true, class: "needs-validation", novalidate: true do |form| %>
+        <%= form_with model: [@project, @task], local: true, html: { multipart: true }, class: "needs-validation", novalidate: true do |form| %>
           <% if @task.errors.any? %>
             <div class="alert alert-danger">
               <ul class="mb-0">
@@ -81,6 +81,24 @@
           <div class="mb-3">
             <%= form.label :due_date, "Prazo", class: "form-label" %>
             <%= form.date_field :due_date, class: "form-control" %>
+          </div>
+
+          <% if @project_tags.any? %>
+            <div class="mb-3">
+              <span class="form-label">Etiquetas</span>
+              <div class="d-flex gap-2 flex-wrap">
+                <%= form.collection_check_boxes :tag_ids, @project_tags, :id, :name do |b| %>
+                  <label class="form-check-label border rounded px-2 py-1">
+                    <%= b.check_box(class: "form-check-input me-1") %><%= b.text %>
+                  </label>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+
+          <div class="mb-3">
+            <%= form.label :files, "Anexos (máx. 10MB cada)", class: "form-label" %>
+            <%= form.file_field :files, multiple: true, class: "form-control" %>
           </div>
 
           <div class="d-flex gap-2">

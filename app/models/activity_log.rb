@@ -1,5 +1,5 @@
 class ActivityLog < ApplicationRecord
-  ACTIONS = %w[task_created task_updated task_completed comment_created requirement_created].freeze
+  ACTIONS = %w[task_created task_updated task_completed comment_created requirement_created member_added member_removed].freeze
 
   belongs_to :project
   belongs_to :actor, class_name: "User"

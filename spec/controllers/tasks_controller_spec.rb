@@ -15,6 +15,14 @@ RSpec.describe TasksController, type: :controller do
       expect(response).to redirect_to(project_task_path(project, Task.last))
     end
 
+    it "enfileira e-mail quando responsável é outro" do
+      other = create(:user)
+      project.users << other
+      expect {
+        post :create, params: { project_id: project.id, task: { title: "Tarefa Z", description: "desc", status: "pendente", priority: "baixa", assigned_to_id: other.id } }
+      }.to have_enqueued_job(ActionMailer::MailDeliveryJob)
+    end
+
     it "rejeita responsável que não é membro" do
       outsider = create(:user)
       expect {
@@ -39,6 +47,14 @@ RSpec.describe TasksController, type: :controller do
       get :index, params: { project_id: project.id, status: "pendente", q: "mágico" }
       expect(assigns(:tasks).map(&:title)).to include("Login mágico")
       expect(assigns(:tasks).map(&:title)).not_to include("Checkout")
+    end
+  end
+
+  describe "PATCH #update via JSON (kanban)" do
+    it "move status e retorna json" do
+      patch :update, params: { project_id: project.id, id: task.id, task: { status: "em_andamento" }, format: :json }
+      expect(task.reload.status).to eq("em_andamento")
+      expect(response).to have_http_status(:ok)
     end
   end
 

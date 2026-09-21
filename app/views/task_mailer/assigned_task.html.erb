@@ -1,0 +1,5 @@
+<h1>Nova tarefa para você</h1>
+<p>Olá, <%= @task.assigned_to.name %>!</p>
+<p>Você foi atribuído à tarefa <strong><%= @task.title %></strong> no projeto <strong><%= @project.name %></strong>.</p>
+<p><%= @task.description %></p>
+<% if @task.due_date %><p>Prazo: <%= @task.due_date %></p><% end %>
