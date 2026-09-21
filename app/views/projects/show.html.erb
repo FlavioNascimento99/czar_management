@@ -2,7 +2,10 @@
 
 <div class="d-flex justify-content-between align-items-start mb-4">
   <div>
-    <h1><%= @project.name %></h1>
+    <h1>
+      <%= @project.name %>
+      <span class="badge bg-<%= @project.pessoal? ? "info text-dark" : "primary" %> fs-6"><%= @project.pessoal? ? "Pessoal" : "Equipe" %></span>
+    </h1>
     <p class="text-muted lead"><%= @project.description %></p>
   </div>
   <div class="d-flex gap-2">
@@ -55,6 +58,7 @@
 </div>
 
 <!-- Membros -->
+<% unless @project.pessoal? %>
 <div class="card mb-4">
   <div class="card-header">
     <span class="fw-bold">Membros (<%= @members.count %>)</span>
@@ -90,6 +94,7 @@
     <% end %>
   </div>
 </div>
+<% end %>
 
 <!-- Atividade recente -->
 <div class="card mt-4 mb-4">

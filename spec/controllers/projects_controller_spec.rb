@@ -46,6 +46,30 @@ RSpec.describe ProjectsController, type: :controller do
       }.to change(Task, :count).by(2)
       expect(Project.last.tasks.count).to eq(2)
     end
+
+    it "cria espaço pessoal com rotina de estudos" do
+      post :create, params: { project: { name: "Estudos", description: "Minha rotina", kind: "pessoal", template: "rotina_estudos" } }
+      created = Project.last
+      expect(created.pessoal?).to be_truthy
+      expect(created.tasks.count).to eq(3)
+      expect(response).to redirect_to(created)
+    end
+  end
+
+  describe "espaços pessoais" do
+    it "index separa equipe e pessoal" do
+      personal = create(:project, owner: user, users: [ user ], kind: "pessoal")
+      get :index
+      expect(assigns(:personal_projects)).to include(personal)
+      expect(assigns(:team_projects)).not_to include(personal)
+    end
+
+    it "bloqueia add_member em pessoal" do
+      personal = create(:project, owner: user, users: [ user ], kind: "pessoal")
+      newcomer = create(:user)
+      post :add_member, params: { id: personal.id, email: newcomer.email }
+      expect(personal.reload.member?(newcomer)).to be_falsey
+    end
   end
 
   describe "PATCH #update" do

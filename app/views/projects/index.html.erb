@@ -9,45 +9,22 @@
 </div>
 
 <% if @projects.any? %>
+  <h4 class="mt-4">Equipes (<%= @team_projects.size %>)</h4>
   <div class="row">
-    <% @projects.each do |project| %>
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body">
-            <h5 class="card-title"><%= project.name %></h5>
-            <p class="card-text text-muted">
-              <%= truncate(project.description, length: 100) %>
-            </p>
-            
-            <div class="row text-center mb-3">
-              <div class="col">
-                <small class="text-muted">Tarefas</small>
-                <div class="fw-bold"><%= @task_counts.fetch(project.id, 0) %></div>
-              </div>
-              <div class="col">
-                <small class="text-muted">Requisitos</small>
-                <div class="fw-bold"><%= @requirement_counts.fetch(project.id, 0) %></div>
-              </div>
-              <div class="col">
-                <small class="text-muted">Membros</small>
-                <div class="fw-bold"><%= project.users.size %></div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="card-footer bg-transparent">
-            <div class="d-flex gap-2">
-              <%= link_to "Ver", project, class: "btn btn-outline-primary btn-sm flex-fill" %>
-              <%= link_to "Editar", edit_project_path(project), class: "btn btn-outline-secondary btn-sm flex-fill" %>
-              <%= link_to "Excluir", project,
-                          data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja excluir este projeto?" },
-                          class: "btn btn-outline-danger btn-sm flex-fill" %>
-            </div>
-          </div>
-        </div>
-      </div>
+    <% @team_projects.each do |project| %>
+      <%= render "card", project: project, task_counts: @task_counts, requirement_counts: @requirement_counts %>
     <% end %>
   </div>
+
+  <h4 class="mt-4">Pessoal — rotinas e estudos (<%= @personal_projects.size %>)</h4>
+  <div class="row">
+    <% @personal_projects.each do |project| %>
+      <%= render "card", project: project, task_counts: @task_counts, requirement_counts: @requirement_counts %>
+    <% end %>
+  </div>
+  <% if @personal_projects.empty? %>
+    <p class="text-muted">Crie um espaço pessoal com o modelo "Rotina de estudos". 🌱</p>
+  <% end %>
 <% else %>
   <div class="text-center py-5">
     <div class="mb-4">

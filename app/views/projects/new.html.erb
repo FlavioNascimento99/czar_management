@@ -37,6 +37,11 @@
           </div>
 
           <div class="mb-3">
+            <%= form.label :kind, "Tipo de espaço", class: "form-label" %>
+            <%= form.select :kind, options_for_select([["Equipe", "equipe"], ["Pessoal (rotina, estudos)", "pessoal"]]), {}, class: "form-select" %>
+          </div>
+
+          <div class="mb-3">
             <%= form.label :template, "Começar de um modelo (opcional)", class: "form-label" %>
             <%= form.select :template, options_for_select([["Projeto em branco", ""]] + ProjectTemplateService::TEMPLATES.map { |k, v| [v[:name], k] }), {}, class: "form-select" %>
           </div>

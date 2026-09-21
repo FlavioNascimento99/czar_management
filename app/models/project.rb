@@ -1,7 +1,11 @@
 class Project < ApplicationRecord
+  enum :kind, { equipe: 0, pessoal: 1 }, default: :equipe
+
   # Validações
   validates :name, presence: true
   validates :description, presence: true
+  validates :kind, presence: true
+  validate :personal_has_single_member
 
   # Relacionamentos
   belongs_to :owner, class_name: "User"
@@ -17,5 +21,12 @@ class Project < ApplicationRecord
 
   def member?(user)
     user.present? && users.exists?(user.id)
+  end
+
+  private
+
+  def personal_has_single_member
+    return unless pessoal? && users.size > 1
+    errors.add(:kind, "pessoal aceita só você")
   end
 end

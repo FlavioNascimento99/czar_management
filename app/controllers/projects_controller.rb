@@ -6,6 +6,8 @@ class ProjectsController < ApplicationController
 
   def index
     @projects = current_user.projects.includes(:users).order(:name).to_a
+    @team_projects = @projects.select(&:equipe?)
+    @personal_projects = @projects.select(&:pessoal?)
     project_ids = @projects.map(&:id)
     @task_counts = Task.where(project_id: project_ids).group(:project_id).count
     @requirement_counts = Requirement.where(project_id: project_ids).group(:project_id).count
@@ -81,6 +83,10 @@ class ProjectsController < ApplicationController
   end
 
   def add_member
+    if @project.pessoal?
+      redirect_to @project, alert: "Espaços pessoais não aceitam membros"
+      return
+    end
     user = User.find_by(email: params[:email].to_s.strip.downcase)
 
     if user.nil?
@@ -132,6 +138,6 @@ class ProjectsController < ApplicationController
   end
 
   def project_params
-    params.require(:project).permit(:name, :description)
+    params.require(:project).permit(:name, :description, :kind)
   end
 end

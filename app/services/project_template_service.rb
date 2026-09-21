@@ -1,5 +1,14 @@
 class ProjectTemplateService
   TEMPLATES = {
+    "rotina_estudos" => {
+      name: "Rotina de estudos",
+      requirements: [],
+      tasks: [
+        { title: "Revisar anotações de ontem", description: "15 min de revisão espaçada", status: "pendente", priority: "alta" },
+        { title: "Estudar tópico novo", description: "Foco profundo, sem distrações", status: "pendente", priority: "media" },
+        { title: "Fazer exercícios", description: "Praticar o que foi estudado", status: "pendente", priority: "media" }
+      ]
+    },
     "sprint_dev" => {
       name: "Sprint de desenvolvimento",
       requirements: [
