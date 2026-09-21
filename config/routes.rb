@@ -25,6 +25,11 @@ Rails.application.routes.draw do
   resources :users, only: [ :show ] do
     post "regenerate_token", on: :member
   end
+  resources :folders
+  resources :docs do
+    post "preview", on: :collection
+    delete "files/:attachment_id", to: "docs#purge_file", on: :member, as: :purge_file
+  end
   resources :projects do
     get "board", to: "projects#board", on: :member
     get "calendar", to: "projects#calendar", on: :member

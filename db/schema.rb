@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_21_022208) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_21_031835) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -61,6 +61,29 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_21_022208) do
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_comments_on_author_id"
     t.index ["task_id"], name: "index_comments_on_task_id"
+  end
+
+  create_table "docs", force: :cascade do |t|
+    t.text "body", default: "", null: false
+    t.datetime "created_at", null: false
+    t.integer "folder_id"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["folder_id"], name: "index_docs_on_folder_id"
+    t.index ["user_id", "updated_at"], name: "index_docs_on_user_id_and_updated_at"
+    t.index ["user_id"], name: "index_docs_on_user_id"
+  end
+
+  create_table "folders", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.integer "parent_id"
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["parent_id"], name: "index_folders_on_parent_id"
+    t.index ["user_id", "parent_id", "name"], name: "index_folders_on_user_id_and_parent_id_and_name", unique: true
+    t.index ["user_id"], name: "index_folders_on_user_id"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -310,6 +333,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_21_022208) do
   add_foreign_key "activity_logs", "users", column: "actor_id"
   add_foreign_key "comments", "tasks"
   add_foreign_key "comments", "users", column: "author_id"
+  add_foreign_key "docs", "folders"
+  add_foreign_key "docs", "users"
+  add_foreign_key "folders", "folders", column: "parent_id"
+  add_foreign_key "folders", "users"
   add_foreign_key "notifications", "users"
   add_foreign_key "notifications", "users", column: "actor_id"
   add_foreign_key "projects", "users", column: "owner_id"

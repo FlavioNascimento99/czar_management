@@ -16,6 +16,9 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+# Markdown puro-Ruby para o módulo Docs (sem extensão nativa)
+gem "kramdown"
+
 # Rate limiting for auth endpoints [https://github.com/rack/rack-attack]
 gem "rack-attack"
 

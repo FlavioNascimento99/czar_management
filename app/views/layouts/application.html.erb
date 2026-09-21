@@ -29,6 +29,7 @@
             <%= link_to "Dashboard", root_path %>
             <%= link_to "Projects", projects_path %>
             <%= link_to "My Tasks", my_tasks_path %>
+            <%= link_to "Docs", docs_path %>
             <%= link_to notifications_path, class: "position-relative" do %>
               🔔
               <% unread = current_user.notifications.unread.count %>
