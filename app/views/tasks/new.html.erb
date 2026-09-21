@@ -78,6 +78,11 @@
             </div>
           </div>
 
+          <div class="mb-3">
+            <%= form.label :due_date, "Prazo", class: "form-label" %>
+            <%= form.date_field :due_date, class: "form-control" %>
+          </div>
+
           <div class="d-flex gap-2">
             <%= form.submit "Criar Tarefa", class: "btn btn-primary" %>
             <%= link_to "Cancelar", @project, class: "btn btn-secondary" %>

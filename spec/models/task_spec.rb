@@ -49,4 +49,24 @@ RSpec.describe Task, type: :model do
     task.project.users.delete(outsider)
     expect(task).not_to be_valid
   end
+
+  describe "prazos" do
+    it "detecta atrasada" do
+      task = build(:task, due_date: 1.day.ago.to_date, status: "pendente")
+      expect(task.overdue?).to be_truthy
+    end
+
+    it "concluída não conta como atrasada" do
+      task = build(:task, due_date: 1.day.ago.to_date, status: "concluida")
+      expect(task.overdue?).to be_falsey
+    end
+
+    it ".overdue retorna só pendentes/em andamento vencidas" do
+      project = create(:project)
+      overdue = create(:task, project: project, due_date: 2.days.ago.to_date, status: "pendente")
+      create(:task, project: project, due_date: 2.days.ago.to_date, status: "concluida")
+      expect(Task.overdue).to include(overdue)
+      expect(Task.overdue.count).to eq(1)
+    end
+  end
 end

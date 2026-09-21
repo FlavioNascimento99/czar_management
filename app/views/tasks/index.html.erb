@@ -1,6 +1,6 @@
 <% content_for :title, "Tarefas - #{@project.name}" %>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex justify-content-between align-items-center mb-3">
   <div>
     <h1>Tarefas</h1>
     <small class="text-muted">Projeto: <%= @project.name %></small>
@@ -8,13 +8,37 @@
   <%= link_to "Nova Tarefa", new_project_task_path(@project), class: "btn btn-primary" %>
 </div>
 
+<%= form_with url: project_tasks_path(@project), method: :get, local: true, class: "card card-body mb-3" do %>
+  <div class="row g-2">
+    <div class="col-md-3">
+      <%= search_field_tag :q, params[:q], class: "form-control", placeholder: "Buscar título/descrição..." %>
+    </div>
+    <div class="col-md-2">
+      <%= select_tag :status, options_for_select([["Todos status", ""]] + Task.statuses.keys.map { |s| [s.humanize, s] }, params[:status]), class: "form-select" %>
+    </div>
+    <div class="col-md-2">
+      <%= select_tag :priority, options_for_select([["Todas prioridades", ""]] + Task.priorities.keys.map { |p| [p.capitalize, p] }, params[:priority]), class: "form-select" %>
+    </div>
+    <div class="col-md-3">
+      <%= select_tag :assigned_to_id, options_for_select([["Todos responsáveis", ""]] + @project_users.map { |u| [u.name, u.id] }, params[:assigned_to_id]), class: "form-select" %>
+    </div>
+    <div class="col-md-2 d-flex gap-2">
+      <%= submit_tag "Filtrar", class: "btn btn-primary" %>
+      <%= link_to "Limpar", project_tasks_path(@project), class: "btn btn-outline-secondary" %>
+    </div>
+  </div>
+<% end %>
+
 <% if @tasks.any? %>
   <div class="list-group">
     <% @tasks.each do |task| %>
-      <%= link_to [@project, task], class: "list-group-item list-group-item-action d-flex justify-content-between align-items-center" do %>
+      <%= link_to [@project, task], class: "list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-2" do %>
         <span><%= task.title %></span>
-        <span class="badge bg-<%= task.status == "concluida" ? "success" : task.status == "em_andamento" ? "warning" : "secondary" %>">
-          <%= task.status.humanize %>
+        <span class="d-flex gap-1 align-items-center">
+          <%= due_date_badge(task) %>
+          <span class="badge bg-<%= task.status == "concluida" ? "success" : task.status == "em_andamento" ? "warning" : "secondary" %>">
+            <%= task.status.humanize %>
+          </span>
         </span>
       <% end %>
     <% end %>

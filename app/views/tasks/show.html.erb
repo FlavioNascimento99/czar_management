@@ -14,6 +14,7 @@
         <span class="badge bg-<%= @task.status == "concluida" ? "success" : @task.status == "em_andamento" ? "warning" : "secondary" %> mb-3">
           <%= @task.status.humanize %>
         </span>
+        <%= due_date_badge(@task) %>
 
         <p class="mt-2"><%= simple_format(@task.description) %></p>
 
@@ -29,6 +30,42 @@
                       class: "btn btn-outline-danger btn-sm" %>
           <%= link_to "Voltar", @project, class: "btn btn-secondary btn-sm" %>
         </div>
+      </div>
+    </div>
+
+    <div class="card shadow mt-4">
+      <div class="card-body">
+        <h5 class="card-title">Comentários (<%= @comments.size %>)</h5>
+
+        <% if @comments.any? %>
+          <div class="list-group list-group-flush mb-3">
+            <% @comments.each do |comment| %>
+              <div class="list-group-item px-0">
+                <div class="d-flex justify-content-between">
+                  <strong><%= comment.author.name %></strong>
+                  <small class="text-muted"><%= l(comment.created_at, format: :short) %></small>
+                </div>
+                <p class="mb-1"><%= simple_format(comment.body) %></p>
+                <% if comment.author == current_user || @project.owned_by?(current_user) %>
+                  <%= link_to "Excluir", project_task_comment_path(@project, @task, comment),
+                              data: { turbo_method: :delete, turbo_confirm: "Excluir comentário?" },
+                              class: "btn btn-link btn-sm text-danger p-0" %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-muted">Nenhum comentário ainda. Seja o primeiro!</p>
+        <% end %>
+
+        <%= form_with model: [@project, @task, @comment] do |f| %>
+          <div class="mb-2">
+            <%= f.text_area :body, rows: 3, class: "form-control", placeholder: "Escreva um comentário..." %>
+          </div>
+          <%= f.submit "Comentar", class: "btn btn-primary btn-sm" %>
+        <% end %>
+      </div>
+    </div>
       </div>
     </div>
   </div>

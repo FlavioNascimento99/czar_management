@@ -69,11 +69,11 @@
             <% end %>
           </span>
           <% if @project.owned_by?(current_user) && !@project.owned_by?(member) %>
-            <%= button_to "Remover", project_remove_member_path(@project, user_id: member.id),
+            <%= button_to "Remover", remove_member_project_path(@project, user_id: member.id),
                           method: :delete, class: "btn btn-outline-danger btn-sm",
                           form: { "data-turbo-confirm": "Remover este membro do projeto?" } %>
           <% elsif member == current_user %>
-            <%= button_to "Sair do projeto", project_remove_member_path(@project, user_id: member.id),
+            <%= button_to "Sair do projeto", remove_member_project_path(@project, user_id: member.id),
                           method: :delete, class: "btn btn-outline-warning btn-sm",
                           form: { "data-turbo-confirm": "Sair deste projeto?" } %>
           <% end %>
@@ -81,10 +81,31 @@
       <% end %>
     </ul>
     <% if @project.owned_by?(current_user) %>
-      <%= form_with url: project_add_member_path(@project), method: :post, local: true, class: "d-flex gap-2" do |form| %>
+      <%= form_with url: add_member_project_path(@project), method: :post, local: true, class: "d-flex gap-2" do |form| %>
         <%= form.email_field :email, class: "form-control", placeholder: "Email do novo membro", required: true %>
         <%= form.submit "Adicionar membro", class: "btn btn-primary" %>
       <% end %>
+    <% end %>
+  </div>
+</div>
+
+<!-- Atividade recente -->
+<div class="card mt-4 mb-4">
+  <div class="card-header">
+    <span class="fw-bold">Atividade recente</span>
+  </div>
+  <div class="card-body">
+    <% if @activities.any? %>
+      <ul class="list-group list-group-flush">
+        <% @activities.each do |log| %>
+          <li class="list-group-item px-0 d-flex justify-content-between">
+            <span><%= activity_description(log) %></span>
+            <small class="text-muted"><%= l(log.created_at, format: :short) %></small>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted mb-0">Nenhuma atividade ainda. Crie uma tarefa ou requisito!</p>
     <% end %>
   </div>
 </div>

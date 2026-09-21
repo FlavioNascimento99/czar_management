@@ -23,6 +23,7 @@ class RequirementsController < ApplicationController
     @requirement = @project.requirements.build(requirement_params)
 
     if @requirement.save
+      ActivityLog.log!(project: @project, actor: current_user, action: "requirement_created", trackable: @requirement)
       redirect_to [ @project, @requirement ], notice: "Requisito criado com sucesso!"
     else
       render :new, status: :unprocessable_entity
