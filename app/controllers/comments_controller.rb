@@ -12,7 +12,7 @@ class CommentsController < ApplicationController
 
     if @comment.save
       ActivityLog.log!(project: @project, actor: current_user, action: "comment_created", trackable: @comment)
-      TaskMailer.task_commented(@comment.id).deliver_later
+      EmailGate.deliver(TaskMailer.task_commented(@comment.id))
       [ @task.author, @task.assigned_to ].compact.uniq.each do |recipient|
         Notification.notify!(user: recipient, action: "task_commented", actor: current_user, notifiable: @comment)
       end

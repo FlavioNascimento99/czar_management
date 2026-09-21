@@ -90,7 +90,7 @@ class ProjectsController < ApplicationController
     else
       @project.users << user
       ActivityLog.log!(project: @project, actor: current_user, action: "member_added", trackable: user)
-      TaskMailer.member_added(@project.id, user.id).deliver_later
+      EmailGate.deliver(TaskMailer.member_added(@project.id, user.id))
       Notification.notify!(user: user, action: "member_added", actor: current_user, notifiable: @project)
       redirect_to @project, notice: I18n.t("projects.member_added")
     end

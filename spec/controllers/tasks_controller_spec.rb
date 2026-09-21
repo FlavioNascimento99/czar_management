@@ -15,7 +15,16 @@ RSpec.describe TasksController, type: :controller do
       expect(response).to redirect_to(project_task_path(project, Task.last))
     end
 
-    it "enfileira e-mail quando responsável é outro" do
+    it "não enfileira e-mail por padrão (conexão externa desligada)" do
+      other = create(:user)
+      project.users << other
+      expect {
+        post :create, params: { project_id: project.id, task: { title: "Tarefa Z", description: "desc", status: "pendente", priority: "baixa", assigned_to_id: other.id } }
+      }.not_to have_enqueued_job(ActionMailer::MailDeliveryJob)
+    end
+
+    it "enfileira e-mail quando EMAIL_ENABLED=true" do
+      allow(Rails.configuration.x).to receive(:email_enabled).and_return(true)
       other = create(:user)
       project.users << other
       expect {

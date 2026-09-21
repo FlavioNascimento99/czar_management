@@ -14,7 +14,7 @@ class DueReminderJob < ApplicationJob
         end
       next if action.nil?
       Notification.notify!(user: task.assigned_to, action: action, notifiable: task)
-      TaskMailer.due_reminder(task.id, action).deliver_later
+      EmailGate.deliver(TaskMailer.due_reminder(task.id, action))
     end
   end
 end

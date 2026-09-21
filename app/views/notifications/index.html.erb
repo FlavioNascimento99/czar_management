@@ -5,6 +5,10 @@
   <%= button_to "Marcar todas como lidas", read_all_notifications_path, method: :patch, class: "btn btn-sm btn-outline-primary" %>
 </div>
 
+<% unless EmailGate.enabled? %>
+  <div class="alert alert-info">E-mail <span class="badge bg-secondary">A implementar</span> — enquanto a conexão externa (SMTP) não existe, todos os avisos chegam aqui no app.</div>
+<% end %>
+
 <% if @notifications.any? %>
   <div class="list-group">
     <% @notifications.each do |notification| %>
