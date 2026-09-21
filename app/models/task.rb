@@ -17,6 +17,8 @@ class Task < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :task_tags, dependent: :destroy
   has_many :tags, through: :task_tags
+  has_many :task_docs, dependent: :destroy
+  has_many :docs, through: :task_docs
   has_many :subtasks, dependent: :destroy
   has_many_attached :files
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_21_031835) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_21_033210) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -289,6 +289,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_21_031835) do
     t.index ["project_id"], name: "index_tags_on_project_id"
   end
 
+  create_table "task_docs", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "doc_id", null: false
+    t.integer "task_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["doc_id"], name: "index_task_docs_on_doc_id"
+    t.index ["task_id", "doc_id"], name: "index_task_docs_on_task_id_and_doc_id", unique: true
+    t.index ["task_id"], name: "index_task_docs_on_task_id"
+  end
+
   create_table "task_tags", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "tag_id", null: false
@@ -351,6 +361,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_21_031835) do
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "subtasks", "tasks"
   add_foreign_key "tags", "projects"
+  add_foreign_key "task_docs", "docs"
+  add_foreign_key "task_docs", "tasks"
   add_foreign_key "task_tags", "tags"
   add_foreign_key "task_tags", "tasks"
   add_foreign_key "tasks", "projects"

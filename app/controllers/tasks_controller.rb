@@ -29,6 +29,8 @@ class TasksController < ApplicationController
     @comment = @task.comments.build
     @subtasks = @task.subtasks.ordered
     @subtask = @task.subtasks.build
+    @task_docs = @task.task_docs.includes(:doc)
+    @available_docs = current_user.docs.where.not(id: @task.doc_ids).recent.limit(50)
   end
 
   def new

@@ -36,6 +36,7 @@ Rails.application.routes.draw do
     resources :tags
     resources :tasks do
       resources :comments, only: [ :create, :destroy ]
+      resources :task_docs, only: [ :create, :destroy ]
       resources :subtasks, only: [ :create, :destroy ] do
         patch "toggle", on: :member
       end

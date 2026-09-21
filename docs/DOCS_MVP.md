@@ -12,7 +12,14 @@ Decisões: docs **pessoais** (sem compartilhar), editor **markdown simples**
 ## Fora de escopo
 Compartilhar docs, blocos Notion-like, versionamento, ligar Docs ↔ Tasks (fase 2), contextos de rotina (módulo Organizar).
 
-## Checks
+## Fase 2 — vínculo Docs ↔ Tasks | Branch `feature/docs-tasks-link`
+
+Regra: só vinculo **meu** doc em task de projeto do qual sou membro
+(`TaskDoc` valida dono-do-doc-membro-do-projeto). Nos dois lados:
+card na task ("Documentos vinculados") e no doc ("Tarefas vinculadas",
+só as de projetos meus).
+
+## Checks (MVP)
 - [x] Migrations up dev+test; `rspec` verde (132 examples, 0 failures); `rubocop` limpo (123 files); `brakeman` 0 (1 XSS fraco corrigido com `sanitize` na show)
 - [x] Doc de outro usuário nunca vaza (spec 404/redirect)
 - [x] Preview renderiza markdown sem XSS (sanitize)

@@ -11,6 +11,7 @@ class DocsController < ApplicationController
   end
 
   def show
+    @linked_tasks = @doc.tasks.includes(:project).select { |t| t.project.member?(current_user) }
   end
 
   def new

@@ -1,6 +1,8 @@
 class Doc < ApplicationRecord
   belongs_to :user
   belongs_to :folder, optional: true
+  has_many :task_docs, dependent: :destroy
+  has_many :tasks, through: :task_docs
   has_many_attached :files
 
   validates :title, presence: true

@@ -36,6 +36,32 @@
       </div>
     </div>
 
+    <div class="card shadow mt-4">
+      <div class="card-body">
+        <h5 class="card-title">Documentos vinculados (<%= @task_docs.size %>)</h5>
+        <% if @task_docs.any? %>
+          <div class="list-group list-group-flush mb-2">
+            <% @task_docs.each do |link| %>
+              <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                <%= link_to link.doc.title, link.doc %>
+                <%= link_to "Desvincular", project_task_task_doc_path(@project, @task, link),
+                            data: { turbo_method: :delete, turbo_confirm: "Remover vínculo?" },
+                            class: "btn btn-link btn-sm text-danger p-0" %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+        <% if @available_docs.any? %>
+          <%= form_with url: project_task_task_docs_path(@project, @task), method: :post, local: true, class: "d-flex gap-2" do %>
+            <%= select_tag :doc_id, options_from_collection_for_select(@available_docs, :id, :title), class: "form-select form-select-sm" %>
+            <%= submit_tag "Vincular", class: "btn btn-outline-primary btn-sm" %>
+          <% end %>
+        <% elsif @task_docs.empty? %>
+          <p class="text-muted mb-0">Nenhum documento vinculado. Crie um em <%= link_to "Docs", docs_path %> e vincule aqui.</p>
+        <% end %>
+      </div>
+    </div>
+
     <div class="card shadow mt-4" id="subtasks">
       <div class="card-body">
         <h5 class="card-title">Checklist (<%= @subtasks.count(&:done) %>/<%= @subtasks.size %>)</h5>
