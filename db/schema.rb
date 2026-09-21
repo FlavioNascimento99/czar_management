@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_21_020917) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_21_022208) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -63,6 +63,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_21_020917) do
     t.index ["task_id"], name: "index_comments_on_task_id"
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.string "action", null: false
+    t.integer "actor_id"
+    t.datetime "created_at", null: false
+    t.integer "notifiable_id"
+    t.string "notifiable_type"
+    t.datetime "read_at"
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["actor_id"], name: "index_notifications_on_actor_id"
+    t.index ["notifiable_type", "notifiable_id"], name: "index_notifications_on_notifiable_type_and_notifiable_id"
+    t.index ["user_id", "read_at"], name: "index_notifications_on_user_id_and_read_at"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
   create_table "projects", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
@@ -86,6 +101,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_21_020917) do
     t.string "title"
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_requirements_on_project_id"
+  end
+
+  create_table "subtasks", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.boolean "done", default: false, null: false
+    t.integer "position", default: 0, null: false
+    t.integer "task_id", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["task_id", "position"], name: "index_subtasks_on_task_id_and_position"
+    t.index ["task_id"], name: "index_subtasks_on_task_id"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -142,10 +168,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_21_020917) do
   add_foreign_key "activity_logs", "users", column: "actor_id"
   add_foreign_key "comments", "tasks"
   add_foreign_key "comments", "users", column: "author_id"
+  add_foreign_key "notifications", "users"
+  add_foreign_key "notifications", "users", column: "actor_id"
   add_foreign_key "projects", "users", column: "owner_id"
   add_foreign_key "projects_users", "projects"
   add_foreign_key "projects_users", "users"
   add_foreign_key "requirements", "projects"
+  add_foreign_key "subtasks", "tasks"
   add_foreign_key "tags", "projects"
   add_foreign_key "task_tags", "tags"
   add_foreign_key "task_tags", "tasks"

@@ -11,6 +11,10 @@ Rails.application.routes.draw do
   # Recursos principais
   get "/my_tasks", to: "my_tasks#index", as: :my_tasks
   get "/my_tasks/calendar", to: "my_tasks#calendar", as: :my_tasks_calendar
+  resources :notifications, only: [ :index ] do
+    patch "read", to: "notifications#mark_read", on: :member, as: :read
+    patch "read_all", to: "notifications#mark_all_read", on: :collection
+  end
   namespace :api do
     namespace :v1 do
       resources :projects, only: [ :index, :show ] do
@@ -27,6 +31,9 @@ Rails.application.routes.draw do
     resources :tags
     resources :tasks do
       resources :comments, only: [ :create, :destroy ]
+      resources :subtasks, only: [ :create, :destroy ] do
+        patch "toggle", on: :member
+      end
       delete "files/:attachment_id", to: "tasks#purge_file", on: :member, as: :purge_file
     end
     resources :requirements

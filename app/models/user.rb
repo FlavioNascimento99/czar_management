@@ -15,6 +15,7 @@ class User < ApplicationRecord
   has_many :authored_tasks, class_name: "Task", foreign_key: "author_id", dependent: :restrict_with_error
   has_many :assigned_tasks, class_name: "Task", foreign_key: "assigned_to_id", dependent: :restrict_with_error
   has_many :authored_comments, class_name: "Comment", foreign_key: "author_id", dependent: :destroy
+  has_many :notifications, dependent: :destroy
 
   private
 
