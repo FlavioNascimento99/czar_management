@@ -41,5 +41,10 @@ module CzarManagement
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Conexões externas (ex.: SMTP) ficam desligadas por padrão: o app é
+    # autosuficiente e o envio de e-mails aparece como "A implementar" no UI.
+    # Para ligar: EMAIL_ENABLED=true + smtp_settings configurado.
+    config.x.email_enabled = ENV.fetch("EMAIL_ENABLED", "false") == "true"
   end
 end

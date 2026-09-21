@@ -1,0 +1,3 @@
+<h1><%= @kind == "overdue" ? "Tarefa atrasada" : "Vence amanhã" %></h1>
+<p>Olá, <%= @task.assigned_to.name %>!</p>
+<p>A tarefa <strong><%= @task.title %></strong> (<%= @project.name %>) tem prazo em <%= @task.due_date %>.</p>

@@ -17,6 +17,7 @@ class Task < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :task_tags, dependent: :destroy
   has_many :tags, through: :task_tags
+  has_many :subtasks, dependent: :destroy
   has_many_attached :files
 
   validate :files_size_and_type
@@ -31,6 +32,11 @@ class Task < ApplicationRecord
 
   def due_today?
     due_date.present? && due_date == Date.current
+  end
+
+  def subtasks_progress
+    return 0 if subtasks.empty?
+    (subtasks.count(&:done) * 100 / subtasks.size)
   end
 
   private

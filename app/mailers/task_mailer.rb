@@ -27,4 +27,12 @@ class TaskMailer < ApplicationMailer
     @user = User.find(user_id)
     mail(to: @user.email, subject: "[Czar] Você entrou no projeto: #{@project.name}")
   end
+
+  def due_reminder(task_id, kind)
+    @task = Task.includes(:project, :assigned_to).find(task_id)
+    @project = @task.project
+    @kind = kind
+    subject = kind == "overdue" ? "[Czar] Tarefa atrasada: #{@task.title}" : "[Czar] Vence amanhã: #{@task.title}"
+    mail(to: @task.assigned_to.email, subject: subject)
+  end
 end

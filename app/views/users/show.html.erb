@@ -10,6 +10,13 @@
         <p><code><%= @user.api_token %></code></p>
         <p class="small text-muted">Use como <code>Authorization: Bearer TOKEN</code> ou <code>?token=TOKEN</code> em <code>/api/v1/projects</code>.</p>
         <%= button_to "Regenerar token", regenerate_token_user_path(@user), class: "btn btn-outline-warning btn-sm" %>
+        <hr>
+        <h5>Notificações por e-mail <span class="badge bg-secondary">A implementar</span></h5>
+        <% if EmailGate.enabled? %>
+          <p class="small text-success">Envio de e-mails ativo neste ambiente.</p>
+        <% else %>
+          <p class="small text-muted">Conexão externa (SMTP) ainda não configurada — por enquanto, todos os avisos chegam no sino 🔔 e nesta página de perfil nada é enviado.</p>
+        <% end %>
       </div>
     </div>
   </div>

@@ -29,6 +29,13 @@
             <%= link_to "Dashboard", root_path %>
             <%= link_to "Projects", projects_path %>
             <%= link_to "My Tasks", my_tasks_path %>
+            <%= link_to notifications_path, class: "position-relative" do %>
+              🔔
+              <% unread = current_user.notifications.unread.count %>
+              <% if unread.positive? %>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"><%= unread %></span>
+              <% end %>
+            <% end %>
           </nav>
           <div class="saas-nav-cta">
             <span class="saas-user">Hi, <%= current_user.name %></span>

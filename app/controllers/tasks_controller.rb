@@ -27,6 +27,8 @@ class TasksController < ApplicationController
   def show
     @comments = @task.comments.includes(:author).order(created_at: :asc)
     @comment = @task.comments.build
+    @subtasks = @task.subtasks.ordered
+    @subtask = @task.subtasks.build
   end
 
   def new
@@ -41,7 +43,8 @@ class TasksController < ApplicationController
 
     if @task.save
       ActivityLog.log!(project: @project, actor: current_user, action: "task_created", trackable: @task)
-      TaskMailer.assigned_task(@task.id).deliver_later if @task.assigned_to != current_user
+      EmailGate.deliver(TaskMailer.assigned_task(@task.id)) if @task.assigned_to != current_user
+      Notification.notify!(user: @task.assigned_to, action: "task_assigned", actor: current_user, notifiable: @task)
       redirect_to [ @project, @task ], notice: "Tarefa criada com sucesso!"
     else
       @project_users = @project.users.order(:name)
@@ -59,7 +62,10 @@ class TasksController < ApplicationController
     if @task.update(task_params)
       action = (@task.saved_change_to_status? && @task.concluida?) ? "task_completed" : "task_updated"
       ActivityLog.log!(project: @project, actor: current_user, action: action, trackable: @task)
-      TaskMailer.task_reassigned(@task.id).deliver_later if @task.saved_change_to_assigned_to_id? && @task.assigned_to != current_user
+      EmailGate.deliver(TaskMailer.task_reassigned(@task.id)) if @task.saved_change_to_assigned_to_id? && @task.assigned_to != current_user
+      if @task.saved_change_to_assigned_to_id?
+        Notification.notify!(user: @task.assigned_to, action: "task_reassigned", actor: current_user, notifiable: @task)
+      end
       respond_to do |format|
         format.html { redirect_to [ @project, @task ], notice: "Tarefa atualizada com sucesso!" }
         format.json { render json: { id: @task.id, status: @task.status }, status: :ok }

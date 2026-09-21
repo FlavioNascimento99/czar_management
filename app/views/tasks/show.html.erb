@@ -36,6 +36,39 @@
       </div>
     </div>
 
+    <div class="card shadow mt-4" id="subtasks">
+      <div class="card-body">
+        <h5 class="card-title">Checklist (<%= @subtasks.count(&:done) %>/<%= @subtasks.size %>)</h5>
+        <div class="progress mb-3" style="height: 8px">
+          <div class="progress-bar" style="width: <%= @task.subtasks_progress %>%"></div>
+        </div>
+        <% if @subtasks.any? %>
+          <div class="list-group list-group-flush mb-3">
+            <% @subtasks.each do |subtask| %>
+              <div class="list-group-item px-0 d-flex justify-content-between align-items-center" id="subtask_<%= subtask.id %>">
+                <span class="<%= 'text-decoration-line-through text-muted' if subtask.done %>"><%= subtask.title %></span>
+                <span class="d-flex gap-2">
+                  <%= button_to subtask.done ? "Reabrir" : "Concluir", toggle_project_task_subtask_path(@project, @task, subtask),
+                                method: :patch, class: "btn btn-sm btn-outline-success" %>
+                  <%= link_to "Remover", project_task_subtask_path(@project, @task, subtask),
+                              data: { turbo_method: :delete, turbo_confirm: "Remover subtarefa?" },
+                              class: "btn btn-link btn-sm text-danger p-0" %>
+                </span>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-muted">Nenhuma subtarefa. Quebre o trabalho em passos!</p>
+        <% end %>
+        <%= form_with model: [@project, @task, @subtask] do |f| %>
+          <div class="input-group">
+            <%= f.text_field :title, class: "form-control", placeholder: "Nova subtarefa..." %>
+            <%= f.submit "Adicionar", class: "btn btn-primary btn-sm" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
     <div class="card shadow mt-4">
       <div class="card-body">
         <h5 class="card-title">Anexos (<%= @task.files.count %>)</h5>
