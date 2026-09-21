@@ -1,63 +1,42 @@
-<% content_for :title, "Cadastro - CzarManagement" %>
+<% content_for :title, "Start free — Czar" %>
 
-<div class="row justify-content-center">
-  <div class="col-md-6 col-lg-4">
-    <div class="card shadow">
-      <div class="card-body">
-        <h2 class="card-title text-center mb-4">Cadastro</h2>
-        
-        <%= form_with model: @user, url: signup_path, local: true, class: "needs-validation", novalidate: true do |form| %>
-          <% if @user.errors.any? %>
-            <div class="alert alert-danger">
-              <ul class="mb-0">
-                <% @user.errors.full_messages.each do |message| %>
-                  <li><%= message %></li>
-                <% end %>
-              </ul>
-            </div>
+<div class="saas-auth">
+  <h1>Start free 🚀</h1>
+  <p class="muted">Free forever for small teams. No credit card. Set up in 30 seconds.</p>
+
+  <%= form_with model: @user, url: signup_path, local: true do |form| %>
+    <% if @user.errors.any? %>
+      <div class="saas-errors">
+        <ul style="margin:0;padding-left:18px">
+          <% @user.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
           <% end %>
-
-          <div class="mb-3">
-            <%= form.label :name, "Nome", class: "form-label" %>
-            <%= form.text_field :name, class: "form-control", required: true %>
-            <div class="invalid-feedback">
-              Por favor, insira seu nome.
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <%= form.label :email, "Email", class: "form-label" %>
-            <%= form.email_field :email, class: "form-control", required: true %>
-            <div class="invalid-feedback">
-              Por favor, insira um email válido.
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <%= form.label :password, "Senha", class: "form-label" %>
-            <%= form.password_field :password, class: "form-control", required: true, minlength: 6 %>
-            <div class="invalid-feedback">
-              A senha deve ter pelo menos 6 caracteres.
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <%= form.label :password_confirmation, "Confirmar Senha", class: "form-label" %>
-            <%= form.password_field :password_confirmation, class: "form-control", required: true %>
-            <div class="invalid-feedback">
-              Por favor, confirme sua senha.
-            </div>
-          </div>
-
-          <div class="d-grid">
-            <%= form.submit "Cadastrar", class: "btn btn-primary" %>
-          </div>
-        <% end %>
-        
-        <div class="text-center mt-3">
-          <p class="mb-0">Já tem uma conta? <%= link_to "Faça login", login_path, class: "text-decoration-none" %></p>
-        </div>
+        </ul>
       </div>
+    <% end %>
+
+    <div class="saas-field">
+      <%= form.label :name, "Your name" %>
+      <%= form.text_field :name, required: true, placeholder: "Ada Lovelace", autocomplete: "name" %>
     </div>
-  </div>
+    <div class="saas-field">
+      <%= form.label :email, "Work email" %>
+      <%= form.email_field :email, required: true, placeholder: "you@team.com", autocomplete: "email" %>
+    </div>
+    <div class="saas-field">
+      <%= form.label :password, "Password (min. 8 characters)" %>
+      <%= form.password_field :password, required: true, minlength: 8, placeholder: "••••••••", autocomplete: "new-password" %>
+    </div>
+    <div class="saas-field">
+      <%= form.label :password_confirmation, "Confirm password" %>
+      <%= form.password_field :password_confirmation, required: true, placeholder: "••••••••", autocomplete: "new-password" %>
+    </div>
+    <div class="d-grid">
+      <%= form.submit "Create free account", class: "saas-btn saas-btn-primary full" %>
+    </div>
+  <% end %>
+
+  <p class="muted" style="text-align:center;margin-top:16px;margin-bottom:0">
+    Already have an account? <%= link_to "Log in", login_path, style: "font-weight:700;color:var(--sz-brand)" %>
+  </p>
 </div>

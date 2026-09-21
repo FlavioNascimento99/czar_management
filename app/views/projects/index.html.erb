@@ -1,8 +1,11 @@
-<% content_for :title, "Meus Projetos - CzarManagement" %>
+<% content_for :title, "Projects — Czar" %>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-  <h1>Meus Projetos</h1>
-  <%= link_to "Novo Projeto", new_project_path, class: "btn btn-primary" %>
+<div class="saas-page-head">
+  <div>
+    <h1>Projects</h1>
+    <p>All the projects you belong to. Create one to get started.</p>
+  </div>
+  <%= link_to "＋ New project", new_project_path, class: "saas-btn saas-btn-primary" %>
 </div>
 
 <% if @projects.any? %>
@@ -53,8 +56,8 @@
         <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
       </svg>
     </div>
-    <h4 class="text-muted">Nenhum projeto encontrado</h4>
-    <p class="text-muted">Comece criando seu primeiro projeto!</p>
-    <%= link_to "Criar Projeto", new_project_path, class: "btn btn-primary" %>
+    <h4 class="text-muted">No projects yet</h4>
+    <p class="text-muted">Create your first project — free, and ready in 30 seconds.</p>
+    <%= link_to "Create project", new_project_path, class: "saas-btn saas-btn-primary" %>
   </div>
 <% end %>

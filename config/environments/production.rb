@@ -25,10 +25,14 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
-  config.assume_ssl = true
+  # Set LOCAL_HTTP=1 only for plain-HTTP local runs of the production image
+  # (e.g. `docker run --network host`). Real deployments stay behind
+  # Cloudflare TLS termination, so SSL stays enforced by default.
+  local_http = ENV["LOCAL_HTTP"].present?
+  config.assume_ssl = !local_http
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  config.force_ssl = !local_http
 
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
