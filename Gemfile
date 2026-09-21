@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.1.0"
+gem "rails", "~> 8.1.1"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use sqlite3 as the database for Active Record
@@ -16,32 +16,26 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
-# Rate limiting for auth endpoints [https://github.com/rack/rack-attack]
-gem "rack-attack"
-
-gem "kaminari"
-gem "bootstrap5-kaminari-views", "~> 0.0.1"
+gem 'kaminari'
+gem 'bootstrap5-kaminari-views', '~> 0.0.1'
 
 group :development, :test do
-  gem "rspec-rails"
-  gem "factory_bot_rails"
-  gem "faker"
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
+  gem 'faker'
+
 end
 
 group :test do
-  gem "capybara"
-  gem "selenium-webdriver"
-  gem "database_cleaner-active_record"
-  gem "rails-controller-testing"
+  gem 'capybara'
+  gem 'selenium-webdriver'
+  gem 'factory_bot_rails'
+  gem 'faker'
+  gem 'database_cleaner-active_record'
+  gem 'rails-controller-testing'
 end
 
-# sqlite3 must install on all platforms: Linux (CI, Docker, Kamal) needs it,
-# not just Windows. Restricting `platforms:` broke `bundle install` on ubuntu-latest.
-gem "sqlite3", "~> 2.7"
-
-# Postgres for production on Cloudflare Containers (Supabase). Precompiled
-# linux binaries, so CI/dev install it fine without libpq.
-gem "pg", "~> 1.6"
+gem 'sqlite3', '~> 2.7', platforms: [:x64_mingw, :mingw, :mswin]
 
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
