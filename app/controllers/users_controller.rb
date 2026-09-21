@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :require_login, only: [ :show ]
+  before_action :require_login, only: [ :show, :regenerate_token ]
 
   def new
     @user = User.new
@@ -22,6 +22,15 @@ class UsersController < ApplicationController
       redirect_to root_path, alert: I18n.t("auth.profile_forbidden")
     else
       @user = current_user
+    end
+  end
+
+  def regenerate_token
+    if params[:id].to_s != current_user.id.to_s
+      redirect_to root_path, alert: I18n.t("auth.profile_forbidden")
+    else
+      current_user.regenerate_api_token
+      redirect_to current_user, notice: "Token de API regenerado!"
     end
   end
 
