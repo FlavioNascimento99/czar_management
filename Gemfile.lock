@@ -213,7 +213,6 @@ GEM
     parser (3.3.9.0)
       ast (~> 2.4.1)
       racc
-    pg (1.6.3)
     pg (1.6.3-x86_64-linux)
     pp (0.6.4)
       prettyprint
@@ -422,7 +421,7 @@ DEPENDENCIES
   propshaft
   puma (>= 5.0)
   rack-attack
-  rails (~> 8.1.0)
+  rails (~> 8.1.1)
   rails-controller-testing
   rspec-rails
   rubocop-rails-omakase
