@@ -41,7 +41,7 @@ end
 
 # sqlite3 must install on all platforms: Linux (CI, Docker, Kamal) needs it,
 # not just Windows. Restricting `platforms:` broke `bundle install` on ubuntu-latest.
-gem "sqlite3", "~> 2.7"
+gem "sqlite3", "~> 2.9"
 
 # Postgres for production on Cloudflare Containers (Supabase). Precompiled
 # linux binaries, so CI/dev install it fine without libpq.
