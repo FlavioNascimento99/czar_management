@@ -61,17 +61,28 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  # APP_HOST must be set on the deploy target (e.g. app.example.com).
-  config.action_mailer.default_url_options = { host: ENV.fetch("APP_HOST", "example.com") }
+  # APP_HOST is required in production: mailer links and Host
+  # authorization both depend on it (fail fast instead of silently
+  # generating https://example.com links or allowing every Host).
+  config.action_mailer.default_url_options = {
+    host: ENV.fetch("APP_HOST") do
+      raise KeyError, 'APP_HOST must be set in production (e.g. APP_HOST="app.example.com")'
+    end
+  }
 
-  # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
-  # config.action_mailer.smtp_settings = {
-  #   user_name: Rails.application.credentials.dig(:smtp, :user_name),
-  #   password: Rails.application.credentials.dig(:smtp, :password),
-  #   address: "smtp.example.com",
-  #   port: 587,
-  #   authentication: :plain
-  # }
+  # Outgoing SMTP. Only enabled when EMAIL_ENABLED=true; otherwise mailers
+  # stay gated by EmailGate (see app/services/email_gate.rb) and raise no
+  # errors at boot when SMTP_* vars are absent.
+  if ENV.fetch("EMAIL_ENABLED", "false") == "true"
+    config.action_mailer.smtp_settings = {
+      user_name: ENV.fetch("SMTP_USERNAME"),
+      password: ENV.fetch("SMTP_PASSWORD"),
+      address: ENV.fetch("SMTP_ADDRESS", "smtp.example.com"),
+      port: ENV.fetch("SMTP_PORT", "587").to_i,
+      authentication: :plain,
+      enable_starttls_auto: true
+    }
+  end
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
@@ -84,9 +95,14 @@ Rails.application.configure do
   config.active_record.attributes_for_inspect = [ :id ]
 
   # Enable DNS rebinding protection and other `Host` header attacks.
-  # Set APP_HOST on the deploy target; without it every Host is allowed.
-  if (app_host = ENV["APP_HOST"]).present?
-    config.hosts << app_host
+  # APP_HOST is required in production (fail fast); LOCAL_HTTP=1 additionally
+  # allows localhost for plain-HTTP local runs of the production image.
+  app_host = ENV.fetch("APP_HOST") do
+    raise KeyError, 'APP_HOST must be set in production (e.g. APP_HOST="app.example.com")'
+  end
+  config.hosts << app_host
+  if local_http
+    config.hosts += %w[localhost 127.0.0.1 [::1]]
   end
 
   # Skip Host authorization for the health check endpoint so Kamal and
