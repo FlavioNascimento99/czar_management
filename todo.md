@@ -50,20 +50,19 @@
 - [ ] Testar CRUD de tarefas
 - [ ] Testar CRUD de requisitos
 - [ ] Validar relacionamentos entre entidades
-- [ ] Testar interface web comp## Fase 7: Entrega final e documentação
+- [ ] Testar interface web completa
+
+## Fase 7: Entrega final e documentação
 - [x] Criar documentação completa (README.md)
 - [x] Criar guia de uso para usuários
 - [x] Documentar arquitetura e funcionalidades
 - [x] Preparar entrega final
 
-## ✅ PROJETO CONCLUÍDO COM SUCESSO!
+## Estado atual (2026-09-22)
 
-Todas as fases foram implementadas e testadas:
-1. ✅ Configuração inicial do projeto Rails
-2. ✅ Criação dos modelos e relacionamentos  
-3. ✅ Implementação do sistema de autenticação
-4. ✅ Desenvolvimento dos controllers e rotas
-5. ✅ Criação das views e interface web
-6. ✅ Testes e validação do sistema
-7. ✅ Entrega final e documentação [ ] Entregar projeto completo
+Fases 1–5 e 7 entregues. Fase 6 parcialmente pendente (itens acima) —
+coberta pela suite RSpec (`bundle exec rspec`), mas sem aceite manual
+roteirizado (ver `docs/ROADMAP_PENDENTE.md`).
+7. ✅ Entrega final e documentação
+- [ ] Entregar projeto completo
 

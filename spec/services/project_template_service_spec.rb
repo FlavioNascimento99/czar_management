@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ProjectTemplateService do
   it "aplica sprint_dev com requisitos e tarefas" do
-    project = create(:project)
+    project = create(:project, :with_owner_as_member)
     creator = project.owner
     expect {
       described_class.apply!(project: project, template_key: "sprint_dev", creator: creator)

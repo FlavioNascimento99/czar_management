@@ -12,7 +12,7 @@ RSpec.describe Project, type: :model do
   end
 
   it "pode ter múltiplos usuários" do
-    project = create(:project)
+    project = create(:project, :with_owner_as_member)
     users = create_list(:user, 2)
     project.users << users
     expect(project.users.count).to eq(3)
