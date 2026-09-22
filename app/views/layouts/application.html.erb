@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title><%= content_for(:title) || "Czar — Free & easy project management" %></title>
+    <title><%= content_for(:title) || "CZAR MANAGER — Free & easy project management" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="description" content="Czar is free project management for small teams. Projects, tasks and requirements in one simple place.">
+    <meta name="description" content="CZAR MANAGER is free project management for small teams. Projects, tasks and requirements in one simple place.">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= yield :head %>
@@ -21,7 +21,7 @@
     <header class="saas-nav">
       <div class="saas-nav-inner">
         <%= link_to root_path, class: "saas-brand" do %>
-          <span class="saas-logo">C</span><span>Czar</span>
+          <span class="saas-logo">C</span><span>CZAR MANAGER</span>
         <% end %>
 
         <% if logged_in? %>
@@ -79,7 +79,7 @@
 
     <footer class="saas-footer">
       <div class="saas-footer-inner">
-        <span><strong>Czar</strong> — free &amp; easy project management.</span>
+        <span><strong>CZAR MANAGER</strong> — free &amp; easy project management.</span>
         <span>Free forever for small teams · No credit card · <a href="#pricing">Pricing</a></span>
       </div>
     </footer>
