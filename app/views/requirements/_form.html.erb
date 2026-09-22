@@ -1,0 +1,27 @@
+<div class="saas-form-wrap">
+  <span class="saas-section-label">Manage · Requirement in <%= @project.name %></span>
+  <h1><%= @requirement.persisted? ? "Edit requirement" : "New requirement" %></h1>
+  <p class="muted">Capture what needs to be built before you build it.</p>
+  <%= form_with model: [@project, @requirement], local: true do |form| %>
+    <% if @requirement.errors.any? %>
+      <div class="saas-errors"><ul style="margin:0;padding-left:18px"><% @requirement.errors.full_messages.each do |m| %><li><%= m %></li><% end %></ul></div>
+    <% end %>
+    <div class="saas-field">
+      <%= form.label :title, "Title" %>
+      <%= form.text_field :title, required: true, placeholder: "Ex: System must allow Google login",
+                          style: "width:100%;border:1px solid var(--sz-line);border-radius:10px;padding:11px 12px;font-size:14px" %>
+    </div>
+    <div class="saas-field">
+      <%= form.label :description, "Description" %>
+      <%= form.text_area :description, rows: 4, required: true, placeholder: "Describe the requirement…" %>
+    </div>
+    <div class="saas-field">
+      <%= form.label :priority, "Priority" %>
+      <%= form.select :priority, options_for_select([['Low', 'baixa'], ['Medium', 'media'], ['High', 'alta']], @requirement.priority.presence || 'media'), {}, required: true %>
+    </div>
+    <div class="saas-form-actions">
+      <%= form.submit @requirement.persisted? ? "Save changes" : "Create requirement", class: "saas-btn saas-btn-primary" %>
+      <%= link_to "Cancel", @requirement.persisted? ? [@project, @requirement] : @project, class: "saas-btn saas-btn-ghost" %>
+    </div>
+  <% end %>
+</div>

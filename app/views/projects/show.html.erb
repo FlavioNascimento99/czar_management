@@ -1,240 +1,39 @@
-<% content_for :title, "#{@project.name} - CzarManagement" %>
+<% content_for :title, "#{@project.name} — Czar" %>
 
-<div class="d-flex justify-content-between align-items-start mb-4">
+<%= render "header" %>
+<%= render "stats" %>
+
+<div class="saas-2col" style="margin-bottom:0">
   <div>
-    <h1>
-      <%= @project.name %>
-      <span class="badge bg-<%= @project.pessoal? ? "info text-dark" : "primary" %> fs-6"><%= @project.pessoal? ? "Pessoal" : "Equipe" %></span>
-    </h1>
-    <p class="text-muted lead"><%= @project.description %></p>
+    <%= render "members" %>
+    <%= render "activity" %>
   </div>
-  <div class="d-flex gap-2">
-    <%= link_to "Kanban", board_project_path(@project), class: "btn btn-outline-success" %>
-    <%= link_to "Calendário", calendar_project_path(@project, format: :ics), class: "btn btn-outline-info" %>
-    <%= link_to "Editar", edit_project_path(@project), class: "btn btn-outline-primary" %>
-    <% if @project.owned_by?(current_user) %>
-      <%= link_to "Excluir", @project,
-                  data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja excluir este projeto? Esta ação não pode ser desfeita." },
-                  class: "btn btn-outline-danger" %>
-    <% end %>
-    <%= link_to "Voltar", projects_path, class: "btn btn-secondary" %>
+  <div class="saas-panel">
+    <h2>Linked docs</h2>
+    <p class="saas-mini">Knowledge lives in Documents — link task docs from the task page.</p>
+    <%= link_to "Open Documents", docs_path, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+    <%= link_to "＋ New doc", new_doc_path, class: "saas-btn saas-btn-primary saas-btn-sm" %>
   </div>
 </div>
 
-<!-- Estatísticas -->
-<div class="row mb-4">
-  <div class="col-md-3">
-    <div class="card text-center">
-      <div class="card-body">
-        <h3 class="text-primary"><%= @tasks_count %></h3>
-        <p class="card-text">Total de Tarefas</p>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="card text-center">
-      <div class="card-body">
-        <h3 class="text-success"><%= @tasks_done_count %></h3>
-        <p class="card-text">Concluídas</p>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="card text-center">
-      <div class="card-body">
-        <h3 class="text-warning"><%= @tasks_doing_count %></h3>
-        <p class="card-text">Em Andamento</p>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="card text-center">
-      <div class="card-body">
-        <h3 class="text-info"><%= @requirements_count %></h3>
-        <p class="card-text">Requisitos</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Membros -->
-<% unless @project.pessoal? %>
-<div class="card mb-4">
-  <div class="card-header">
-    <span class="fw-bold">Membros (<%= @members.count %>)</span>
-  </div>
-  <div class="card-body">
-    <ul class="list-group mb-3">
-      <% @members.each do |member| %>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <span>
-            <%= member.name %>
-            <small class="text-muted"><%= member.email %></small>
-            <% if @project.owned_by?(member) %>
-              <span class="badge bg-primary">Dono</span>
-            <% end %>
-          </span>
-          <% if @project.owned_by?(current_user) && !@project.owned_by?(member) %>
-            <%= button_to "Remover", remove_member_project_path(@project, user_id: member.id),
-                          method: :delete, class: "btn btn-outline-danger btn-sm",
-                          form: { "data-turbo-confirm": "Remover este membro do projeto?" } %>
-          <% elsif member == current_user %>
-            <%= button_to "Sair do projeto", remove_member_project_path(@project, user_id: member.id),
-                          method: :delete, class: "btn btn-outline-warning btn-sm",
-                          form: { "data-turbo-confirm": "Sair deste projeto?" } %>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
-    <% if @project.member?(current_user) %>
-      <%= form_with url: add_member_project_path(@project), method: :post, local: true, class: "d-flex gap-2" do |form| %>
-        <%= form.email_field :email, class: "form-control", placeholder: "Email do novo membro", required: true %>
-        <%= form.submit "Adicionar membro", class: "btn btn-primary" %>
-      <% end %>
-    <% end %>
-  </div>
-</div>
-<% end %>
-
-<!-- Atividade recente -->
-<div class="card mt-4 mb-4">
-  <div class="card-header">
-    <span class="fw-bold">Atividade recente</span>
-  </div>
-  <div class="card-body">
-    <% if @activities.any? %>
-      <ul class="list-group list-group-flush">
-        <% @activities.each do |log| %>
-          <li class="list-group-item px-0 d-flex justify-content-between">
-            <span><%= activity_description(log) %></span>
-            <small class="text-muted"><%= l(log.created_at, format: :short) %></small>
-          </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p class="text-muted mb-0">Nenhuma atividade ainda. Crie uma tarefa ou requisito!</p>
-    <% end %>
-  </div>
-</div>
-
-<!-- Navegação por abas -->
-<ul class="nav nav-tabs" id="projectTabs" role="tablist">
+<ul class="nav nav-tabs saas-tabs" id="projectTabs" role="tablist">
   <li class="nav-item" role="presentation">
     <button class="nav-link active" id="tasks-tab" data-bs-toggle="tab" data-bs-target="#tasks" type="button" role="tab">
-      Tarefas (<%= @tasks_count %>)
+      Tasks · <%= @tasks_count %>
     </button>
   </li>
   <li class="nav-item" role="presentation">
     <button class="nav-link" id="requirements-tab" data-bs-toggle="tab" data-bs-target="#requirements" type="button" role="tab">
-      Requisitos (<%= @requirements_count %>)
+      Requirements · <%= @requirements_count %>
     </button>
   </li>
 </ul>
 
 <div class="tab-content" id="projectTabsContent">
-  <!-- Aba de Tarefas -->
-  <div class="tab-pane fade show active" id="tasks" role="tabpanel">
-    <div class="d-flex justify-content-between align-items-center my-3">
-      <h4>Tarefas</h4>
-      <div class="d-flex gap-2">
-        <%= link_to "Etiquetas", project_tags_path(@project), class: "btn btn-outline-secondary btn-sm" %>
-        <%= link_to "Nova Tarefa", new_project_task_path(@project), class: "btn btn-primary btn-sm" %>
-      </div>
-    </div>
-
-    <% if @tasks.any? %>
-      <div class="row">
-        <% @tasks.each do |task| %>
-          <div class="col-md-6 col-lg-4 mb-3">
-            <div class="card">
-              <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                  <h6 class="card-title"><%= task.title %></h6>
-                  <span class="badge bg-<%= task.priority == 'alta' ? 'danger' : task.priority == 'media' ? 'warning' : 'secondary' %>">
-                    <%= task.priority.capitalize %>
-                  </span>
-                </div>
-
-                <p class="card-text small text-muted">
-                  <%= truncate(task.description, length: 80) %>
-                </p>
-
-                <div class="mb-2">
-                  <span class="badge bg-<%= task.status == 'concluida' ? 'success' : task.status == 'em_andamento' ? 'warning' : 'secondary' %>">
-                    <%= task.status.humanize %>
-                  </span>
-                </div>
-
-                <div class="small text-muted">
-                  <div>Autor: <%= task.author.name %></div>
-                  <div>Responsável: <%= task.assigned_to.name %></div>
-                </div>
-
-                <div class="mt-2">
-                  <%= link_to "Ver", [@project, task], class: "btn btn-outline-primary btn-sm" %>
-                  <%= link_to "Editar", edit_project_task_path(@project, task), class: "btn btn-outline-secondary btn-sm" %>
-                </div>
-              </div>
-            </div>
-          </div>
-        <% end %>
-      </div>
-
-      <!-- Paginação das tarefas -->
-      <div class="mt-3 d-flex justify-content-center">
-        <%= paginate @tasks, param_name: :tasks_page, theme: 'bootstrap-5' %>
-      </div>
-    <% else %>
-      <div class="text-center py-4">
-        <p class="text-muted">Nenhuma tarefa criada ainda.</p>
-        <%= link_to "Criar primeira tarefa", new_project_task_path(@project), class: "btn btn-primary" %>
-      </div>
-    <% end %>
+  <div class="tab-pane fade show active saas-tab-body" id="tasks" role="tabpanel">
+    <%= render "tasks_tab" %>
   </div>
-
-  <!-- Aba de Requisitos -->
-  <div class="tab-pane fade" id="requirements" role="tabpanel">
-    <div class="d-flex justify-content-between align-items-center my-3">
-      <h4>Requisitos</h4>
-      <%= link_to "Novo Requisito", new_project_requirement_path(@project), class: "btn btn-primary btn-sm" %>
-    </div>
-
-    <% if @requirements.any? %>
-      <div class="row">
-        <% @requirements.each do |requirement| %>
-          <div class="col-md-6 mb-3">
-            <div class="card">
-              <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                  <h6 class="card-title"><%= requirement.title %></h6>
-                  <span class="badge bg-<%= requirement.priority == 'alta' ? 'danger' : requirement.priority == 'media' ? 'warning' : 'secondary' %>">
-                    <%= requirement.priority.capitalize %>
-                  </span>
-                </div>
-
-                <p class="card-text text-muted">
-                  <%= truncate(requirement.description, length: 120) %>
-                </p>
-
-                <div class="mt-2">
-                  <%= link_to "Ver", [@project, requirement], class: "btn btn-outline-primary btn-sm" %>
-                  <%= link_to "Editar", edit_project_requirement_path(@project, requirement), class: "btn btn-outline-secondary btn-sm" %>
-                </div>
-              </div>
-            </div>
-          </div>
-        <% end %>
-      </div>
-
-      <!-- Paginação dos requisitos -->
-      <div class="mt-3 d-flex justify-content-center">
-        <%= paginate @requirements, param_name: :requirements_page, theme: 'bootstrap-5' %>
-      </div>
-    <% else %>
-      <div class="text-center py-4">
-        <p class="text-muted">Nenhum requisito criado ainda.</p>
-        <%= link_to "Criar primeiro requisito", new_project_requirement_path(@project), class: "btn btn-primary" %>
-      </div>
-    <% end %>
+  <div class="tab-pane fade saas-tab-body" id="requirements" role="tabpanel">
+    <%= render "requirements_tab" %>
   </div>
 </div>

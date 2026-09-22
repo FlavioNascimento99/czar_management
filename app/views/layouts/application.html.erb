@@ -27,9 +27,17 @@
         <% if logged_in? %>
           <nav class="saas-links">
             <%= link_to "Dashboard", root_path %>
-            <%= link_to "Projects", projects_path %>
-            <%= link_to "My Tasks", my_tasks_path %>
-            <%= link_to "Docs", docs_path %>
+            <span class="saas-nav-group">
+              <span class="saas-nav-tag">Docs</span>
+              <%= link_to "Documents", docs_path %>
+              <%= link_to "Folders", folders_path %>
+            </span>
+            <span class="saas-nav-sep"></span>
+            <span class="saas-nav-group">
+              <span class="saas-nav-tag">Manage</span>
+              <%= link_to "Projects", projects_path %>
+              <%= link_to "My Tasks", my_tasks_path %>
+            </span>
             <%= link_to notifications_path, class: "position-relative" do %>
               🔔
               <% unread = current_user.notifications.unread.count %>
@@ -40,6 +48,7 @@
           </nav>
           <div class="saas-nav-cta">
             <span class="saas-user">Hi, <%= current_user.name %></span>
+            <%= link_to "＋ New doc", new_doc_path, class: "saas-btn saas-btn-primary saas-btn-sm" %>
             <%= link_to "New project", new_project_path, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
             <%= button_to "Log out", logout_path, method: :delete, class: "saas-btn saas-btn-ghost saas-btn-sm", form: { "data-turbo-confirm": "Log out?" } %>
           </div>

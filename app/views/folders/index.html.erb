@@ -1,36 +1,44 @@
-<% content_for :title, "Minhas Pastas" %>
+<% content_for :title, "Folders — Czar" %>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h1>Pastas</h1>
-  <%= link_to "Nova Pasta", new_folder_path, class: "btn btn-primary btn-sm" %>
+<div class="saas-crumb"><%= link_to "Documents", docs_path %> <span class="sep">/</span> <span>Folders</span></div>
+
+<div class="saas-page-head">
+  <div>
+    <span class="saas-section-label">Docs · Organization (secondary)</span>
+    <h1>Folders</h1>
+    <p>Secondary management for your primary docs. Create docs first, organize after.</p>
+  </div>
+  <div style="display:flex;gap:8px">
+    <%= link_to "＋ New doc", new_doc_path, class: "saas-btn saas-btn-primary" %>
+    <%= link_to "New folder", new_folder_path, class: "saas-btn saas-btn-ghost" %>
+  </div>
 </div>
 
 <% if @folders.any? %>
-  <div class="list-group mb-4">
+  <div class="saas-list" style="margin-bottom:16px">
     <% @folders.each do |folder| %>
-      <div class="list-group-item d-flex justify-content-between align-items-center">
-        <%= link_to folder, class: "text-decoration-none" do %>
-          <strong>📁 <%= folder.name %></strong>
-          <small class="text-muted d-block"><%= folder.subfolders.size %> subpastas · <%= folder.docs.count %> docs</small>
+      <div class="saas-list-item">
+        <%= link_to folder, style: "color:inherit" do %>
+          <span><strong>📁 <%= folder.name %></strong><small class="saas-mini" style="display:block"><%= folder.subfolders.size %> subfolders · <%= folder.docs.count %> docs</small></span>
         <% end %>
-        <span class="d-flex gap-2">
-          <%= link_to "Editar", edit_folder_path(folder), class: "btn btn-sm btn-outline-secondary" %>
-          <%= link_to "Excluir", folder, data: { turbo_method: :delete, turbo_confirm: "Excluir pasta e subpastas?" }, class: "btn btn-sm btn-outline-danger" %>
+        <span style="display:flex;gap:8px">
+          <%= link_to "Edit", edit_folder_path(folder), class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+          <%= link_to "Delete", folder, data: { turbo_method: :delete, turbo_confirm: "Delete folder and subfolders?" }, class: "saas-btn saas-btn-ghost saas-btn-sm", style: "color:var(--sz-red)" %>
         </span>
       </div>
     <% end %>
   </div>
 <% else %>
-  <p class="text-muted">Nenhuma pasta. Organize seus docs por assunto! 📁</p>
+  <div class="saas-panel"><div class="saas-empty"><p>No folders. Organize your docs by topic! 📁</p></div></div>
 <% end %>
 
 <% if @loose_docs.any? %>
-  <h5>Sem pasta</h5>
-  <div class="list-group">
-    <% @loose_docs.each do |doc| %>
-      <%= link_to doc, class: "list-group-item list-group-item-action" do %>
-        <%= doc.title %>
+  <div class="saas-panel">
+    <h2>No folder</h2>
+    <div class="saas-side-list">
+      <% @loose_docs.each do |doc| %>
+        <div class="saas-row"><%= link_to doc.title, doc %></div>
       <% end %>
-    <% end %>
+    </div>
   </div>
 <% end %>

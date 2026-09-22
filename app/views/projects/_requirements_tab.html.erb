@@ -1,0 +1,30 @@
+<div class="saas-tab-head">
+  <h3>Requirements</h3>
+  <%= link_to "＋ New requirement", new_project_requirement_path(@project), class: "saas-btn saas-btn-primary saas-btn-sm" %>
+</div>
+
+<% if @requirements.any? %>
+  <div class="saas-task-grid" style="grid-template-columns:repeat(2,1fr)">
+    <% @requirements.each do |requirement| %>
+      <div class="saas-task">
+        <div style="display:flex;justify-content:space-between;gap:8px;align-items:start">
+          <h4><%= link_to requirement.title, [@project, requirement] %></h4>
+          <span class="saas-badge <%= requirement.priority == 'alta' ? '' : requirement.priority == 'media' ? 'amber' : 'gray' %>" style="<%= 'background:#fee2e2;color:#991b1b' if requirement.priority == 'alta' %>"><%= requirement.priority.capitalize %></span>
+        </div>
+        <p><%= truncate(requirement.description, length: 120) %></p>
+        <div class="saas-task-foot">
+          <%= link_to "Open", [@project, requirement], class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+          <%= link_to "Edit", edit_project_requirement_path(@project, requirement), class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="mt-3 d-flex justify-content-center">
+    <%= paginate @requirements, param_name: :requirements_page, theme: 'bootstrap-5' %>
+  </div>
+<% else %>
+  <div class="saas-empty">
+    <p>No requirements yet.</p>
+    <%= link_to "Create first requirement", new_project_requirement_path(@project), class: "saas-btn saas-btn-primary saas-btn-sm" %>
+  </div>
+<% end %>

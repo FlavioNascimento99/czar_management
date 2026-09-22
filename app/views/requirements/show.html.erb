@@ -1,26 +1,14 @@
-<% content_for :title, "#{@requirement.title} - #{@project.name}" %>
-
-<div class="row justify-content-center">
-  <div class="col-md-8">
-    <div class="card shadow">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-start mb-2">
-          <h3 class="card-title mb-0"><%= @requirement.title %></h3>
-          <span class="badge bg-<%= @requirement.priority == "alta" ? "danger" : @requirement.priority == "media" ? "warning" : "secondary" %>">
-            <%= @requirement.priority.capitalize %>
-          </span>
-        </div>
-
-        <p class="mt-2"><%= simple_format(@requirement.description) %></p>
-
-        <div class="d-flex gap-2">
-          <%= link_to "Editar", edit_project_requirement_path(@project, @requirement), class: "btn btn-primary btn-sm" %>
-          <%= link_to "Excluir", [ @project, @requirement ],
-                      data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja excluir este requisito?" },
-                      class: "btn btn-outline-danger btn-sm" %>
-          <%= link_to "Voltar", @project, class: "btn btn-secondary btn-sm" %>
-        </div>
-      </div>
-    </div>
+<% content_for :title, "#{@requirement.title} — #{@project.name}" %>
+<div class="saas-crumb"><%= link_to "Projects", projects_path %> <span class="sep">/</span> <%= link_to @project.name, @project %> <span class="sep">/</span> <span>Requirement</span></div>
+<div class="saas-form-wrap">
+  <div style="display:flex;justify-content:space-between;gap:10px;align-items:start">
+    <h1 style="font-size:22px"><%= @requirement.title %></h1>
+    <span class="saas-badge <%= @requirement.priority == 'alta' ? '' : @requirement.priority == 'media' ? 'amber' : 'gray' %>" style="<%= 'background:#fee2e2;color:#991b1b' if @requirement.priority == 'alta' %>"><%= @requirement.priority.capitalize %></span>
+  </div>
+  <div style="font-size:14.5px;line-height:1.65;margin-top:10px"><%= simple_format(@requirement.description) %></div>
+  <div class="saas-form-actions">
+    <%= link_to "Edit", edit_project_requirement_path(@project, @requirement), class: "saas-btn saas-btn-primary saas-btn-sm" %>
+    <%= link_to "Delete", [@project, @requirement], data: { turbo_method: :delete, turbo_confirm: "Delete this requirement?" }, class: "saas-btn saas-btn-ghost saas-btn-sm", style: "color:var(--sz-red);border-color:#fecaca" %>
+    <%= link_to "Back", @project, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
   </div>
 </div>

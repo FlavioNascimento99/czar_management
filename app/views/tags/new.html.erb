@@ -1,28 +1,3 @@
-<% content_for :title, "Nova Etiqueta" %>
-<div class="row justify-content-center">
-  <div class="col-md-6">
-    <div class="card shadow">
-      <div class="card-body">
-        <h3>Nova Etiqueta</h3>
-        <small class="text-muted">Projeto: <%= @project.name %></small>
-        <%= form_with model: [@project, @tag] do |f| %>
-          <% if @tag.errors.any? %>
-            <div class="alert alert-danger mt-2"><ul class="mb-0"><% @tag.errors.full_messages.each do |m| %><li><%= m %></li><% end %></ul></div>
-          <% end %>
-          <div class="mb-3 mt-2">
-            <%= f.label :name, "Nome", class: "form-label" %>
-            <%= f.text_field :name, class: "form-control", required: true, placeholder: "Ex: frontend" %>
-          </div>
-          <div class="mb-3">
-            <%= f.label :color, "Cor", class: "form-label" %>
-            <%= f.color_field :color, class: "form-control form-control-color" %>
-          </div>
-          <div class="d-flex gap-2">
-            <%= f.submit "Criar", class: "btn btn-primary" %>
-            <%= link_to "Cancelar", project_tags_path(@project), class: "btn btn-secondary" %>
-          </div>
-        <% end %>
-      </div>
-    </div>
-  </div>
-</div>
+<% content_for :title, "New tag — Czar" %>
+<div class="saas-crumb"><%= link_to "Projects", projects_path %> <span class="sep">/</span> <span>New tag</span></div>
+<%= render "form" %>

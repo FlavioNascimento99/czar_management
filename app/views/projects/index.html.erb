@@ -2,39 +2,50 @@
 
 <div class="saas-page-head">
   <div>
+    <span class="saas-section-label">Manage · Projects</span>
     <h1>Projects</h1>
-    <p>All the projects you belong to. Create one to get started.</p>
+    <p>Team spaces and personal routines. Docs live in <%= link_to "Documents", docs_path %> — projects are for execution.</p>
   </div>
-  <%= link_to "＋ New project", new_project_path, class: "saas-btn saas-btn-primary" %>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <%= link_to "＋ New doc", new_doc_path, class: "saas-btn saas-btn-ghost" %>
+    <%= link_to "＋ New project", new_project_path, class: "saas-btn saas-btn-primary" %>
+  </div>
 </div>
 
 <% if @projects.any? %>
-  <h4 class="mt-4">Equipes (<%= @team_projects.size %>)</h4>
-  <div class="row">
-    <% @team_projects.each do |project| %>
-      <%= render "card", project: project, task_counts: @task_counts, requirement_counts: @requirement_counts %>
+  <div class="saas-panel" style="margin-bottom:16px">
+    <h2>Team projects · <%= @team_projects.size %></h2>
+    <% if @team_projects.any? %>
+      <div class="saas-grid" style="margin-top:12px">
+        <% @team_projects.each do |project| %>
+          <%= render "card", project: project, task_counts: @task_counts, requirement_counts: @requirement_counts %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="saas-empty"><p>No team projects yet.</p></div>
     <% end %>
   </div>
 
-  <h4 class="mt-4">Pessoal — rotinas e estudos (<%= @personal_projects.size %>)</h4>
-  <div class="row">
-    <% @personal_projects.each do |project| %>
-      <%= render "card", project: project, task_counts: @task_counts, requirement_counts: @requirement_counts %>
+  <div class="saas-panel">
+    <h2>Personal — routines & studies · <%= @personal_projects.size %></h2>
+    <% if @personal_projects.any? %>
+      <div class="saas-grid" style="margin-top:12px">
+        <% @personal_projects.each do |project| %>
+          <%= render "card", project: project, task_counts: @task_counts, requirement_counts: @requirement_counts %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="saas-empty">
+        <p>Create a personal space with the "Study routine" template. 🌱</p>
+        <%= link_to "New personal project", new_project_path, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+      </div>
     <% end %>
   </div>
-  <% if @personal_projects.empty? %>
-    <p class="text-muted">Crie um espaço pessoal com o modelo "Rotina de estudos". 🌱</p>
-  <% end %>
 <% else %>
-  <div class="text-center py-5">
-    <div class="mb-4">
-      <svg width="64" height="64" fill="currentColor" class="text-muted" viewBox="0 0 16 16">
-        <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-      </svg>
+  <div class="saas-panel">
+    <div class="saas-empty">
+      <p><strong>No projects yet.</strong><br>Create your first project — free, and ready in 30 seconds.</p>
+      <%= link_to "Create project", new_project_path, class: "saas-btn saas-btn-primary saas-btn-sm" %>
     </div>
-    <h4 class="text-muted">No projects yet</h4>
-    <p class="text-muted">Create your first project — free, and ready in 30 seconds.</p>
-    <%= link_to "Create project", new_project_path, class: "saas-btn saas-btn-primary" %>
   </div>
 <% end %>

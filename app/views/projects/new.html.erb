@@ -1,57 +1,49 @@
-<% content_for :title, "Novo Projeto - CzarManagement" %>
+<% content_for :title, "New project — Czar" %>
 
-<div class="row justify-content-center">
-  <div class="col-md-8 col-lg-6">
-    <div class="card shadow">
-      <div class="card-header">
-        <h3 class="card-title mb-0">Novo Projeto</h3>
-      </div>
-      <div class="card-body">
-        <%= form_with model: @project, local: true, class: "needs-validation", novalidate: true do |form| %>
-          <% if @project.errors.any? %>
-            <div class="alert alert-danger">
-              <ul class="mb-0">
-                <% @project.errors.full_messages.each do |message| %>
-                  <li><%= message %></li>
-                <% end %>
-              </ul>
-            </div>
+<div class="saas-crumb"><%= link_to "Dashboard", root_path %> <span class="sep">/</span> <%= link_to "Projects", projects_path %> <span class="sep">/</span> <span>New</span></div>
+
+<div class="saas-form-wrap">
+  <span class="saas-section-label">Manage · Project</span>
+  <h1>New project</h1>
+  <p class="muted">Team space or personal routine. Takes 30 seconds — docs stay in <%= link_to "Documents", docs_path %>.</p>
+
+  <%= form_with model: @project, local: true do |form| %>
+    <% if @project.errors.any? %>
+      <div class="saas-errors">
+        <ul style="margin:0;padding-left:18px">
+          <% @project.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
           <% end %>
+        </ul>
+      </div>
+    <% end %>
 
-          <div class="mb-3">
-            <%= form.label :name, "Nome do Projeto", class: "form-label" %>
-            <%= form.text_field :name, class: "form-control", required: true, 
-                                placeholder: "Ex: Sistema de Vendas" %>
-            <div class="invalid-feedback">
-              Por favor, insira o nome do projeto.
-            </div>
-          </div>
+    <div class="saas-field">
+      <%= form.label :name, "Project name" %>
+      <%= form.text_field :name, required: true, placeholder: "Ex: Website redesign",
+                          style: "width:100%;border:1px solid var(--sz-line);border-radius:10px;padding:11px 12px;font-size:14px" %>
+    </div>
 
-          <div class="mb-3">
-            <%= form.label :description, "Descrição", class: "form-label" %>
-            <%= form.text_area :description, class: "form-control", rows: 4, required: true,
-                               placeholder: "Descreva os objetivos e escopo do projeto..." %>
-            <div class="invalid-feedback">
-              Por favor, insira a descrição do projeto.
-            </div>
-          </div>
+    <div class="saas-field">
+      <%= form.label :description, "Description" %>
+      <%= form.text_area :description, rows: 4, required: true, placeholder: "Goals and scope…" %>
+    </div>
 
-          <div class="mb-3">
-            <%= form.label :kind, "Tipo de espaço", class: "form-label" %>
-            <%= form.select :kind, options_for_select([["Equipe", "equipe"], ["Pessoal (rotina, estudos)", "pessoal"]]), {}, class: "form-select" %>
-          </div>
-
-          <div class="mb-3">
-            <%= form.label :template, "Começar de um modelo (opcional)", class: "form-label" %>
-            <%= form.select :template, options_for_select([["Projeto em branco", ""]] + ProjectTemplateService::TEMPLATES.map { |k, v| [v[:name], k] }), {}, class: "form-select" %>
-          </div>
-
-          <div class="d-flex gap-2">
-            <%= form.submit "Criar Projeto", class: "btn btn-primary" %>
-            <%= link_to "Cancelar", projects_path, class: "btn btn-secondary" %>
-          </div>
-        <% end %>
+    <div class="saas-field-row two">
+      <div class="saas-field">
+        <%= form.label :kind, "Space type" %>
+        <%= form.select :kind, options_for_select([["Team", "equipe"], ["Personal (routine, studies)", "pessoal"]]) %>
+        <div class="saas-mini" style="margin-top:6px">Personal allows only you as member.</div>
+      </div>
+      <div class="saas-field">
+        <%= form.label :template, "Start from template (optional)" %>
+        <%= form.select :template, options_for_select([["Blank project", ""]] + ProjectTemplateService::TEMPLATES.map { |k, v| [v[:name], k] }) %>
       </div>
     </div>
-  </div>
+
+    <div class="saas-form-actions">
+      <%= form.submit "Create project", class: "saas-btn saas-btn-primary" %>
+      <%= link_to "Cancel", projects_path, class: "saas-btn saas-btn-ghost" %>
+    </div>
+  <% end %>
 </div>

@@ -1,0 +1,69 @@
+<div class="saas-form-wrap">
+  <span class="saas-section-label">Manage · Task in <%= @project.name %></span>
+  <h1><%= @task.persisted? ? "Edit task" : "New task" %></h1>
+  <p class="muted">Clear owner, status and priority. Pending → In progress → Done.</p>
+
+  <%= form_with model: [@project, @task], local: true, html: { multipart: true } do |form| %>
+    <% if @task.errors.any? %>
+      <div class="saas-errors"><ul style="margin:0;padding-left:18px"><% @task.errors.full_messages.each do |m| %><li><%= m %></li><% end %></ul></div>
+    <% end %>
+
+    <div class="saas-field">
+      <%= form.label :title, "Title" %>
+      <%= form.text_field :title, required: true, placeholder: "Ex: Implement login",
+                          style: "width:100%;border:1px solid var(--sz-line);border-radius:10px;padding:11px 12px;font-size:14px" %>
+    </div>
+
+    <div class="saas-field">
+      <%= form.label :description, "Description" %>
+      <%= form.text_area :description, rows: 4, required: true, placeholder: "What needs to be done…" %>
+    </div>
+
+    <div class="saas-field-row">
+      <div class="saas-field">
+        <%= form.label :status, "Status" %>
+        <%= form.select :status, options_for_select([['Pending', 'pendente'], ['In Progress', 'em_andamento'], ['Done', 'concluida']], @task.status.presence || 'pendente'), {}, required: true %>
+      </div>
+      <div class="saas-field">
+        <%= form.label :priority, "Priority" %>
+        <%= form.select :priority, options_for_select([['Low', 'baixa'], ['Medium', 'media'], ['High', 'alta']], @task.priority.presence || 'media'), {}, required: true %>
+      </div>
+      <div class="saas-field">
+        <%= form.label :assigned_to_id, "Owner" %>
+        <%= form.select :assigned_to_id, options_from_collection_for_select(@project_users, :id, :name, @task.assigned_to_id), { prompt: "Select owner" }, required: true %>
+      </div>
+    </div>
+
+    <div class="saas-field-row two">
+      <div class="saas-field">
+        <%= form.label :due_date, "Due date" %>
+        <%= form.date_field :due_date %>
+      </div>
+      <div class="saas-field">
+        <%= form.label :recurrence, "Repeats" %>
+        <%= form.select :recurrence, options_for_select([["Doesn't repeat", "nenhuma"], ["Daily", "diaria"], ["Weekly", "semanal"]], @task.recurrence) %>
+      </div>
+    </div>
+
+    <% if @project_tags.any? %>
+      <div class="saas-field">
+        <%= form.label :tag_ids, "Tags" %>
+        <div class="saas-checks">
+          <%= form.collection_check_boxes :tag_ids, @project_tags, :id, :name do |b| %>
+            <label class="saas-check"><%= b.check_box %><%= b.text %></label>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="saas-field">
+      <%= form.label :files, "Attachments (max 10MB each)" %>
+      <%= form.file_field :files, multiple: true, style: "width:100%;border:1px solid var(--sz-line);border-radius:10px;padding:9px 12px" %>
+    </div>
+
+    <div class="saas-form-actions">
+      <%= form.submit @task.persisted? ? "Save changes" : "Create task", class: "saas-btn saas-btn-primary" %>
+      <%= link_to "Cancel", @task.persisted? ? [@project, @task] : @project, class: "saas-btn saas-btn-ghost" %>
+    </div>
+  <% end %>
+</div>

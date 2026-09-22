@@ -1,0 +1,37 @@
+<div class="saas-tab-head">
+  <h3>Tasks</h3>
+  <div style="display:flex;gap:8px">
+    <%= link_to "Tags", project_tags_path(@project), class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+    <%= link_to "＋ New task", new_project_task_path(@project), class: "saas-btn saas-btn-primary saas-btn-sm" %>
+  </div>
+</div>
+
+<% if @tasks.any? %>
+  <div class="saas-task-grid">
+    <% @tasks.each do |task| %>
+      <div class="saas-task">
+        <div style="display:flex;justify-content:space-between;gap:8px;align-items:start">
+          <h4><%= link_to task.title, [@project, task] %></h4>
+          <span class="saas-badge <%= task.priority == 'alta' ? '' : task.priority == 'media' ? 'amber' : 'gray' %>" style="<%= 'background:#fee2e2;color:#991b1b' if task.priority == 'alta' %>"><%= task.priority.capitalize %></span>
+        </div>
+        <p><%= truncate(task.description, length: 80) %></p>
+        <div class="saas-badges">
+          <span class="saas-badge <%= task.status == 'concluida' ? 'green' : task.status == 'em_andamento' ? 'amber' : 'gray' %>"><%= task.status.humanize %></span>
+        </div>
+        <div class="saas-mini" style="margin-top:8px">By <%= task.author.name %> · Owner <%= task.assigned_to.name %></div>
+        <div class="saas-task-foot">
+          <%= link_to "Open", [@project, task], class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+          <%= link_to "Edit", edit_project_task_path(@project, task), class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="mt-3 d-flex justify-content-center">
+    <%= paginate @tasks, param_name: :tasks_page, theme: 'bootstrap-5' %>
+  </div>
+<% else %>
+  <div class="saas-empty">
+    <p>No tasks yet.</p>
+    <%= link_to "Create first task", new_project_task_path(@project), class: "saas-btn saas-btn-primary saas-btn-sm" %>
+  </div>
+<% end %>

@@ -1,0 +1,29 @@
+<div class="saas-panel">
+  <h2>Comments · <%= @comments.size %></h2>
+  <% if @comments.any? %>
+    <div class="saas-side-list" style="margin-bottom:12px">
+      <% @comments.each do |comment| %>
+        <div style="padding:10px 0;border-top:1px solid var(--sz-line)">
+          <div style="display:flex;justify-content:space-between;gap:8px">
+            <strong style="font-size:13.5px"><%= comment.author.name %></strong>
+            <small class="saas-mini"><%= l(comment.created_at, format: :short) %></small>
+          </div>
+          <div style="font-size:14px;margin:6px 0"><%= simple_format(comment.body) %></div>
+          <% if comment.author == current_user || @project.owned_by?(current_user) %>
+            <%= link_to "Delete", project_task_comment_path(@project, @task, comment),
+                        data: { turbo_method: :delete, turbo_confirm: "Delete comment?" },
+                        class: "saas-btn saas-btn-ghost saas-btn-sm", style: "color:var(--sz-red)" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="saas-empty"><p>No comments yet. Start the thread!</p></div>
+  <% end %>
+  <%= form_with model: [@project, @task, @comment] do |f| %>
+    <div class="saas-field">
+      <%= f.text_area :body, rows: 3, placeholder: "Write a comment…" %>
+    </div>
+    <%= f.submit "Comment", class: "saas-btn saas-btn-primary saas-btn-sm" %>
+  <% end %>
+</div>

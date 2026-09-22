@@ -1,0 +1,28 @@
+<div class="saas-panel" id="subtasks">
+  <h2>Checklist · <%= @subtasks.count(&:done) %>/<%= @subtasks.size %></h2>
+  <div class="saas-progress"><div style="width:<%= @task.subtasks_progress %>%"></div></div>
+  <% if @subtasks.any? %>
+    <div class="saas-side-list" style="margin-bottom:12px">
+      <% @subtasks.each do |subtask| %>
+        <div class="saas-row" id="subtask_<%= subtask.id %>">
+          <span class="<%= 'text-muted' if subtask.done %>" style="<%= 'text-decoration:line-through' if subtask.done %>"><%= subtask.title %></span>
+          <span style="display:flex;gap:6px">
+            <%= button_to subtask.done ? "Reopen" : "Done", toggle_project_task_subtask_path(@project, @task, subtask),
+                          method: :patch, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+            <%= link_to "Remove", project_task_subtask_path(@project, @task, subtask),
+                        data: { turbo_method: :delete, turbo_confirm: "Remove subtask?" },
+                        class: "saas-btn saas-btn-ghost saas-btn-sm", style: "color:var(--sz-red)" %>
+          </span>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="saas-empty"><p>Break the work into steps!</p></div>
+  <% end %>
+  <%= form_with model: [@project, @task, @subtask] do |f| %>
+    <div class="saas-input-group">
+      <%= f.text_field :title, placeholder: "New subtask…" %>
+      <%= f.submit "Add", class: "saas-btn saas-btn-primary saas-btn-sm" %>
+    </div>
+  <% end %>
+</div>

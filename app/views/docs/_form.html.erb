@@ -1,0 +1,41 @@
+<div class="saas-form-wrap wide">
+  <span class="saas-section-label">Docs · <%= @doc.persisted? ? "Edit" : "New" %> (primary)</span>
+  <h1><%= @doc.persisted? ? "Edit document" : "New document" %></h1>
+  <p class="muted">Markdown with live preview. Folder organization is secondary — write first.</p>
+  <%= form_with model: @doc, html: { multipart: true } do |f| %>
+    <% if @doc.errors.any? %>
+      <div class="saas-errors"><ul style="margin:0;padding-left:18px"><% @doc.errors.full_messages.each do |m| %><li><%= m %></li><% end %></ul></div>
+    <% end %>
+    <div class="saas-field-row two">
+      <div class="saas-field">
+        <%= f.label :title, "Title" %>
+        <%= f.text_field :title, required: true, placeholder: "Ex: Study roadmap — Week 1",
+                         style: "width:100%;border:1px solid var(--sz-line);border-radius:10px;padding:11px 12px;font-size:14px" %>
+      </div>
+      <div class="saas-field">
+        <%= f.label :folder_id, "Folder (secondary)" %>
+        <%= f.select :folder_id, options_for_select([["No folder", ""]] + @folders.map { |x| [x.name, x.id] }, @doc.folder_id) %>
+      </div>
+    </div>
+    <div data-controller="markdown" data-markdown-url-value="<%= preview_docs_path %>">
+      <div class="saas-field-row two">
+        <div class="saas-field">
+          <%= f.label :body, "Markdown" %>
+          <%= f.text_area :body, rows: 18, class: "font-monospace", style: "font-family:monospace", data: { markdown_target: "input", action: "input->markdown#changed" } %>
+        </div>
+        <div class="saas-field">
+          <label>Preview</label>
+          <div class="saas-panel" style="min-height:300px" data-markdown-target="preview"><em class="saas-mini">Loading preview…</em></div>
+        </div>
+      </div>
+    </div>
+    <div class="saas-field">
+      <%= f.label :files, "Attachments" %>
+      <%= f.file_field :files, multiple: true, style: "width:100%;border:1px solid var(--sz-line);border-radius:10px;padding:9px 12px" %>
+    </div>
+    <div class="saas-form-actions">
+      <%= f.submit @doc.persisted? ? "Save changes" : "Create document", class: "saas-btn saas-btn-primary" %>
+      <%= link_to "Cancel", @doc.persisted? ? @doc : docs_path, class: "saas-btn saas-btn-ghost" %>
+    </div>
+  <% end %>
+</div>

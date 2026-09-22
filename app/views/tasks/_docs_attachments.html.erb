@@ -1,0 +1,44 @@
+<div class="saas-panel">
+  <h2>Linked documents · <%= @task_docs.size %></h2>
+  <% if @task_docs.any? %>
+    <div class="saas-side-list" style="margin-bottom:10px">
+      <% @task_docs.each do |link| %>
+        <div class="saas-row">
+          <%= link_to link.doc.title, link.doc %>
+          <%= link_to "Unlink", project_task_task_doc_path(@project, @task, link),
+                      data: { turbo_method: :delete, turbo_confirm: "Remove link?" },
+                      class: "saas-btn saas-btn-ghost saas-btn-sm", style: "color:var(--sz-red)" %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <% if @available_docs.any? %>
+    <%= form_with url: project_task_task_docs_path(@project, @task), method: :post, local: true, class: "saas-input-group" do %>
+      <%= select_tag :doc_id, options_from_collection_for_select(@available_docs, :id, :title) %>
+      <%= submit_tag "Link", class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+    <% end %>
+  <% elsif @task_docs.empty? %>
+    <div class="saas-empty"><p>No linked docs. Create one in <%= link_to "Documents", docs_path %>.</p><%= link_to "＋ New doc", new_doc_path, class: "saas-btn saas-btn-primary saas-btn-sm" %></div>
+  <% end %>
+</div>
+
+<div class="saas-panel">
+  <h2>Attachments · <%= @task.files.count %></h2>
+  <% if @task.files.attached? %>
+    <div class="saas-side-list">
+      <% @task.files.each do |file| %>
+        <div class="saas-row">
+          <%= link_to file.filename.to_s, rails_blob_path(file, disposition: "attachment") %>
+          <span style="display:flex;gap:8px;align-items:center">
+            <small class="saas-mini"><%= number_to_human_size(file.byte_size) %></small>
+            <%= link_to "Remove", purge_file_project_task_path(@project, @task, file.id),
+                        data: { turbo_method: :delete, turbo_confirm: "Remove attachment?" },
+                        class: "saas-btn saas-btn-ghost saas-btn-sm", style: "color:var(--sz-red)" %>
+          </span>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="saas-empty"><p>No attachments.</p></div>
+  <% end %>
+</div>
