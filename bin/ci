@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Local CI mirror (issue #46): install, migrate, specs, lint, audit.
+# Usage: bin/ci
+set -euo pipefail
+
+echo "== bundle =="
+bundle install --local
+
+echo "== db:migrate (dev + test) =="
+bin/rails db:migrate
+bin/rails db:migrate RAILS_ENV=test
+
+echo "== rspec (with coverage) =="
+COVERAGE=1 bundle exec rspec
+
+echo "== rubocop =="
+bundle exec rubocop --no-color
+
+echo "== brakeman =="
+bundle exec brakeman --no-pager -q
+
+echo "== diff check =="
+git diff --check
+
+echo "CI OK"

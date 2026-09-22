@@ -36,6 +36,7 @@ group :test do
   gem "selenium-webdriver"
   gem "database_cleaner-active_record"
   gem "rails-controller-testing"
+  gem "simplecov", "~> 0.22", require: false
 end
 
 # sqlite3 must install on all platforms: Linux (CI, Docker, Kamal) needs it,

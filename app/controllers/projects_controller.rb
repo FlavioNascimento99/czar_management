@@ -84,8 +84,7 @@ class ProjectsController < ApplicationController
 
   def add_member
     if @project.pessoal?
-      redirect_to @project, alert: "Espaços pessoais não aceitam membros"
-      return
+      redirect_to(@project, alert: "Espaços pessoais não aceitam membros") and return
     end
     user = User.find_by(email: params[:email].to_s.strip.downcase)
 
