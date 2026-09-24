@@ -1,0 +1,10 @@
+<% if notice || alert %>
+  <div class="saas-flash">
+    <% if notice %>
+      <%= render "shared/flash_message", tone: "success", icon_name: "circle-check", role: "status", message: notice %>
+    <% end %>
+    <% if alert %>
+      <%= render "shared/flash_message", tone: "danger", icon_name: "circle-alert", role: "alert", message: alert %>
+    <% end %>
+  </div>
+<% end %>

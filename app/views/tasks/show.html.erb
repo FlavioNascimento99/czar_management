@@ -1,6 +1,6 @@
 <% content_for :title, "#{@task.title} — #{@project.name}" %>
 
-<div class="saas-crumb"><%= link_to "Projects", projects_path %> <span class="sep">/</span> <%= link_to @project.name, @project %> <span class="sep">/</span> <span><%= truncate(@task.title, length: 40) %></span></div>
+<nav class="saas-crumb" aria-label="Breadcrumb"><%= link_to "Projects", projects_path %> <span class="sep">/</span> <%= link_to @project.name, @project %> <span class="sep">/</span> <span><%= truncate(@task.title, length: 40) %></span></nav>
 
 <div class="saas-detail">
   <div class="saas-detail-main">
@@ -8,7 +8,7 @@
     <%= render "checklist" %>
     <%= render "comments" %>
   </div>
-  <div class="saas-detail-main">
+  <aside class="saas-detail-main">
     <%= render "docs_attachments" %>
-  </div>
+  </aside>
 </div>

@@ -1,0 +1,50 @@
+<header class="saas-nav" data-controller="disclosure"
+        data-action="keydown.esc->disclosure#closeOnEscape turbo:before-cache@document->disclosure#close">
+  <div class="saas-nav-inner">
+    <%= link_to root_path, class: "saas-brand" do %>
+      <span class="saas-logo" aria-hidden="true">C</span><span>Czar Manager</span>
+    <% end %>
+
+    <% if logged_in? %>
+      <nav class="saas-links" aria-label="Main">
+        <% primary_nav_groups.each_with_index do |group, index| %>
+          <% if index.positive? %><span class="saas-nav-sep" aria-hidden="true"></span><% end %>
+          <% group.each do |item| %><%= nav_link(item) %><% end %>
+        <% end %>
+      </nav>
+      <div class="saas-nav-cta">
+        <%= link_to new_doc_path, class: "saas-btn saas-btn-primary saas-btn-sm saas-nav-primary" do %>
+          <%= icon("plus") %><span>New doc</span>
+        <% end %>
+        <%= render "shared/notifications_link" %>
+        <%= render "shared/user_menu" %>
+        <%= render "shared/menu_button" %>
+      </div>
+    <% else %>
+      <nav class="saas-links" aria-label="Main">
+        <%= link_to "Features", root_path(anchor: "features"), class: "saas-nav-link" %>
+        <%= link_to "How it works", root_path(anchor: "how"), class: "saas-nav-link" %>
+        <%= link_to "Pricing", root_path(anchor: "pricing"), class: "saas-nav-link" %>
+      </nav>
+      <div class="saas-nav-cta">
+        <%= link_to "Log in", login_path, class: "saas-btn saas-btn-subtle saas-btn-sm saas-nav-primary" %>
+        <%= link_to "Start free", signup_path, class: "saas-btn saas-btn-primary saas-btn-sm" %>
+        <%= render "shared/menu_button" %>
+      </div>
+    <% end %>
+  </div>
+
+  <nav id="saas-mobile-nav" class="saas-mobile-nav" aria-label="Main" hidden data-disclosure-target="panel">
+    <% if logged_in? %>
+      <% primary_nav_groups.flatten.each do |item| %><%= nav_link(item, css: "saas-mobile-link") %><% end %>
+      <%= link_to new_doc_path, class: "saas-btn saas-btn-primary saas-btn-lg saas-mobile-only" do %>
+        <%= icon("plus") %><span>New doc</span>
+      <% end %>
+    <% else %>
+      <%= link_to "Features", root_path(anchor: "features"), class: "saas-mobile-link" %>
+      <%= link_to "How it works", root_path(anchor: "how"), class: "saas-mobile-link" %>
+      <%= link_to "Pricing", root_path(anchor: "pricing"), class: "saas-mobile-link" %>
+      <%= link_to "Log in", login_path, class: "saas-mobile-link saas-mobile-only" %>
+    <% end %>
+  </nav>
+</header>

@@ -1,15 +1,16 @@
-<div class="saas-panel" style="margin-bottom:16px">
+<section class="saas-panel">
   <h2>Recent activity</h2>
   <% if @activities.any? %>
-    <div>
+    <div class="saas-side-list">
       <% @activities.each do |log| %>
         <div class="saas-row">
           <span><%= activity_description(log) %></span>
-          <small style="color:var(--sz-muted)"><%= l(log.created_at, format: :short) %></small>
+          <small class="saas-mini"><%= l(log.created_at, format: :short) %></small>
         </div>
       <% end %>
     </div>
   <% else %>
-    <div class="saas-empty"><p>No activity yet. Create a task or requirement!</p></div>
+    <%= empty_state(icon_name: "inbox", title: "No activity yet",
+                    text: "Creating tasks, comments and requirements will show up here.") %>
   <% end %>
-</div>
+</section>

@@ -2,24 +2,32 @@
 
 <div class="saas-page-head">
   <div>
-    <span class="saas-section-label">Inbox</span>
     <h1>Notifications</h1>
     <p>All your updates in one calm place.</p>
   </div>
-  <%= button_to "Mark all as read", read_all_notifications_path, method: :patch, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+  <%= button_to read_all_notifications_path, method: :patch, class: "saas-btn saas-btn-ghost saas-btn-sm" do %>
+    <%= icon("check") %><span>Mark all as read</span>
+  <% end %>
 </div>
 
 <% unless EmailGate.enabled? %>
-  <div class="saas-panel" style="margin-bottom:14px"><span class="saas-badge gray">Soon</span> <span class="saas-mini">Email is not connected yet (no SMTP) — all alerts arrive here in-app.</span></div>
+  <div class="saas-alert saas-alert-info saas-notice">
+    <%= icon("info") %>
+    <div class="saas-alert-body">Email is not connected yet (no SMTP). All alerts arrive here in-app.</div>
+  </div>
 <% end %>
 
 <% if @notifications.any? %>
   <div class="saas-list">
     <% @notifications.each do |notification| %>
-      <div class="saas-list-item" style="<%= 'opacity:.65' if notification.read? %>">
-        <%= link_to notification_link(notification), style: "color:inherit" do %>
-          <span><%= notification_text(notification) %></span>
-          <small class="saas-mini" style="display:block"><%= l(notification.created_at, format: :short) %></small>
+      <div class="saas-list-item saas-notification<%= ' is-read' if notification.read? %>">
+        <%= link_to notification_link(notification), class: "saas-list-main" do %>
+          <span class="saas-list-title">
+            <% unless notification.read? %><span class="saas-unread-dot" aria-hidden="true"></span><% end %>
+            <%= notification_text(notification) %>
+            <% unless notification.read? %><span class="saas-sr-only">(unread)</span><% end %>
+          </span>
+          <span class="saas-row-meta"><%= l(notification.created_at, format: :short) %></span>
         <% end %>
         <% unless notification.read? %>
           <%= button_to "Read", read_notification_path(notification), method: :patch, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
@@ -27,7 +35,10 @@
       </div>
     <% end %>
   </div>
-  <div class="mt-3 d-flex justify-content-center"><%= paginate @notifications, theme: "bootstrap-5" %></div>
+  <div class="saas-pager"><%= paginate @notifications, theme: "bootstrap-5" %></div>
 <% else %>
-  <div class="saas-panel"><div class="saas-empty"><p>No notifications. 🎉</p></div></div>
+  <div class="saas-panel">
+    <%= empty_state(icon_name: "bell", title: "You're all caught up",
+                    text: "Assignments, comments on your tasks and due date reminders will show up here.") %>
+  </div>
 <% end %>

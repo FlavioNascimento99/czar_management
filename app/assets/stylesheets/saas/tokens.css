@@ -1,0 +1,117 @@
+/* Design tokens (ecosystem design language) + Bootstrap variable mapping. Loaded first after Bootstrap. */
+:root {
+  --sz-bg: oklch(0.985 0.003 275);
+  --sz-surface: oklch(1 0 0);
+  --sz-surface-2: oklch(0.967 0.005 275);
+  --sz-line: oklch(0.918 0.008 275);
+  --sz-line-strong: oklch(0.86 0.01 275);
+  --sz-line-hover: oklch(0.8 0.012 275);
+  --sz-ink: oklch(0.22 0.02 275);
+  --sz-muted: oklch(0.47 0.02 275);
+  --sz-faint: oklch(0.56 0.015 275);
+
+  --sz-brand: oklch(0.51 0.23 277);
+  --sz-brand-hover: oklch(0.45 0.22 277);
+  --sz-brand-subtle: oklch(0.955 0.03 277);
+  --sz-brand-subtle-ink: oklch(0.42 0.2 277);
+
+  --sz-success: oklch(0.5 0.13 150);
+  --sz-success-subtle: oklch(0.962 0.04 150);
+  --sz-warning: oklch(0.54 0.13 65);
+  --sz-warning-subtle: oklch(0.965 0.05 85);
+  --sz-danger: oklch(0.53 0.2 25);
+  --sz-danger-hover: oklch(0.47 0.19 25);
+  --sz-danger-subtle: oklch(0.965 0.02 25);
+  --sz-info: oklch(0.5 0.12 240);
+  --sz-info-subtle: oklch(0.962 0.025 240);
+
+  --sz-font: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --sz-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --sz-text-display: clamp(2rem, 1.4rem + 2.4vw, 3rem);
+  --sz-text-h1: 1.625rem;
+  --sz-text-h2: 1.125rem;
+  --sz-text-h3: 1rem;
+  --sz-text-body: 0.875rem;
+  --sz-text-lg: 1rem;
+  --sz-text-sm: 0.8125rem;
+  --sz-text-xs: 0.75rem;
+
+  --sz-space-1: 4px;
+  --sz-space-2: 8px;
+  --sz-space-3: 12px;
+  --sz-space-4: 16px;
+  --sz-space-5: 20px;
+  --sz-space-6: 24px;
+  --sz-space-8: 32px;
+  --sz-space-12: 48px;
+  --sz-space-16: 64px;
+  --sz-max: 1200px;
+  --sz-gutter: 16px;
+
+  --sz-radius-sm: 6px;
+  --sz-radius-md: 8px;
+  --sz-radius-lg: 12px;
+  --sz-radius-full: 999px;
+  --sz-radius: var(--sz-radius-lg);
+
+  --sz-shadow-card: 0 1px 2px oklch(0.22 0.02 275 / 0.04);
+  --sz-shadow-popover: 0 8px 24px -6px oklch(0.22 0.03 275 / 0.16);
+  --sz-shadow-modal: 0 24px 48px -12px oklch(0.22 0.03 275 / 0.28);
+  --sz-ring: 0 0 0 3px oklch(0.51 0.23 277 / 0.18);
+  --sz-ring-danger: 0 0 0 3px oklch(0.53 0.2 25 / 0.18);
+
+  --sz-z-dropdown: 10;
+  --sz-z-sticky: 20;
+  --sz-z-overlay: 30;
+  --sz-z-modal: 40;
+  --sz-z-toast: 50;
+  --sz-z-tooltip: 60;
+
+  --sz-ease: cubic-bezier(0.25, 1, 0.5, 1);
+  --sz-duration: 160ms;
+  --sz-nav-height: 56px;
+
+  /* Bootstrap 5.3 widgets (tabs, pagination, utilities) read these. rgb triplets are sRGB equivalents of the tokens above. */
+  --bs-body-font-family: var(--sz-font);
+  --bs-body-font-size: var(--sz-text-body);
+  --bs-body-line-height: 1.55;
+  --bs-body-color: var(--sz-ink);
+  --bs-body-color-rgb: 24, 26, 36;
+  --bs-body-bg: var(--sz-bg);
+  --bs-body-bg-rgb: 249, 250, 252;
+  --bs-emphasis-color: var(--sz-ink);
+  --bs-secondary-color: var(--sz-muted);
+  --bs-tertiary-color: var(--sz-faint);
+  --bs-secondary-bg: var(--sz-surface-2);
+  --bs-tertiary-bg: var(--sz-surface-2);
+  --bs-heading-color: var(--sz-ink);
+  --bs-primary: var(--sz-brand);
+  --bs-primary-rgb: 79, 70, 229;
+  --bs-primary-text-emphasis: var(--sz-brand-subtle-ink);
+  --bs-primary-bg-subtle: var(--sz-brand-subtle);
+  --bs-success: var(--sz-success);
+  --bs-success-rgb: 19, 119, 56;
+  --bs-warning: var(--sz-warning);
+  --bs-warning-rgb: 161, 91, 0;
+  --bs-danger: var(--sz-danger);
+  --bs-danger-rgb: 197, 29, 40;
+  --bs-info: var(--sz-info);
+  --bs-info-rgb: 0, 106, 160;
+  --bs-link-color: var(--sz-brand);
+  --bs-link-color-rgb: 79, 70, 229;
+  --bs-link-hover-color: var(--sz-brand-hover);
+  --bs-link-hover-color-rgb: 65, 51, 203;
+  --bs-link-decoration: none;
+  --bs-border-color: var(--sz-line);
+  --bs-border-color-translucent: var(--sz-line);
+  --bs-border-radius: var(--sz-radius-md);
+  --bs-border-radius-sm: var(--sz-radius-sm);
+  --bs-border-radius-lg: var(--sz-radius-lg);
+  --bs-border-radius-pill: var(--sz-radius-full);
+  --bs-focus-ring-color: oklch(0.51 0.23 277 / 0.18);
+  --bs-code-color: var(--sz-brand-subtle-ink);
+}
+
+@media (min-width: 768px) {
+  :root { --sz-gutter: 24px; }
+}

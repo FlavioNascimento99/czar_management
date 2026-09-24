@@ -1,0 +1,7 @@
+<div class="saas-alert saas-alert-<%= tone %>" role="<%= role %>" data-controller="dismissible">
+  <%= icon(icon_name) %>
+  <div class="saas-alert-body"><%= message %></div>
+  <button type="button" class="saas-alert-close" data-action="dismissible#dismiss">
+    <%= icon("x") %><span class="saas-sr-only">Dismiss</span>
+  </button>
+</div>

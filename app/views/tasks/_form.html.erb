@@ -1,17 +1,13 @@
 <div class="saas-form-wrap">
-  <span class="saas-section-label">Manage · Task in <%= @project.name %></span>
   <h1><%= @task.persisted? ? "Edit task" : "New task" %></h1>
-  <p class="muted">Clear owner, status and priority. Pending → In progress → Done.</p>
+  <p class="muted">In <%= @project.name %>. Clear owner, status and priority. Pending → In progress → Done.</p>
 
   <%= form_with model: [@project, @task], local: true, html: { multipart: true } do |form| %>
-    <% if @task.errors.any? %>
-      <div class="saas-errors"><ul style="margin:0;padding-left:18px"><% @task.errors.full_messages.each do |m| %><li><%= m %></li><% end %></ul></div>
-    <% end %>
+    <%= render "shared/form_errors", record: @task %>
 
     <div class="saas-field">
       <%= form.label :title, "Title" %>
-      <%= form.text_field :title, required: true, placeholder: "Ex: Implement login",
-                          style: "width:100%;border:1px solid var(--sz-line);border-radius:10px;padding:11px 12px;font-size:14px" %>
+      <%= form.text_field :title, required: true, placeholder: "Ex: Implement login" %>
     </div>
 
     <div class="saas-field">
@@ -46,19 +42,19 @@
     </div>
 
     <% if @project_tags.any? %>
-      <div class="saas-field">
-        <%= form.label :tag_ids, "Tags" %>
+      <fieldset class="saas-field">
+        <legend class="saas-label">Tags</legend>
         <div class="saas-checks">
           <%= form.collection_check_boxes :tag_ids, @project_tags, :id, :name do |b| %>
             <label class="saas-check"><%= b.check_box %><%= b.text %></label>
           <% end %>
         </div>
-      </div>
+      </fieldset>
     <% end %>
 
     <div class="saas-field">
       <%= form.label :files, "Attachments (max 10MB each)" %>
-      <%= form.file_field :files, multiple: true, style: "width:100%;border:1px solid var(--sz-line);border-radius:10px;padding:9px 12px" %>
+      <%= form.file_field :files, multiple: true %>
     </div>
 
     <div class="saas-form-actions">

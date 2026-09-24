@@ -1,7 +1,8 @@
 <% content_for :title, "Log in — Czar" %>
 
 <div class="saas-auth">
-  <h1>Welcome back 👋</h1>
+  <span class="saas-logo" aria-hidden="true">C</span>
+  <h1>Welcome back</h1>
   <p class="muted">Log in to your workspace. Free forever.</p>
 
   <%= form_with url: login_path, local: true do |form| %>
@@ -13,12 +14,10 @@
       <%= form.label :password, "Password" %>
       <%= form.password_field :password, required: true, placeholder: "••••••••", autocomplete: "current-password" %>
     </div>
-    <div class="d-grid">
-      <%= form.submit "Log in", class: "saas-btn saas-btn-primary full" %>
-    </div>
+    <%= form.submit "Log in", class: "saas-btn saas-btn-primary saas-btn-lg full" %>
   <% end %>
 
-  <p class="muted" style="text-align:center;margin-top:16px;margin-bottom:0">
-    New to Czar? <%= link_to "Create a free account", signup_path, style: "font-weight:700;color:var(--sz-brand)" %>
+  <p class="saas-auth-foot">
+    New to Czar? <%= link_to "Create a free account", signup_path %>
   </p>
 </div>

@@ -1,0 +1,22 @@
+<div class="saas-menu" data-controller="disclosure"
+     data-action="keydown.esc->disclosure#closeOnEscape turbo:before-cache@document->disclosure#close">
+  <button type="button" class="saas-avatar-btn" aria-expanded="false" aria-controls="saas-user-menu"
+          data-disclosure-target="button" data-action="disclosure#toggle">
+    <span class="saas-avatar" aria-hidden="true"><%= user_initials(current_user) %></span>
+    <%= icon("chevron-down", size: 14) %>
+    <span class="saas-sr-only">Account menu for <%= current_user.name %></span>
+  </button>
+  <div id="saas-user-menu" class="saas-menu-panel" hidden data-disclosure-target="panel">
+    <div class="saas-menu-head">
+      <strong><%= current_user.name %></strong>
+      <span><%= current_user.email %></span>
+    </div>
+    <%= link_to user_path(current_user), class: "saas-menu-item" do %>
+      <%= icon("user") %><span>Profile</span>
+    <% end %>
+    <%= button_to logout_path, method: :delete, class: "saas-menu-item",
+                  form: { "data-turbo-confirm": "Log out?", class: "saas-menu-form" } do %>
+      <%= icon("log-out") %><span>Log out</span>
+    <% end %>
+  </div>
+</div>

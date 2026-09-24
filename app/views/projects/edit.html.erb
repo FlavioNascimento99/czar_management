@@ -1,26 +1,17 @@
 <% content_for :title, "Edit #{@project.name} — Czar" %>
 
-<div class="saas-crumb"><%= link_to "Projects", projects_path %> <span class="sep">/</span> <%= link_to @project.name, @project %> <span class="sep">/</span> <span>Edit</span></div>
+<nav class="saas-crumb" aria-label="Breadcrumb"><%= link_to "Projects", projects_path %> <span class="sep">/</span> <%= link_to @project.name, @project %> <span class="sep">/</span> <span>Edit</span></nav>
 
 <div class="saas-form-wrap">
-  <span class="saas-section-label">Manage · Project settings</span>
   <h1>Edit project</h1>
   <p class="muted">Rename, clarify the goal, or switch between team and personal space.</p>
 
   <%= form_with model: @project, local: true do |form| %>
-    <% if @project.errors.any? %>
-      <div class="saas-errors">
-        <ul style="margin:0;padding-left:18px">
-          <% @project.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
+    <%= render "shared/form_errors", record: @project %>
 
     <div class="saas-field">
       <%= form.label :name, "Project name" %>
-      <%= form.text_field :name, required: true, style: "width:100%;border:1px solid var(--sz-line);border-radius:10px;padding:11px 12px;font-size:14px" %>
+      <%= form.text_field :name, required: true %>
     </div>
 
     <div class="saas-field">
@@ -30,8 +21,8 @@
 
     <div class="saas-field">
       <%= form.label :kind, "Space type" %>
-      <%= form.select :kind, options_for_select([["Team", "equipe"], ["Personal (routine, studies)", "pessoal"]], @project.kind) %>
-      <div class="saas-mini" style="margin-top:6px">Personal allows only you as member.</div>
+      <%= form.select :kind, options_for_select([["Team", "equipe"], ["Personal (routine, studies)", "pessoal"]], @project.kind), {}, aria: { describedby: "project_kind_hint" } %>
+      <span class="saas-hint" id="project_kind_hint">Personal allows only you as member.</span>
     </div>
 
     <div class="saas-form-actions">

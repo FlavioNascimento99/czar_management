@@ -1,29 +1,36 @@
 <% content_for :title, "Meu perfil" %>
-<div class="row justify-content-center">
-  <div class="col-md-8">
-    <div class="card shadow">
-      <div class="card-body">
-        <h3><%= @user.name %></h3>
-        <p class="text-muted"><%= @user.email %></p>
-        <hr>
-        <h5>Token de API</h5>
-        <p><code><%= @user.api_token %></code></p>
-        <p class="small text-muted">Use como <code>Authorization: Bearer TOKEN</code> ou <code>?token=TOKEN</code> em <code>/api/v1/projects</code>.</p>
-        <%= button_to "Regenerar token", regenerate_token_user_path(@user), class: "btn btn-outline-warning btn-sm" %>
-        <hr>
-        <h5>Notificações por e-mail
-          <% if EmailGate.enabled? %>
-            <span class="badge bg-success">Ativo</span>
-          <% else %>
-            <span class="badge bg-secondary">A implementar</span>
-          <% end %>
-        </h5>
-        <% if EmailGate.enabled? %>
-          <p class="small text-success">Envio de e-mails ativo neste ambiente.</p>
-        <% else %>
-          <p class="small text-muted">Conexão externa (SMTP) ainda não configurada — por enquanto, todos os avisos chegam no sino 🔔 e nesta página de perfil nada é enviado.</p>
-        <% end %>
-      </div>
+
+<div class="saas-page-head">
+  <div class="saas-profile-head">
+    <span class="saas-avatar saas-avatar-lg" aria-hidden="true"><%= user_initials(@user) %></span>
+    <div>
+      <h1><%= @user.name %></h1>
+      <p><%= @user.email %></p>
     </div>
   </div>
+</div>
+
+<div class="saas-stack saas-profile">
+  <section class="saas-panel">
+    <h2>Token de API</h2>
+    <code class="saas-token"><%= @user.api_token %></code>
+    <p class="saas-hint saas-profile-hint">Use como <code>Authorization: Bearer TOKEN</code> ou <code>?token=TOKEN</code> em <code>/api/v1/projects</code>.</p>
+    <%= button_to "Regenerar token", regenerate_token_user_path(@user), class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+  </section>
+
+  <section class="saas-panel">
+    <div class="saas-panel-head">
+      <h2>Notificações por e-mail</h2>
+      <% if EmailGate.enabled? %>
+        <span class="saas-badge green">Ativo</span>
+      <% else %>
+        <span class="saas-badge gray">A implementar</span>
+      <% end %>
+    </div>
+    <% if EmailGate.enabled? %>
+      <p class="saas-muted">Envio de e-mails ativo neste ambiente.</p>
+    <% else %>
+      <p class="saas-muted">Conexão externa (SMTP) ainda não configurada — por enquanto, todos os avisos chegam no sino de <%= link_to "notificações", notifications_path %> e nesta página de perfil nada é enviado.</p>
+    <% end %>
+  </section>
 </div>

@@ -1,37 +1,41 @@
 <div class="saas-tab-head">
-  <h3>Tasks</h3>
-  <div style="display:flex;gap:8px">
-    <%= link_to "Tags", project_tags_path(@project), class: "saas-btn saas-btn-ghost saas-btn-sm" %>
-    <%= link_to "＋ New task", new_project_task_path(@project), class: "saas-btn saas-btn-primary saas-btn-sm" %>
+  <h2>Tasks</h2>
+  <div class="saas-page-actions">
+    <%= link_to project_tags_path(@project), class: "saas-btn saas-btn-ghost saas-btn-sm" do %>
+      <%= icon("tag") %><span>Tags</span>
+    <% end %>
+    <%= link_to new_project_task_path(@project), class: "saas-btn saas-btn-primary saas-btn-sm" do %>
+      <%= icon("plus") %><span>New task</span>
+    <% end %>
   </div>
 </div>
 
 <% if @tasks.any? %>
   <div class="saas-task-grid">
     <% @tasks.each do |task| %>
-      <div class="saas-task">
-        <div style="display:flex;justify-content:space-between;gap:8px;align-items:start">
-          <h4><%= link_to task.title, [@project, task] %></h4>
-          <span class="saas-badge <%= task.priority == 'alta' ? '' : task.priority == 'media' ? 'amber' : 'gray' %>" style="<%= 'background:#fee2e2;color:#991b1b' if task.priority == 'alta' %>"><%= task.priority.capitalize %></span>
+      <article class="saas-task">
+        <div class="saas-task-top">
+          <h3><%= link_to task.title, [@project, task] %></h3>
+          <%= priority_badge(task.priority) %>
         </div>
         <p><%= truncate(task.description, length: 80) %></p>
-        <div class="saas-badges">
-          <span class="saas-badge <%= task.status == 'concluida' ? 'green' : task.status == 'em_andamento' ? 'amber' : 'gray' %>"><%= task.status.humanize %></span>
-        </div>
-        <div class="saas-mini" style="margin-top:8px">By <%= task.author.name %> · Owner <%= task.assigned_to.name %></div>
+        <div class="saas-badges"><%= status_badge(task.status) %></div>
+        <div class="saas-mini">By <%= task.author.name %> · Owner <%= task.assigned_to.name %></div>
         <div class="saas-task-foot">
           <%= link_to "Open", [@project, task], class: "saas-btn saas-btn-ghost saas-btn-sm" %>
-          <%= link_to "Edit", edit_project_task_path(@project, task), class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+          <%= link_to "Edit", edit_project_task_path(@project, task), class: "saas-btn saas-btn-subtle saas-btn-sm" %>
         </div>
-      </div>
+      </article>
     <% end %>
   </div>
-  <div class="mt-3 d-flex justify-content-center">
-    <%= paginate @tasks, param_name: :tasks_page, theme: 'bootstrap-5' %>
+  <div class="saas-pager">
+    <%= paginate @tasks, param_name: :tasks_page, theme: "bootstrap-5" %>
   </div>
 <% else %>
-  <div class="saas-empty">
-    <p>No tasks yet.</p>
-    <%= link_to "Create first task", new_project_task_path(@project), class: "saas-btn saas-btn-primary saas-btn-sm" %>
+  <div class="saas-panel">
+    <%= empty_state(icon_name: "list-checks", title: "No tasks yet",
+                    text: "Break the project into tasks with an owner, a status and a priority.") do %>
+      <%= link_to "Create first task", new_project_task_path(@project), class: "saas-btn saas-btn-primary saas-btn-sm" %>
+    <% end %>
   </div>
 <% end %>

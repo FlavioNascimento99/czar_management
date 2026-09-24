@@ -1,19 +1,12 @@
 <% content_for :title, "Start free — Czar" %>
 
 <div class="saas-auth">
-  <h1>Start free 🚀</h1>
+  <span class="saas-logo" aria-hidden="true">C</span>
+  <h1>Start free</h1>
   <p class="muted">Free forever for small teams. No credit card. Set up in 30 seconds.</p>
 
   <%= form_with model: @user, url: signup_path, local: true do |form| %>
-    <% if @user.errors.any? %>
-      <div class="saas-errors">
-        <ul style="margin:0;padding-left:18px">
-          <% @user.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
+    <%= render "shared/form_errors", record: @user %>
 
     <div class="saas-field">
       <%= form.label :name, "Your name" %>
@@ -31,12 +24,10 @@
       <%= form.label :password_confirmation, "Confirm password" %>
       <%= form.password_field :password_confirmation, required: true, placeholder: "••••••••", autocomplete: "new-password" %>
     </div>
-    <div class="d-grid">
-      <%= form.submit "Create free account", class: "saas-btn saas-btn-primary full" %>
-    </div>
+    <%= form.submit "Create free account", class: "saas-btn saas-btn-primary saas-btn-lg full" %>
   <% end %>
 
-  <p class="muted" style="text-align:center;margin-top:16px;margin-bottom:0">
-    Already have an account? <%= link_to "Log in", login_path, style: "font-weight:700;color:var(--sz-brand)" %>
+  <p class="saas-auth-foot">
+    Already have an account? <%= link_to "Log in", login_path %>
   </p>
 </div>

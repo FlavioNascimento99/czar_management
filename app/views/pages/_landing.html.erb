@@ -1,0 +1,99 @@
+<section class="saas-hero">
+  <div class="saas-hero-copy">
+    <p class="saas-hero-note">Free forever · No credit card · 30-second setup</p>
+    <h1>Project management<br>that's actually easy.</h1>
+    <p class="lead">CZAR MANAGER brings your projects, tasks and requirements into one calm place. Invite your team, assign work, and ship — free for small teams.</p>
+    <div class="saas-hero-cta">
+      <%= link_to "Start free — no card required", signup_path, class: "saas-btn saas-btn-primary saas-btn-lg" %>
+      <%= link_to "Log in", login_path, class: "saas-btn saas-btn-ghost saas-btn-lg" %>
+    </div>
+    <p class="saas-proof">Loved by tiny teams · Unlimited projects · Cancel anytime (it's free anyway)</p>
+  </div>
+
+  <figure class="saas-preview" aria-label="Example project board">
+    <div class="saas-preview-board" aria-hidden="true">
+      <% [
+           [ "Pending", [ [ "Write onboarding doc", "Medium", "amber" ], [ "Collect login requirements", "Low", "gray" ] ] ],
+           [ "In progress", [ [ "Implement Google login", "High", "red" ] ] ],
+           [ "Done", [ [ "Set up the project", "Medium", "amber" ] ] ]
+         ].each do |column, cards| %>
+        <div class="saas-preview-col">
+          <div class="saas-preview-head"><span><%= column %></span><span class="saas-badge gray"><%= cards.size %></span></div>
+          <% cards.each do |title, priority, tone| %>
+            <div class="saas-preview-card">
+              <span><%= title %></span>
+              <span class="saas-badge <%= tone %>"><%= priority %></span>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <figcaption>An example board: every task has an owner, a status and a priority.</figcaption>
+  </figure>
+</section>
+
+<section class="saas-section" id="features">
+  <div class="saas-section-head">
+    <h2>Everything you need, nothing you don't</h2>
+    <p class="saas-sub">Built for teams that hate bloated tools.</p>
+  </div>
+  <dl class="saas-feature-list">
+    <div><dt>Projects in seconds</dt><dd>Create a project, invite members by email, and start shipping. No setup wizard, no workspace maze.</dd></div>
+    <div><dt>Tasks with owners</dt><dd>Every task has a clear owner, status and priority. Pending → In progress → Done. That's it.</dd></div>
+    <div><dt>Requirements first</dt><dd>Capture what needs to be built before you build it. Prioritize and turn requirements into tasks.</dd></div>
+    <div><dt>Team-friendly</dt><dd>Add members by email, see who's doing what, and leave anytime. Owners stay in control.</dd></div>
+    <div><dt>Progress at a glance</dt><dd>Dashboards show totals, done vs. doing, and your personal to-do list the moment you log in.</dd></div>
+    <div><dt>Works everywhere</dt><dd>Fast, responsive and mobile-ready. Check your tasks from your phone on the go.</dd></div>
+  </dl>
+</section>
+
+<section class="saas-section" id="how">
+  <div class="saas-section-head">
+    <h2>Get started in 3 steps</h2>
+    <p class="saas-sub">From signup to shipped in under a minute.</p>
+  </div>
+  <ol class="saas-steps">
+    <li class="saas-step"><span class="saas-num" aria-hidden="true">1</span><b>Create your free account</b><p>Just name, email and password. No card, no trial countdown.</p></li>
+    <li class="saas-step"><span class="saas-num" aria-hidden="true">2</span><b>Start a project &amp; invite the team</b><p>Add members by email and list your first requirements.</p></li>
+    <li class="saas-step"><span class="saas-num" aria-hidden="true">3</span><b>Assign tasks &amp; track progress</b><p>Watch work move from pending to done on your dashboard.</p></li>
+  </ol>
+</section>
+
+<section class="saas-section" id="pricing">
+  <div class="saas-section-head">
+    <h2>Simple pricing: free.</h2>
+    <p class="saas-sub">Yes, really. CZAR MANAGER is free to use while we're growing.</p>
+  </div>
+  <div class="saas-pricing">
+    <div class="saas-price">
+      <h3>Starter</h3>
+      <div class="amount">$0</div>
+      <p class="saas-price-caption">Free forever · for small teams</p>
+      <ul>
+        <li><%= icon("check") %>Unlimited projects</li>
+        <li><%= icon("check") %>Unlimited tasks &amp; requirements</li>
+        <li><%= icon("check") %>Team members by email invite</li>
+        <li><%= icon("check") %>Dashboard &amp; progress tracking</li>
+      </ul>
+      <%= link_to "Start free today", signup_path, class: "saas-btn saas-btn-primary saas-btn-lg saas-btn-block" %>
+    </div>
+    <div class="saas-price-note">
+      <h3>Why free?</h3>
+      <p>We're focused on making project management effortless. Paid plans with advanced reports and integrations may come later — early users keep free access.</p>
+      <ul>
+        <li>No credit card required</li>
+        <li>Cancel anytime (one click)</li>
+        <li>Your data stays yours</li>
+      </ul>
+      <%= link_to signup_path, class: "saas-link-arrow" do %>
+        <span>Talk to us</span><%= icon("arrow-right") %>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<section class="saas-section saas-cta">
+  <h2>Ready to get organized?</h2>
+  <p class="saas-sub">Join CZAR MANAGER today — free, fast, and friendly.</p>
+  <%= link_to "Create my free account", signup_path, class: "saas-btn saas-btn-primary saas-btn-lg" %>
+</section>

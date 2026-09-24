@@ -1,44 +1,53 @@
 <% content_for :title, "Folders — Czar" %>
 
-<div class="saas-crumb"><%= link_to "Documents", docs_path %> <span class="sep">/</span> <span>Folders</span></div>
+<nav class="saas-crumb" aria-label="Breadcrumb"><%= link_to "Documents", docs_path %> <span class="sep">/</span> <span>Folders</span></nav>
 
 <div class="saas-page-head">
   <div>
-    <span class="saas-section-label">Docs · Organization (secondary)</span>
     <h1>Folders</h1>
     <p>Secondary management for your primary docs. Create docs first, organize after.</p>
   </div>
-  <div style="display:flex;gap:8px">
-    <%= link_to "＋ New doc", new_doc_path, class: "saas-btn saas-btn-primary" %>
-    <%= link_to "New folder", new_folder_path, class: "saas-btn saas-btn-ghost" %>
+  <div class="saas-page-actions">
+    <%= link_to new_folder_path, class: "saas-btn saas-btn-ghost" do %>
+      <%= icon("folder") %><span>New folder</span>
+    <% end %>
+    <%= link_to new_doc_path, class: "saas-btn saas-btn-primary" do %>
+      <%= icon("plus") %><span>New doc</span>
+    <% end %>
   </div>
 </div>
 
 <% if @folders.any? %>
-  <div class="saas-list" style="margin-bottom:16px">
+  <div class="saas-list saas-section-block">
     <% @folders.each do |folder| %>
       <div class="saas-list-item">
-        <%= link_to folder, style: "color:inherit" do %>
-          <span><strong>📁 <%= folder.name %></strong><small class="saas-mini" style="display:block"><%= folder.subfolders.size %> subfolders · <%= folder.docs.count %> docs</small></span>
+        <%= link_to folder, class: "saas-list-main" do %>
+          <span class="saas-list-title"><%= icon("folder") %><%= folder.name %></span>
+          <span class="saas-row-meta"><%= folder.subfolders.size %> subfolders · <%= folder.docs.count %> docs</span>
         <% end %>
-        <span style="display:flex;gap:8px">
+        <span class="saas-row-actions">
           <%= link_to "Edit", edit_folder_path(folder), class: "saas-btn saas-btn-ghost saas-btn-sm" %>
-          <%= link_to "Delete", folder, data: { turbo_method: :delete, turbo_confirm: "Delete folder and subfolders?" }, class: "saas-btn saas-btn-ghost saas-btn-sm", style: "color:var(--sz-red)" %>
+          <%= link_to "Delete", folder, data: { turbo_method: :delete, turbo_confirm: "Delete folder and subfolders?" }, class: "saas-btn saas-btn-danger-soft saas-btn-sm" %>
         </span>
       </div>
     <% end %>
   </div>
 <% else %>
-  <div class="saas-panel"><div class="saas-empty"><p>No folders. Organize your docs by topic! 📁</p></div></div>
+  <div class="saas-panel saas-section-block">
+    <%= empty_state(icon_name: "folder", title: "No folders yet",
+                    text: "Group related docs by topic. Folders can be nested, and docs work fine without one.") do %>
+      <%= link_to "New folder", new_folder_path, class: "saas-btn saas-btn-primary saas-btn-sm" %>
+    <% end %>
+  </div>
 <% end %>
 
 <% if @loose_docs.any? %>
-  <div class="saas-panel">
+  <section class="saas-panel saas-section-block">
     <h2>No folder</h2>
     <div class="saas-side-list">
       <% @loose_docs.each do |doc| %>
-        <div class="saas-row"><%= link_to doc.title, doc %></div>
+        <div class="saas-row"><span class="saas-list-title"><%= icon("file-text") %><%= link_to doc.title, doc %></span></div>
       <% end %>
     </div>
-  </div>
+  </section>
 <% end %>

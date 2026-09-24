@@ -3,37 +3,43 @@
 <%= render "header" %>
 <%= render "stats" %>
 
-<div class="saas-2col" style="margin-bottom:0">
-  <div>
+<div class="saas-2col">
+  <div class="saas-stack">
     <%= render "members" %>
     <%= render "activity" %>
   </div>
-  <div class="saas-panel">
+  <section class="saas-panel">
     <h2>Linked docs</h2>
-    <p class="saas-mini">Knowledge lives in Documents — link task docs from the task page.</p>
-    <%= link_to "Open Documents", docs_path, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
-    <%= link_to "＋ New doc", new_doc_path, class: "saas-btn saas-btn-primary saas-btn-sm" %>
-  </div>
+    <p class="saas-muted">Knowledge lives in Documents. Link docs to a task from the task page.</p>
+    <div class="saas-page-actions">
+      <%= link_to "Open Documents", docs_path, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+      <%= link_to new_doc_path, class: "saas-btn saas-btn-primary saas-btn-sm" do %>
+        <%= icon("plus") %><span>New doc</span>
+      <% end %>
+    </div>
+  </section>
 </div>
 
 <ul class="nav nav-tabs saas-tabs" id="projectTabs" role="tablist">
   <li class="nav-item" role="presentation">
-    <button class="nav-link active" id="tasks-tab" data-bs-toggle="tab" data-bs-target="#tasks" type="button" role="tab">
+    <button class="nav-link active" id="tasks-tab" data-bs-toggle="tab" data-bs-target="#tasks" type="button" role="tab"
+            aria-controls="tasks" aria-selected="true">
       Tasks · <%= @tasks_count %>
     </button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="requirements-tab" data-bs-toggle="tab" data-bs-target="#requirements" type="button" role="tab">
+    <button class="nav-link" id="requirements-tab" data-bs-toggle="tab" data-bs-target="#requirements" type="button" role="tab"
+            aria-controls="requirements" aria-selected="false">
       Requirements · <%= @requirements_count %>
     </button>
   </li>
 </ul>
 
 <div class="tab-content" id="projectTabsContent">
-  <div class="tab-pane fade show active saas-tab-body" id="tasks" role="tabpanel">
+  <div class="tab-pane fade show active saas-tab-body" id="tasks" role="tabpanel" aria-labelledby="tasks-tab">
     <%= render "tasks_tab" %>
   </div>
-  <div class="tab-pane fade saas-tab-body" id="requirements" role="tabpanel">
+  <div class="tab-pane fade saas-tab-body" id="requirements" role="tabpanel" aria-labelledby="requirements-tab">
     <%= render "requirements_tab" %>
   </div>
 </div>

@@ -1,44 +1,50 @@
-<div class="saas-panel">
-  <h2>Linked documents · <%= @task_docs.size %></h2>
+<section class="saas-panel">
+  <h2>Linked documents <span class="saas-muted"><%= @task_docs.size %></span></h2>
   <% if @task_docs.any? %>
-    <div class="saas-side-list" style="margin-bottom:10px">
+    <div class="saas-side-list">
       <% @task_docs.each do |link| %>
         <div class="saas-row">
-          <%= link_to link.doc.title, link.doc %>
+          <span class="saas-list-title"><%= icon("file-text") %><%= link_to link.doc.title, link.doc %></span>
           <%= link_to "Unlink", project_task_task_doc_path(@project, @task, link),
                       data: { turbo_method: :delete, turbo_confirm: "Remove link?" },
-                      class: "saas-btn saas-btn-ghost saas-btn-sm", style: "color:var(--sz-red)" %>
+                      class: "saas-btn saas-btn-danger-soft saas-btn-sm" %>
         </div>
       <% end %>
     </div>
   <% end %>
   <% if @available_docs.any? %>
-    <%= form_with url: project_task_task_docs_path(@project, @task), method: :post, local: true, class: "saas-input-group" do %>
-      <%= select_tag :doc_id, options_from_collection_for_select(@available_docs, :id, :title) %>
+    <%= form_with url: project_task_task_docs_path(@project, @task), method: :post, local: true, class: "saas-input-group saas-comment-form" do %>
+      <%= select_tag :doc_id, options_from_collection_for_select(@available_docs, :id, :title), aria: { label: "Document to link" } %>
       <%= submit_tag "Link", class: "saas-btn saas-btn-ghost saas-btn-sm" %>
     <% end %>
   <% elsif @task_docs.empty? %>
-    <div class="saas-empty"><p>No linked docs. Create one in <%= link_to "Documents", docs_path %>.</p><%= link_to "＋ New doc", new_doc_path, class: "saas-btn saas-btn-primary saas-btn-sm" %></div>
+    <%= empty_state(icon_name: "file-text", title: "No linked docs",
+                    text: "Write specs and notes in Documents, then link them here.") do %>
+      <%= link_to new_doc_path, class: "saas-btn saas-btn-primary saas-btn-sm" do %>
+        <%= icon("plus") %><span>New doc</span>
+      <% end %>
+    <% end %>
   <% end %>
-</div>
+</section>
 
-<div class="saas-panel">
-  <h2>Attachments · <%= @task.files.count %></h2>
+<section class="saas-panel">
+  <h2>Attachments <span class="saas-muted"><%= @task.files.count %></span></h2>
   <% if @task.files.attached? %>
     <div class="saas-side-list">
       <% @task.files.each do |file| %>
         <div class="saas-row">
-          <%= link_to file.filename.to_s, rails_blob_path(file, disposition: "attachment") %>
-          <span style="display:flex;gap:8px;align-items:center">
+          <span class="saas-list-title"><%= icon("paperclip") %><%= link_to file.filename.to_s, rails_blob_path(file, disposition: "attachment") %></span>
+          <span class="saas-row-actions">
             <small class="saas-mini"><%= number_to_human_size(file.byte_size) %></small>
             <%= link_to "Remove", purge_file_project_task_path(@project, @task, file.id),
                         data: { turbo_method: :delete, turbo_confirm: "Remove attachment?" },
-                        class: "saas-btn saas-btn-ghost saas-btn-sm", style: "color:var(--sz-red)" %>
+                        class: "saas-btn saas-btn-danger-soft saas-btn-sm" %>
           </span>
         </div>
       <% end %>
     </div>
   <% else %>
-    <div class="saas-empty"><p>No attachments.</p></div>
+    <%= empty_state(icon_name: "paperclip", title: "No attachments",
+                    text: "Add files (max 10MB each) when you edit the task.") %>
   <% end %>
-</div>
+</section>

@@ -1,16 +1,13 @@
 <% content_for :title, (@folder.persisted? ? "Edit folder" : "New folder") + " — Czar" %>
-<div class="saas-crumb"><%= link_to "Documents", docs_path %> <span class="sep">/</span> <%= link_to "Folders", folders_path %> <span class="sep">/</span> <span><%= @folder.persisted? ? "Edit" : "New" %></span></div>
-<div class="saas-form-wrap" style="max-width:560px">
-  <span class="saas-section-label">Docs · Organization (secondary)</span>
+<nav class="saas-crumb" aria-label="Breadcrumb"><%= link_to "Documents", docs_path %> <span class="sep">/</span> <%= link_to "Folders", folders_path %> <span class="sep">/</span> <span><%= @folder.persisted? ? "Edit" : "New" %></span></nav>
+<div class="saas-form-wrap narrow">
   <h1><%= @folder.persisted? ? "Edit folder" : "New folder" %></h1>
   <p class="muted">Folders only organize — docs are the primary unit.</p>
   <%= form_with model: @folder do |f| %>
-    <% if @folder.errors.any? %>
-      <div class="saas-errors"><ul style="margin:0;padding-left:18px"><% @folder.errors.full_messages.each do |m| %><li><%= m %></li><% end %></ul></div>
-    <% end %>
+    <%= render "shared/form_errors", record: @folder %>
     <div class="saas-field">
       <%= f.label :name, "Name" %>
-      <%= f.text_field :name, required: true, style: "width:100%;border:1px solid var(--sz-line);border-radius:10px;padding:11px 12px;font-size:14px" %>
+      <%= f.text_field :name, required: true %>
     </div>
     <div class="saas-field">
       <%= f.label :parent_id, "Inside" %>

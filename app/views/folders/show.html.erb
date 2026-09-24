@@ -1,38 +1,49 @@
 <% content_for :title, @folder.name %>
 
-<div class="saas-crumb"><%= link_to "Documents", docs_path %> <span class="sep">/</span> <%= link_to "Folders", folders_path %> <span class="sep">/</span> <% @folder.breadcrumb.each do |crumb| %><%= link_to crumb.name, crumb %> <span class="sep">/</span> <% end %> <span><%= @folder.name %></span></div>
+<nav class="saas-crumb" aria-label="Breadcrumb"><%= link_to "Documents", docs_path %> <span class="sep">/</span> <%= link_to "Folders", folders_path %> <span class="sep">/</span> <% @folder.breadcrumb.each do |crumb| %><%= link_to crumb.name, crumb %> <span class="sep">/</span> <% end %> <span><%= @folder.name %></span></nav>
 
 <div class="saas-page-head">
   <div>
-    <span class="saas-section-label">Docs · Folder</span>
-    <h1>📁 <%= @folder.name %></h1>
+    <h1><%= @folder.name %></h1>
     <p>Secondary organization — docs stay primary.</p>
   </div>
-  <div style="display:flex;gap:8px">
-    <%= link_to "New subfolder", new_folder_path(parent_id: @folder.id), class: "saas-btn saas-btn-ghost saas-btn-sm" %>
-    <%= link_to "＋ New doc here", new_doc_path(folder_id: @folder.id), class: "saas-btn saas-btn-primary saas-btn-sm" %>
+  <div class="saas-page-actions">
+    <%= link_to new_folder_path(parent_id: @folder.id), class: "saas-btn saas-btn-ghost saas-btn-sm" do %>
+      <%= icon("folder") %><span>New subfolder</span>
+    <% end %>
+    <%= link_to new_doc_path(folder_id: @folder.id), class: "saas-btn saas-btn-primary saas-btn-sm" do %>
+      <%= icon("plus") %><span>New doc here</span>
+    <% end %>
   </div>
 </div>
 
 <% if @subfolders.any? %>
-  <div class="saas-list" style="margin-bottom:16px">
+  <div class="saas-list saas-section-block">
     <% @subfolders.each do |sub| %>
-      <%= link_to sub, class: "saas-list-item", style: "color:inherit" do %>
-        <span><strong>📁 <%= sub.name %></strong></span>
+      <%= link_to sub, class: "saas-list-item" do %>
+        <span class="saas-list-title"><%= icon("folder") %><%= sub.name %></span>
       <% end %>
     <% end %>
   </div>
 <% end %>
 
 <% if @docs.any? %>
-  <div class="saas-list">
+  <div class="saas-list saas-section-block">
     <% @docs.each do |doc| %>
-      <%= link_to doc, class: "saas-list-item", style: "color:inherit" do %>
-        <span><strong><%= doc.title %></strong><small class="saas-mini" style="display:block"><%= l(doc.updated_at, format: :short) %></small></span>
+      <%= link_to doc, class: "saas-list-item" do %>
+        <span class="saas-list-main">
+          <span class="saas-list-title"><%= icon("file-text") %><%= doc.title %></span>
+          <span class="saas-row-meta"><%= l(doc.updated_at, format: :short) %></span>
+        </span>
       <% end %>
     <% end %>
   </div>
-  <div class="mt-3 d-flex justify-content-center"><%= paginate @docs, theme: "bootstrap-5" %></div>
+  <div class="saas-pager"><%= paginate @docs, theme: "bootstrap-5" %></div>
 <% else %>
-  <div class="saas-panel"><div class="saas-empty"><p>Empty folder.</p><%= link_to "Create doc here", new_doc_path(folder_id: @folder.id), class: "saas-btn saas-btn-primary saas-btn-sm" %></div></div>
+  <div class="saas-panel saas-section-block">
+    <%= empty_state(icon_name: "file-text", title: "This folder is empty",
+                    text: "New docs created from here are filed in this folder automatically.") do %>
+      <%= link_to "Create doc here", new_doc_path(folder_id: @folder.id), class: "saas-btn saas-btn-primary saas-btn-sm" %>
+    <% end %>
+  </div>
 <% end %>

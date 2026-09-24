@@ -1,28 +1,29 @@
-<div class="saas-panel" id="subtasks">
-  <h2>Checklist · <%= @subtasks.count(&:done) %>/<%= @subtasks.size %></h2>
-  <div class="saas-progress"><div style="width:<%= @task.subtasks_progress %>%"></div></div>
+<section class="saas-panel" id="subtasks">
+  <h2>Checklist <span class="saas-muted"><%= @subtasks.count(&:done) %>/<%= @subtasks.size %></span></h2>
+  <progress class="saas-progress" value="<%= @task.subtasks_progress %>" max="100" aria-label="Checklist progress"><%= @task.subtasks_progress %>%</progress>
   <% if @subtasks.any? %>
-    <div class="saas-side-list" style="margin-bottom:12px">
+    <div class="saas-side-list">
       <% @subtasks.each do |subtask| %>
         <div class="saas-row" id="subtask_<%= subtask.id %>">
-          <span class="<%= 'text-muted' if subtask.done %>" style="<%= 'text-decoration:line-through' if subtask.done %>"><%= subtask.title %></span>
-          <span style="display:flex;gap:6px">
+          <span class="saas-subtask-title<%= ' is-done' if subtask.done %>"><%= subtask.title %></span>
+          <span class="saas-row-actions">
             <%= button_to subtask.done ? "Reopen" : "Done", toggle_project_task_subtask_path(@project, @task, subtask),
                           method: :patch, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
             <%= link_to "Remove", project_task_subtask_path(@project, @task, subtask),
                         data: { turbo_method: :delete, turbo_confirm: "Remove subtask?" },
-                        class: "saas-btn saas-btn-ghost saas-btn-sm", style: "color:var(--sz-red)" %>
+                        class: "saas-btn saas-btn-danger-soft saas-btn-sm" %>
           </span>
         </div>
       <% end %>
     </div>
   <% else %>
-    <div class="saas-empty"><p>Break the work into steps!</p></div>
+    <%= empty_state(icon_name: "list-checks", title: "No steps yet",
+                    text: "Break the work into small steps and tick them off as you go.") %>
   <% end %>
-  <%= form_with model: [@project, @task, @subtask] do |f| %>
+  <%= form_with model: [@project, @task, @subtask], class: "saas-comment-form" do |f| %>
     <div class="saas-input-group">
-      <%= f.text_field :title, placeholder: "New subtask…" %>
+      <%= f.text_field :title, placeholder: "New subtask…", aria: { label: "New subtask" } %>
       <%= f.submit "Add", class: "saas-btn saas-btn-primary saas-btn-sm" %>
     </div>
   <% end %>
-</div>
+</section>

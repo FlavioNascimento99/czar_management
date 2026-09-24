@@ -1,51 +1,56 @@
 <% content_for :title, @doc.title %>
 
-<div class="saas-crumb"><%= link_to "Documents", docs_path %> <span class="sep">/</span> <span><%= @doc.folder ? @doc.folder.name : "No folder" %></span> <span class="sep">/</span> <span><%= truncate(@doc.title, length: 40) %></span></div>
+<nav class="saas-crumb" aria-label="Breadcrumb"><%= link_to "Documents", docs_path %> <span class="sep">/</span> <span><%= @doc.folder ? @doc.folder.name : "No folder" %></span> <span class="sep">/</span> <span><%= truncate(@doc.title, length: 40) %></span></nav>
 
 <div class="saas-page-head">
   <div>
-    <span class="saas-section-label">Docs · Updated <%= l(@doc.updated_at, format: :short) %></span>
     <h1><%= @doc.title %></h1>
-    <p><%= @doc.folder ? "In #{@doc.folder.name}" : "No folder — organize later in Folders" %></p>
+    <p><%= @doc.folder ? "In #{@doc.folder.name}" : "No folder — organize later in Folders" %> · Updated <%= l(@doc.updated_at, format: :short) %></p>
   </div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap">
-    <%= link_to "Edit", edit_doc_path(@doc), class: "saas-btn saas-btn-primary saas-btn-sm" %>
-    <%= link_to "Delete", @doc, data: { turbo_method: :delete, turbo_confirm: "Delete document?" }, class: "saas-btn saas-btn-ghost saas-btn-sm", style: "color:var(--sz-red);border-color:#fecaca" %>
-    <%= link_to "Back", docs_path, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+  <div class="saas-page-actions">
+    <%= link_to edit_doc_path(@doc), class: "saas-btn saas-btn-primary saas-btn-sm" do %>
+      <%= icon("pencil") %><span>Edit</span>
+    <% end %>
+    <%= link_to @doc, data: { turbo_method: :delete, turbo_confirm: "Delete document?" }, class: "saas-btn saas-btn-danger-soft saas-btn-sm" do %>
+      <%= icon("trash") %><span>Delete</span>
+    <% end %>
+    <%= link_to docs_path, class: "saas-btn saas-btn-ghost saas-btn-sm" do %>
+      <%= icon("arrow-left") %><span>Back</span>
+    <% end %>
   </div>
 </div>
 
 <div class="saas-detail">
   <div class="saas-detail-main">
-    <div class="saas-panel">
+    <article class="saas-panel">
       <div class="saas-doc-body"><%= sanitize @doc.rendered_body %></div>
-    </div>
+    </article>
   </div>
-  <div class="saas-detail-main">
+  <aside class="saas-detail-main">
     <% if @linked_tasks.any? %>
-      <div class="saas-panel">
+      <section class="saas-panel">
         <h2>Linked tasks</h2>
         <div class="saas-side-list">
           <% @linked_tasks.each do |task| %>
-            <div class="saas-row"><%= link_to task.title, [task.project, task] %></div>
+            <div class="saas-row"><span class="saas-list-title"><%= icon("list-checks") %><%= link_to task.title, [task.project, task] %></span></div>
           <% end %>
         </div>
-      </div>
+      </section>
     <% end %>
-    <div class="saas-panel">
-      <h2>Attachments · <%= @doc.files.count %></h2>
+    <section class="saas-panel">
+      <h2>Attachments <span class="saas-muted"><%= @doc.files.count %></span></h2>
       <% if @doc.files.attached? %>
         <div class="saas-side-list">
           <% @doc.files.each do |file| %>
             <div class="saas-row">
-              <%= link_to file.filename.to_s, rails_blob_path(file, disposition: "attachment") %>
-              <%= link_to "Remove", purge_file_doc_path(@doc, file.id), data: { turbo_method: :delete, turbo_confirm: "Remove?" }, class: "saas-btn saas-btn-ghost saas-btn-sm", style: "color:var(--sz-red)" %>
+              <span class="saas-list-title"><%= icon("paperclip") %><%= link_to file.filename.to_s, rails_blob_path(file, disposition: "attachment") %></span>
+              <%= link_to "Remove", purge_file_doc_path(@doc, file.id), data: { turbo_method: :delete, turbo_confirm: "Remove?" }, class: "saas-btn saas-btn-danger-soft saas-btn-sm" %>
             </div>
           <% end %>
         </div>
       <% else %>
-        <div class="saas-empty"><p>No attachments.</p></div>
+        <%= empty_state(icon_name: "paperclip", title: "No attachments", text: "Add files when you edit this document.") %>
       <% end %>
-    </div>
-  </div>
+    </section>
+  </aside>
 </div>
