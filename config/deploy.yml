@@ -46,9 +46,16 @@ registry:
 env:
   secret:
     - SECRET_KEY_BASE
+    - SMTP_USERNAME
+    - SMTP_PASSWORD
   clear:
     # Public hostname, also used for Host authorization and mailer links.
     APP_HOST: <%= ENV.fetch("APP_HOST") %>
+    # E-mail delivery (see docs/EMAIL_SMTP.md). Keep "false" until SMTP_* is set.
+    EMAIL_ENABLED: <%= ENV.fetch("EMAIL_ENABLED", "false") %>
+    MAILER_FROM: <%= ENV.fetch("MAILER_FROM", "CZAR MANAGER <noreply@example.com>") %>
+    SMTP_ADDRESS: <%= ENV.fetch("SMTP_ADDRESS", "smtp.example.com") %>
+    SMTP_PORT: <%= ENV.fetch("SMTP_PORT", "587") %>
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
     SOLID_QUEUE_IN_PUMA: true

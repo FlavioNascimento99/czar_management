@@ -21,7 +21,11 @@
   <section class="saas-panel">
     <div class="saas-panel-head">
       <h2>Notificações por e-mail</h2>
-      <span class="saas-badge gray">A implementar</span>
+      <% if EmailGate.enabled? %>
+        <span class="saas-badge green">Ativo</span>
+      <% else %>
+        <span class="saas-badge gray">A implementar</span>
+      <% end %>
     </div>
     <% if EmailGate.enabled? %>
       <p class="saas-muted">Envio de e-mails ativo neste ambiente.</p>
