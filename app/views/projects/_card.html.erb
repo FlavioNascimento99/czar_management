@@ -1,4 +1,4 @@
-<div class="saas-proj">
+<article class="saas-proj">
   <div class="saas-badges">
     <span class="saas-badge <%= project.pessoal? ? 'gray' : 'green' %>"><%= project.pessoal? ? "Personal" : "Team" %></span>
   </div>
@@ -13,4 +13,4 @@
     <%= link_to "Open", project, class: "saas-btn saas-btn-primary saas-btn-sm" %>
     <%= link_to "Edit", edit_project_path(project), class: "saas-btn saas-btn-ghost saas-btn-sm" %>
   </div>
-</div>
+</article>

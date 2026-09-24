@@ -1,0 +1,9 @@
+<% unread = current_user.notifications.unread.count %>
+<%= link_to notifications_path, class: "saas-icon-btn",
+            aria: { label: unread.positive? ? "Notifications, #{unread} unread" : "Notifications",
+                    current: ("page" if nav_active?(notifications_path)) } do %>
+  <%= icon("bell", size: 18) %>
+  <% if unread.positive? %>
+    <span class="saas-count" aria-hidden="true"><%= unread > 99 ? "99+" : unread %></span>
+  <% end %>
+<% end %>

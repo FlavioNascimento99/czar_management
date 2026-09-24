@@ -1,15 +1,16 @@
 module TasksHelper
   def due_date_badge(task)
-    return content_tag(:span, "Sem prazo", class: "badge bg-light text-dark border") if task.due_date.nil?
-    label = "Vence #{l(task.due_date, format: :short)}"
-    css =
+    return tag.span("Sem prazo", class: "saas-badge gray") if task.due_date.nil?
+
+    date = l(task.due_date, format: :short)
+    label, tone =
       if task.overdue?
-        "badge bg-danger"
+        [ "Atrasada #{date}", "red" ]
       elsif task.due_today?
-        "badge bg-warning text-dark"
+        [ "Vence #{date}", "amber" ]
       else
-        "badge bg-info text-dark"
+        [ "Vence #{date}", "gray" ]
       end
-    content_tag(:span, task.overdue? ? "Atrasada #{l(task.due_date, format: :short)}" : label, class: css)
+    tag.span(safe_join([ icon("calendar", size: 14), label ]), class: "saas-badge #{tone}")
   end
 end

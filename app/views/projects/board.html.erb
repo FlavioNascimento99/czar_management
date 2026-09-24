@@ -1,43 +1,43 @@
 <% content_for :title, "Kanban — #{@project.name}" %>
 
-<div class="saas-crumb"><%= link_to "Projects", projects_path %> <span class="sep">/</span> <%= link_to @project.name, @project %> <span class="sep">/</span> <span>Kanban</span></div>
+<nav class="saas-crumb" aria-label="Breadcrumb"><%= link_to "Projects", projects_path %> <span class="sep">/</span> <%= link_to @project.name, @project %> <span class="sep">/</span> <span>Kanban</span></nav>
 
 <div class="saas-page-head">
   <div>
-    <span class="saas-section-label">Manage · Kanban</span>
     <h1>Kanban</h1>
-    <p><%= @project.name %> — drag or move to change status.</p>
+    <p><%= @project.name %> · Drag a card or use Move to change its status.</p>
   </div>
-  <div style="display:flex;gap:8px">
+  <div class="saas-page-actions">
     <%= link_to "Tasks", project_tasks_path(@project), class: "saas-btn saas-btn-ghost saas-btn-sm" %>
-    <%= link_to "Back to project", @project, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+    <%= link_to @project, class: "saas-btn saas-btn-ghost saas-btn-sm" do %>
+      <%= icon("arrow-left") %><span>Back to project</span>
+    <% end %>
   </div>
 </div>
 
 <div class="saas-kanban" data-controller="kanban" data-update-base="<%= project_tasks_path(@project) %>">
   <% [["pendente", "Pending"], ["em_andamento", "In Progress"], ["concluida", "Done"]].each do |status, label| %>
-    <div class="saas-kanban-col">
+    <section class="saas-kanban-col" aria-label="<%= label %>">
       <div class="saas-kanban-head"><span><%= label %></span><span class="saas-badge gray"><%= @columns[status].size %></span></div>
       <div class="saas-kanban-body" data-status="<%= status %>" data-kanban-target="column" data-action="dragover->kanban#dragOver drop->kanban#drop">
         <div data-cards>
           <% @columns[status].each do |task| %>
             <div class="saas-kanban-card" draggable="true" data-task-id="<%= task.id %>" data-action="dragstart->kanban#dragStart">
-              <%= link_to task.title, [@project, task], style: "font-weight:700;color:var(--sz-ink)" %>
-              <small class="saas-mini" style="display:block"><%= task.assigned_to.name %></small>
-              <div class="saas-badges" style="margin-top:6px">
+              <%= link_to task.title, [@project, task], class: "saas-kanban-title" %>
+              <small class="saas-mini"><%= task.assigned_to.name %></small>
+              <div class="saas-badges">
                 <%= due_date_badge(task) %>
-                <% task.tags.each do |tag| %>
-                  <span class="saas-badge gray" style="background-color:<%= tag.color %>;color:#fff"><%= tag.name %></span>
-                <% end %>
+                <% task.tags.each do |tag| %><%= tag_badge(tag) %><% end %>
               </div>
-              <%= form_with url: project_task_path(@project, task), method: :patch, local: true, style: "margin-top:8px;display:flex;gap:6px" do %>
-                <%= select_tag "task[status]", options_for_select([["Pending", "pendente"], ["In Progress", "em_andamento"], ["Done", "concluida"]], task.status), class: "form-select form-select-sm" %>
+              <%= form_with url: project_task_path(@project, task), method: :patch, local: true, class: "saas-kanban-move" do %>
+                <%= select_tag "task[status]", options_for_select([["Pending", "pendente"], ["In Progress", "em_andamento"], ["Done", "concluida"]], task.status),
+                               class: "saas-control saas-control-sm", aria: { label: "Status for #{task.title}" } %>
                 <%= submit_tag "Move", class: "saas-btn saas-btn-ghost saas-btn-sm" %>
               <% end %>
             </div>
           <% end %>
         </div>
       </div>
-    </div>
+    </section>
   <% end %>
 </div>

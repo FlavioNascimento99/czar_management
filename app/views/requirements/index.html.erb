@@ -1,22 +1,33 @@
 <% content_for :title, "Requirements — #{@project.name}" %>
 
-<div class="saas-crumb"><%= link_to "Projects", projects_path %> <span class="sep">/</span> <%= link_to @project.name, @project %> <span class="sep">/</span> <span>Requirements</span></div>
+<nav class="saas-crumb" aria-label="Breadcrumb"><%= link_to "Projects", projects_path %> <span class="sep">/</span> <%= link_to @project.name, @project %> <span class="sep">/</span> <span>Requirements</span></nav>
 <div class="saas-page-head">
-  <div><span class="saas-section-label">Manage · Requirements</span><h1>Requirements</h1><p><%= @project.name %></p></div>
-  <%= link_to "＋ New requirement", new_project_requirement_path(@project), class: "saas-btn saas-btn-primary" %>
+  <div><h1>Requirements</h1><p><%= @project.name %></p></div>
+  <%= link_to new_project_requirement_path(@project), class: "saas-btn saas-btn-primary" do %>
+    <%= icon("plus") %><span>New requirement</span>
+  <% end %>
 </div>
 
 <% if @requirements.any? %>
   <div class="saas-list">
     <% @requirements.each do |requirement| %>
-      <%= link_to [@project, requirement], class: "saas-list-item", style: "color:inherit" do %>
-        <span><strong><%= requirement.title %></strong></span>
-        <span class="saas-badge <%= requirement.priority == 'alta' ? '' : requirement.priority == 'media' ? 'amber' : 'gray' %>" style="<%= 'background:#fee2e2;color:#991b1b' if requirement.priority == 'alta' %>"><%= requirement.priority.capitalize %></span>
+      <%= link_to [@project, requirement], class: "saas-list-item" do %>
+        <span class="saas-list-title"><%= requirement.title %></span>
+        <%= priority_badge(requirement.priority) %>
       <% end %>
     <% end %>
   </div>
 <% else %>
-  <div class="saas-panel"><div class="saas-empty"><p>No requirements yet.</p></div></div>
+  <div class="saas-panel">
+    <%= empty_state(icon_name: "file-text", title: "No requirements yet",
+                    text: "Capture what needs to be built before you build it, then turn requirements into tasks.") do %>
+      <%= link_to "Create first requirement", new_project_requirement_path(@project), class: "saas-btn saas-btn-primary saas-btn-sm" %>
+    <% end %>
+  </div>
 <% end %>
-<div class="mt-3 d-flex justify-content-center"><%= paginate @requirements, theme: "bootstrap-5" %></div>
-<div style="margin-top:12px"><%= link_to "Back to project", @project, class: "saas-btn saas-btn-ghost saas-btn-sm" %></div>
+<div class="saas-pager"><%= paginate @requirements, theme: "bootstrap-5" %></div>
+<div class="saas-actions-row">
+  <%= link_to @project, class: "saas-btn saas-btn-ghost saas-btn-sm" do %>
+    <%= icon("arrow-left") %><span>Back to project</span>
+  <% end %>
+</div>

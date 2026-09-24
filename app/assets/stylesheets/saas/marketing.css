@@ -1,0 +1,114 @@
+/* Logged-out landing page. Restrained brand treatment: Display type for the hero, no card grids or gradients. */
+.saas-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: var(--sz-space-12);
+  align-items: center;
+  padding: var(--sz-space-16) 0 var(--sz-space-12);
+}
+.saas-hero-note { margin-bottom: var(--sz-space-4); font-size: var(--sz-text-sm); font-weight: 500; color: var(--sz-brand-subtle-ink); }
+.saas .saas-hero h1 { font-size: var(--sz-text-display); line-height: 1.1; font-weight: 650; letter-spacing: -0.025em; }
+.saas-hero .lead { max-width: 52ch; margin: var(--sz-space-5) 0 var(--sz-space-8); font-size: var(--sz-text-lg); font-weight: 400; line-height: 1.7; color: var(--sz-muted); }
+.saas-hero-cta { display: flex; flex-wrap: wrap; gap: var(--sz-space-3); }
+.saas-proof { margin-top: var(--sz-space-5); font-size: var(--sz-text-sm); color: var(--sz-muted); }
+
+.saas-preview { margin: 0; }
+.saas-preview-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sz-space-2);
+  padding: var(--sz-space-3);
+  background: var(--sz-surface);
+  border: 1px solid var(--sz-line);
+  border-radius: var(--sz-radius-lg);
+  box-shadow: var(--sz-shadow-card);
+}
+.saas-preview-col { display: flex; flex-direction: column; gap: 6px; padding: var(--sz-space-2); background: var(--sz-surface-2); border-radius: var(--sz-radius-md); min-width: 0; }
+.saas-preview-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 2px 2px 4px; font-size: var(--sz-text-xs); font-weight: 600; }
+.saas-preview-head .saas-badge { height: 18px; padding: 0 6px; background: var(--sz-surface); }
+.saas-preview-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 10px;
+  background: var(--sz-surface);
+  border: 1px solid var(--sz-line);
+  border-radius: var(--sz-radius-md);
+  font-size: var(--sz-text-xs);
+  font-weight: 500;
+  line-height: 1.35;
+}
+.saas-preview figcaption { margin-top: var(--sz-space-3); font-size: var(--sz-text-sm); color: var(--sz-muted); }
+
+.saas-section { padding: var(--sz-space-16) 0 0; }
+.saas-section-head { max-width: 60ch; margin-bottom: var(--sz-space-8); }
+.saas .saas-section h2 { font-size: 1.75rem; line-height: 1.2; letter-spacing: -0.02em; }
+.saas-sub { margin-top: var(--sz-space-2); color: var(--sz-muted); font-size: var(--sz-text-lg); }
+
+.saas-feature-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 var(--sz-space-8);
+  margin: 0;
+}
+.saas-feature-list > div { padding: var(--sz-space-5) 0; border-top: 1px solid var(--sz-line); }
+.saas-feature-list dt { margin-bottom: 6px; font-weight: 600; }
+.saas-feature-list dd { margin: 0; color: var(--sz-muted); }
+
+.saas-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sz-space-8); margin: 0; padding: 0; list-style: none; }
+.saas-step b { display: block; margin-bottom: 6px; font-weight: 600; }
+.saas-step p { color: var(--sz-muted); }
+.saas-num {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-bottom: var(--sz-space-3);
+  border-radius: var(--sz-radius-full);
+  background: var(--sz-brand-subtle);
+  color: var(--sz-brand-subtle-ink);
+  font-size: var(--sz-text-sm);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.saas-pricing { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--sz-space-12); align-items: start; max-width: 880px; }
+.saas-price {
+  padding: var(--sz-space-6);
+  background: var(--sz-surface);
+  border: 1px solid var(--sz-line-strong);
+  border-radius: var(--sz-radius-lg);
+  box-shadow: var(--sz-shadow-card);
+}
+.saas-price h3 { font-size: var(--sz-text-h3); }
+.saas-price .amount { margin-top: var(--sz-space-2); font-size: 2.5rem; line-height: 1.1; font-weight: 650; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.saas-price-caption { margin-top: var(--sz-space-1); color: var(--sz-muted); font-size: var(--sz-text-sm); }
+.saas-price ul { margin: var(--sz-space-6) 0; padding: 0; list-style: none; }
+.saas-price li { display: flex; align-items: center; gap: var(--sz-space-2); padding: var(--sz-space-2) 0; }
+.saas-price li + li { border-top: 1px solid var(--sz-line); }
+.saas-price li .saas-icon-svg { color: var(--sz-success); }
+.saas-price-note { padding-top: var(--sz-space-6); }
+.saas-price-note h3 { margin-bottom: var(--sz-space-2); }
+.saas-price-note p { color: var(--sz-muted); }
+.saas-price-note ul { margin: var(--sz-space-4) 0; padding-left: 18px; color: var(--sz-muted); }
+.saas-price-note li + li { margin-top: 4px; }
+.saas .saas-link-arrow { display: inline-flex; align-items: center; gap: 6px; font-weight: 500; }
+
+.saas-cta { text-align: center; padding-bottom: var(--sz-space-8); }
+.saas-cta .saas-sub { margin-bottom: var(--sz-space-6); }
+
+@media (max-width: 1023px) {
+  .saas-hero { grid-template-columns: minmax(0, 1fr); gap: var(--sz-space-8); padding-top: var(--sz-space-12); }
+  .saas-feature-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 767px) {
+  .saas-hero { padding: var(--sz-space-8) 0 var(--sz-space-4); }
+  .saas-section { padding-top: var(--sz-space-12); }
+  .saas .saas-section h2 { font-size: 1.5rem; }
+  .saas-feature-list, .saas-steps, .saas-pricing { grid-template-columns: minmax(0, 1fr); }
+  .saas-steps { gap: var(--sz-space-6); }
+  .saas-pricing { gap: 0; }
+  .saas-preview-board { grid-template-columns: repeat(3, minmax(150px, 1fr)); overflow-x: auto; }
+  .saas-hero-cta .saas-btn { flex: 1 1 100%; }
+}

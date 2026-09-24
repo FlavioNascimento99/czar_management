@@ -2,50 +2,60 @@
 
 <div class="saas-page-head">
   <div>
-    <span class="saas-section-label">Manage · Projects</span>
     <h1>Projects</h1>
     <p>Team spaces and personal routines. Docs live in <%= link_to "Documents", docs_path %> — projects are for execution.</p>
   </div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap">
-    <%= link_to "＋ New doc", new_doc_path, class: "saas-btn saas-btn-ghost" %>
-    <%= link_to "＋ New project", new_project_path, class: "saas-btn saas-btn-primary" %>
+  <div class="saas-page-actions">
+    <%= link_to new_doc_path, class: "saas-btn saas-btn-ghost" do %>
+      <%= icon("plus") %><span>New doc</span>
+    <% end %>
+    <%= link_to new_project_path, class: "saas-btn saas-btn-primary" do %>
+      <%= icon("plus") %><span>New project</span>
+    <% end %>
   </div>
 </div>
 
 <% if @projects.any? %>
-  <div class="saas-panel" style="margin-bottom:16px">
-    <h2>Team projects · <%= @team_projects.size %></h2>
+  <section class="saas-section-block">
+    <h2 class="saas-section-title">Team projects <span class="saas-count-text"><%= @team_projects.size %></span></h2>
     <% if @team_projects.any? %>
-      <div class="saas-grid" style="margin-top:12px">
+      <div class="saas-grid">
         <% @team_projects.each do |project| %>
           <%= render "card", project: project, task_counts: @task_counts, requirement_counts: @requirement_counts %>
         <% end %>
       </div>
     <% else %>
-      <div class="saas-empty"><p>No team projects yet.</p></div>
+      <div class="saas-panel">
+        <%= empty_state(icon_name: "users", title: "No team projects yet",
+                        text: "Team projects let you invite members by email and assign tasks to them.") do %>
+          <%= link_to "New team project", new_project_path, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+        <% end %>
+      </div>
     <% end %>
-  </div>
+  </section>
 
-  <div class="saas-panel">
-    <h2>Personal — routines & studies · <%= @personal_projects.size %></h2>
+  <section class="saas-section-block">
+    <h2 class="saas-section-title">Personal: routines &amp; studies <span class="saas-count-text"><%= @personal_projects.size %></span></h2>
     <% if @personal_projects.any? %>
-      <div class="saas-grid" style="margin-top:12px">
+      <div class="saas-grid">
         <% @personal_projects.each do |project| %>
           <%= render "card", project: project, task_counts: @task_counts, requirement_counts: @requirement_counts %>
         <% end %>
       </div>
     <% else %>
-      <div class="saas-empty">
-        <p>Create a personal space with the "Study routine" template. 🌱</p>
-        <%= link_to "New personal project", new_project_path, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+      <div class="saas-panel">
+        <%= empty_state(icon_name: "user", title: "No personal projects yet",
+                        text: "Create a personal space with the \"Study routine\" template. Only you can see it.") do %>
+          <%= link_to "New personal project", new_project_path, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+        <% end %>
       </div>
     <% end %>
-  </div>
+  </section>
 <% else %>
   <div class="saas-panel">
-    <div class="saas-empty">
-      <p><strong>No projects yet.</strong><br>Create your first project — free, and ready in 30 seconds.</p>
+    <%= empty_state(icon_name: "folder-kanban", title: "No projects yet",
+                    text: "Create your first project to organize tasks and requirements. Free, and ready in 30 seconds.") do %>
       <%= link_to "Create project", new_project_path, class: "saas-btn saas-btn-primary saas-btn-sm" %>
-    </div>
+    <% end %>
   </div>
 <% end %>

@@ -2,35 +2,48 @@
 
 <div class="saas-page-head">
   <div>
-    <span class="saas-section-label">Manage · My work</span>
     <h1>My Tasks</h1>
     <p>Everything assigned to you, ordered by due date.</p>
   </div>
-  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-    <%= link_to "Calendar (.ics)", my_tasks_calendar_path(format: :ics), class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+  <div class="saas-page-actions">
     <% if @overdue_count.positive? %>
-      <span class="saas-badge" style="background:#fee2e2;color:#991b1b"><%= @overdue_count %> overdue</span>
+      <span class="saas-badge red"><%= @overdue_count %> overdue</span>
+    <% end %>
+    <%= link_to my_tasks_calendar_path(format: :ics), class: "saas-btn saas-btn-ghost saas-btn-sm" do %>
+      <%= icon("calendar") %><span>Calendar (.ics)</span>
     <% end %>
   </div>
 </div>
 
-<div class="saas-filters">
-  <%= link_to "All", my_tasks_path, class: "saas-btn #{params[:filter].blank? && params[:status].blank? ? 'saas-btn-primary' : 'saas-btn-ghost'} saas-btn-sm" %>
-  <%= link_to "Open", my_tasks_path(filter: "open"), class: "saas-btn #{params[:filter] == 'open' ? 'saas-btn-primary' : 'saas-btn-ghost'} saas-btn-sm" %>
-  <%= link_to "Overdue", my_tasks_path(filter: "overdue"), class: "saas-btn saas-btn-ghost saas-btn-sm", style: "#{params[:filter] == 'overdue' ? 'background:#dc2626;color:#fff;border-color:#dc2626' : 'color:var(--sz-red);border-color:#fecaca'}" %>
-  <%= link_to "Due today", my_tasks_path(filter: "today"), class: "saas-btn saas-btn-ghost saas-btn-sm" %>
-</div>
+<nav class="saas-seg" aria-label="Filter tasks">
+  <%= link_to "All", my_tasks_path, class: "saas-seg-item",
+              aria: { current: ("page" if params[:filter].blank? && params[:status].blank?) } %>
+  <%= link_to "Open", my_tasks_path(filter: "open"), class: "saas-seg-item",
+              aria: { current: ("page" if params[:filter] == "open") } %>
+  <%= link_to "Overdue", my_tasks_path(filter: "overdue"), class: "saas-seg-item danger",
+              aria: { current: ("page" if params[:filter] == "overdue") } %>
+  <%= link_to "Due today", my_tasks_path(filter: "today"), class: "saas-seg-item",
+              aria: { current: ("page" if params[:filter] == "today") } %>
+</nav>
 
 <% if @tasks.any? %>
   <div class="saas-list">
     <% @tasks.each do |task| %>
-      <%= link_to project_task_path(task.project, task), class: "saas-list-item", style: "color:inherit" do %>
-        <span><strong><%= task.title %></strong><small class="saas-mini" style="display:block"><%= task.project.name %> · <%= task.status.humanize %></small></span>
+      <%= link_to project_task_path(task.project, task), class: "saas-list-item" do %>
+        <span class="saas-list-main">
+          <span class="saas-list-title"><%= task.title %></span>
+          <span class="saas-row-meta"><%= task.project.name %> · <%= task.status.humanize %></span>
+        </span>
         <%= due_date_badge(task) %>
       <% end %>
     <% end %>
   </div>
-  <div class="mt-3 d-flex justify-content-center"><%= paginate @tasks, theme: "bootstrap-5" %></div>
+  <div class="saas-pager"><%= paginate @tasks, theme: "bootstrap-5" %></div>
 <% else %>
-  <div class="saas-panel"><div class="saas-empty"><p>Nothing assigned to you. Enjoy the calm 🎉</p></div></div>
+  <div class="saas-panel">
+    <%= empty_state(icon_name: "list-checks", title: "Nothing assigned to you",
+                    text: "When someone assigns you a task in any project, it shows up here with its due date.") do %>
+      <%= link_to "Browse projects", projects_path, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+    <% end %>
+  </div>
 <% end %>

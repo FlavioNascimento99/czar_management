@@ -1,27 +1,33 @@
-<div class="saas-panel">
-  <span class="saas-section-label">Manage · Task</span>
-  <div style="display:flex;justify-content:space-between;gap:10px;align-items:start;margin-top:6px">
-    <h1 style="margin:0;font-size:24px;letter-spacing:-.02em"><%= @task.title %></h1>
-    <span class="saas-badge <%= @task.priority == 'alta' ? '' : @task.priority == 'media' ? 'amber' : 'gray' %>" style="<%= 'background:#fee2e2;color:#991b1b' if @task.priority == 'alta' %>"><%= @task.priority.capitalize %></span>
+<section class="saas-panel">
+  <div class="saas-task-head">
+    <h1><%= @task.title %></h1>
+    <%= priority_badge(@task.priority) %>
   </div>
-  <div class="saas-badges" style="margin-top:10px">
-    <span class="saas-badge <%= @task.status == 'concluida' ? 'green' : @task.status == 'em_andamento' ? 'amber' : 'gray' %>"><%= @task.status.humanize %></span>
+  <div class="saas-badges saas-meta-line">
+    <%= status_badge(@task.status) %>
     <%= due_date_badge(@task) %>
     <% unless @task.nenhuma? %>
-      <span class="saas-badge gray">🔁 <%= @task.diaria? ? "Daily" : "Weekly" %></span>
+      <span class="saas-badge gray"><%= icon("repeat", size: 14) %><%= @task.diaria? ? "Daily" : "Weekly" %></span>
     <% end %>
-    <% @task.tags.each do |tag| %>
-      <span class="saas-badge gray" style="background-color:<%= tag.color %>;color:#fff"><%= tag.name %></span>
-    <% end %>
+    <% @task.tags.each do |tag| %><%= tag_badge(tag) %><% end %>
   </div>
   <hr class="saas-divider">
-  <div style="font-size:14.5px;line-height:1.65"><%= simple_format(@task.description) %></div>
-  <div class="saas-mini" style="margin-top:12px">Author: <%= @task.author.name %> · Owner: <%= @task.assigned_to.name %></div>
-  <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
-    <%= link_to "Edit", edit_project_task_path(@project, @task), class: "saas-btn saas-btn-primary saas-btn-sm" %>
-    <%= link_to "Delete", [@project, @task],
-                data: { turbo_method: :delete, turbo_confirm: "Delete this task?" },
-                class: "saas-btn saas-btn-ghost saas-btn-sm", style: "color:var(--sz-red);border-color:#fecaca" %>
-    <%= link_to "Back", @project, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+  <div class="saas-prose-sm"><%= simple_format(@task.description) %></div>
+  <div class="saas-meta-line">
+    <span>Author: <strong><%= @task.author.name %></strong></span>
+    <span>Owner: <strong><%= @task.assigned_to.name %></strong></span>
   </div>
-</div>
+  <div class="saas-actions-row">
+    <%= link_to edit_project_task_path(@project, @task), class: "saas-btn saas-btn-primary saas-btn-sm" do %>
+      <%= icon("pencil") %><span>Edit</span>
+    <% end %>
+    <%= link_to [@project, @task],
+                data: { turbo_method: :delete, turbo_confirm: "Delete this task?" },
+                class: "saas-btn saas-btn-danger-soft saas-btn-sm" do %>
+      <%= icon("trash") %><span>Delete</span>
+    <% end %>
+    <%= link_to @project, class: "saas-btn saas-btn-ghost saas-btn-sm" do %>
+      <%= icon("arrow-left") %><span>Back</span>
+    <% end %>
+  </div>
+</section>

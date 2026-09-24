@@ -1,22 +1,29 @@
-<div class="saas-crumb"><%= link_to "Projects", projects_path %> <span class="sep">/</span> <span><%= @project.name %></span></div>
+<nav class="saas-crumb" aria-label="Breadcrumb"><%= link_to "Projects", projects_path %> <span class="sep">/</span> <span><%= @project.name %></span></nav>
 
 <div class="saas-page-head">
   <div>
-    <div class="saas-badges" style="margin-bottom:8px">
-      <span class="saas-section-label">Manage · Project</span>
+    <div class="saas-badges">
       <span class="saas-badge <%= @project.pessoal? ? 'gray' : 'green' %>"><%= @project.pessoal? ? "Personal" : "Team" %></span>
     </div>
     <h1><%= @project.name %></h1>
     <p><%= @project.description %></p>
   </div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap">
-    <%= link_to "Kanban", board_project_path(@project), class: "saas-btn saas-btn-ghost saas-btn-sm" %>
-    <%= link_to "Calendar", calendar_project_path(@project, format: :ics), class: "saas-btn saas-btn-ghost saas-btn-sm" %>
-    <%= link_to "Edit", edit_project_path(@project), class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+  <div class="saas-page-actions">
+    <%= link_to board_project_path(@project), class: "saas-btn saas-btn-ghost saas-btn-sm" do %>
+      <%= icon("square-kanban") %><span>Kanban</span>
+    <% end %>
+    <%= link_to calendar_project_path(@project, format: :ics), class: "saas-btn saas-btn-ghost saas-btn-sm" do %>
+      <%= icon("calendar") %><span>Calendar</span>
+    <% end %>
+    <%= link_to edit_project_path(@project), class: "saas-btn saas-btn-ghost saas-btn-sm" do %>
+      <%= icon("pencil") %><span>Edit</span>
+    <% end %>
     <% if @project.owned_by?(current_user) %>
-      <%= link_to "Delete", @project,
+      <%= link_to @project,
                   data: { turbo_method: :delete, turbo_confirm: "Delete this project? This cannot be undone." },
-                  class: "saas-btn saas-btn-ghost saas-btn-sm", style: "color:var(--sz-red);border-color:#fecaca" %>
+                  class: "saas-btn saas-btn-danger-soft saas-btn-sm" do %>
+        <%= icon("trash") %><span>Delete</span>
+      <% end %>
     <% end %>
   </div>
 </div>

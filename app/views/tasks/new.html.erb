@@ -1,3 +1,3 @@
 <% content_for :title, "New task — #{@project.name}" %>
-<div class="saas-crumb"><%= link_to "Projects", projects_path %> <span class="sep">/</span> <%= link_to @project.name, @project %> <span class="sep">/</span> <span>New task</span></div>
+<nav class="saas-crumb" aria-label="Breadcrumb"><%= link_to "Projects", projects_path %> <span class="sep">/</span> <%= link_to @project.name, @project %> <span class="sep">/</span> <span>New task</span></nav>
 <%= render "form" %>

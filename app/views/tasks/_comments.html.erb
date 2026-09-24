@@ -1,29 +1,31 @@
-<div class="saas-panel">
-  <h2>Comments · <%= @comments.size %></h2>
+<section class="saas-panel">
+  <h2>Comments <span class="saas-muted"><%= @comments.size %></span></h2>
   <% if @comments.any? %>
-    <div class="saas-side-list" style="margin-bottom:12px">
+    <div class="saas-side-list">
       <% @comments.each do |comment| %>
-        <div style="padding:10px 0;border-top:1px solid var(--sz-line)">
-          <div style="display:flex;justify-content:space-between;gap:8px">
-            <strong style="font-size:13.5px"><%= comment.author.name %></strong>
+        <article class="saas-comment">
+          <div class="saas-comment-head">
+            <strong><%= comment.author.name %></strong>
             <small class="saas-mini"><%= l(comment.created_at, format: :short) %></small>
           </div>
-          <div style="font-size:14px;margin:6px 0"><%= simple_format(comment.body) %></div>
+          <div class="saas-comment-body"><%= simple_format(comment.body) %></div>
           <% if comment.author == current_user || @project.owned_by?(current_user) %>
             <%= link_to "Delete", project_task_comment_path(@project, @task, comment),
                         data: { turbo_method: :delete, turbo_confirm: "Delete comment?" },
-                        class: "saas-btn saas-btn-ghost saas-btn-sm", style: "color:var(--sz-red)" %>
+                        class: "saas-btn saas-btn-danger-soft saas-btn-sm" %>
           <% end %>
-        </div>
+        </article>
       <% end %>
     </div>
   <% else %>
-    <div class="saas-empty"><p>No comments yet. Start the thread!</p></div>
+    <%= empty_state(icon_name: "message-square", title: "No comments yet",
+                    text: "Share progress or ask a question. The task owner gets notified.") %>
   <% end %>
-  <%= form_with model: [@project, @task, @comment] do |f| %>
+  <%= form_with model: [@project, @task, @comment], class: "saas-comment-form" do |f| %>
     <div class="saas-field">
+      <%= f.label :body, "Write a comment", class: "saas-sr-only" %>
       <%= f.text_area :body, rows: 3, placeholder: "Write a comment…" %>
     </div>
     <%= f.submit "Comment", class: "saas-btn saas-btn-primary saas-btn-sm" %>
   <% end %>
-</div>
+</section>

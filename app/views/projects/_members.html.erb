@@ -1,21 +1,21 @@
 <% unless @project.pessoal? %>
-  <div class="saas-panel" style="margin-bottom:16px">
-    <div class="saas-tab-head">
-      <h2>Members · <%= @members.count %></h2>
+  <section class="saas-panel">
+    <div class="saas-panel-head">
+      <h2>Members <span class="saas-muted"><%= @members.count %></span></h2>
     </div>
     <div class="saas-side-list">
       <% @members.each do |member| %>
         <div class="saas-row">
-          <span>
-            <strong><%= member.name %></strong>
-            <small style="color:var(--sz-muted)"> · <%= member.email %></small>
-            <% if @project.owned_by?(member) %>
-              <span class="saas-badge">Owner</span>
-            <% end %>
-          </span>
+          <div class="saas-row-main">
+            <span class="saas-badges">
+              <strong><%= member.name %></strong>
+              <% if @project.owned_by?(member) %><span class="saas-badge">Owner</span><% end %>
+            </span>
+            <span class="saas-row-meta"><%= member.email %></span>
+          </div>
           <% if @project.owned_by?(current_user) && !@project.owned_by?(member) %>
             <%= button_to "Remove", remove_member_project_path(@project, user_id: member.id),
-                          method: :delete, class: "saas-btn saas-btn-ghost saas-btn-sm",
+                          method: :delete, class: "saas-btn saas-btn-danger-soft saas-btn-sm",
                           form: { "data-turbo-confirm": "Remove this member?" } %>
           <% elsif member == current_user %>
             <%= button_to "Leave", remove_member_project_path(@project, user_id: member.id),
@@ -28,9 +28,9 @@
     <% if @project.member?(current_user) %>
       <hr class="saas-divider">
       <%= form_with url: add_member_project_path(@project), method: :post, local: true, class: "saas-input-group" do |form| %>
-        <%= form.email_field :email, placeholder: "New member email", required: true %>
+        <%= form.email_field :email, placeholder: "New member email", required: true, aria: { label: "New member email" } %>
         <%= form.submit "Add member", class: "saas-btn saas-btn-primary saas-btn-sm" %>
       <% end %>
     <% end %>
-  </div>
+  </section>
 <% end %>

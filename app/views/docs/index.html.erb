@@ -2,44 +2,69 @@
 
 <div class="saas-page-head">
   <div>
-    <span class="saas-section-label">Docs · Primary workspace</span>
     <h1>Documents</h1>
     <p>Write first, organize in folders, link to tasks when ready to execute.</p>
   </div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap">
-    <%= link_to "Folders", folders_path, class: "saas-btn saas-btn-ghost" %>
-    <%= link_to "＋ New document", new_doc_path, class: "saas-btn saas-btn-primary" %>
+  <div class="saas-page-actions">
+    <%= link_to folders_path, class: "saas-btn saas-btn-ghost" do %>
+      <%= icon("folder") %><span>Folders</span>
+    <% end %>
+    <%= link_to new_doc_path, class: "saas-btn saas-btn-primary" do %>
+      <%= icon("plus") %><span>New document</span>
+    <% end %>
   </div>
 </div>
 
-<%= form_with url: docs_path, method: :get, local: true, class: "saas-search" do %>
-  <%= search_field_tag :q, params[:q], placeholder: "Search title and content…" %>
+<%= form_with url: docs_path, method: :get, local: true, class: "saas-search", role: "search" do %>
+  <%= search_field_tag :q, params[:q], placeholder: "Search title and content…", aria: { label: "Search documents" } %>
   <%= submit_tag "Search", class: "saas-btn saas-btn-ghost" %>
-  <% if params[:q].present? %><%= link_to "Clear", docs_path, class: "saas-btn saas-btn-ghost" %><% end %>
+  <% if params[:q].present? %><%= link_to "Clear", docs_path, class: "saas-btn saas-btn-subtle" %><% end %>
 <% end %>
 
 <% if @docs.any? %>
   <div class="saas-2col">
-    <div class="saas-list">
-      <% @docs.each do |doc| %>
-        <%= link_to doc, class: "saas-list-item", style: "color:inherit" do %>
-          <span><strong>📝 <%= doc.title %></strong><small class="saas-mini" style="display:block"><%= doc.folder&.name || "No folder" %> · <%= l(doc.updated_at, format: :short) %></small></span>
-          <span class="saas-btn saas-btn-ghost saas-btn-sm">Open</span>
+    <div>
+      <div class="saas-list">
+        <% @docs.each do |doc| %>
+          <%= link_to doc, class: "saas-list-item" do %>
+            <span class="saas-list-main">
+              <span class="saas-list-title"><%= icon("file-text") %><%= doc.title %></span>
+              <span class="saas-row-meta"><%= doc.folder&.name || "No folder" %> · <%= l(doc.updated_at, format: :short) %></span>
+            </span>
+            <span class="saas-btn saas-btn-subtle saas-btn-sm" aria-hidden="true">Open</span>
+          <% end %>
         <% end %>
-      <% end %>
+      </div>
+      <div class="saas-pager"><%= paginate @docs, theme: "bootstrap-5" %></div>
     </div>
-    <div class="saas-panel">
+    <aside class="saas-panel">
       <h2>How docs work</h2>
-      <p class="saas-mini">1. Create a doc (primary).<br>2. Organize in folders (secondary).<br>3. Link docs to tasks in Projects → Task → Linked documents.</p>
+      <ol class="saas-howto">
+        <li>Create a doc (primary).</li>
+        <li>Organize in folders (secondary).</li>
+        <li>Link docs to tasks in Projects → Task → Linked documents.</li>
+      </ol>
       <hr class="saas-divider">
-      <%= link_to "＋ New document", new_doc_path, class: "saas-btn saas-btn-primary saas-btn-sm" %>
-      <%= link_to "Manage folders", folders_path, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
-    </div>
+      <div class="saas-page-actions">
+        <%= link_to new_doc_path, class: "saas-btn saas-btn-primary saas-btn-sm" do %>
+          <%= icon("plus") %><span>New document</span>
+        <% end %>
+        <%= link_to "Manage folders", folders_path, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+      </div>
+    </aside>
   </div>
-  <div class="mt-3 d-flex justify-content-center"><%= paginate @docs, theme: "bootstrap-5" %></div>
+<% elsif params[:q].present? %>
+  <div class="saas-panel">
+    <%= empty_state(icon_name: "search", title: "No documents match your search",
+                    text: "Try other words, or clear the search to see all documents.") do %>
+      <%= link_to "Clear search", docs_path, class: "saas-btn saas-btn-ghost saas-btn-sm" %>
+    <% end %>
+  </div>
 <% else %>
-  <div class="saas-panel"><div class="saas-empty">
-    <p><strong>No documents yet.</strong><br>Start with your first note — it takes 10 seconds. 📝</p>
-    <%= link_to "Create document", new_doc_path, class: "saas-btn saas-btn-primary saas-btn-sm" %>
-  </div></div>
+  <div class="saas-panel">
+    <%= empty_state(icon_name: "file-text", title: "No documents yet",
+                    text: "Start with your first note. Docs support Markdown with a live preview and can be linked to tasks.") do %>
+      <%= link_to "Create document", new_doc_path, class: "saas-btn saas-btn-primary saas-btn-sm" %>
+    <% end %>
+  </div>
 <% end %>
