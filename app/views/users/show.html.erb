@@ -11,7 +11,13 @@
         <p class="small text-muted">Use como <code>Authorization: Bearer TOKEN</code> ou <code>?token=TOKEN</code> em <code>/api/v1/projects</code>.</p>
         <%= button_to "Regenerar token", regenerate_token_user_path(@user), class: "btn btn-outline-warning btn-sm" %>
         <hr>
-        <h5>Notificações por e-mail <span class="badge bg-secondary">A implementar</span></h5>
+        <h5>Notificações por e-mail
+          <% if EmailGate.enabled? %>
+            <span class="badge bg-success">Ativo</span>
+          <% else %>
+            <span class="badge bg-secondary">A implementar</span>
+          <% end %>
+        </h5>
         <% if EmailGate.enabled? %>
           <p class="small text-success">Envio de e-mails ativo neste ambiente.</p>
         <% else %>
